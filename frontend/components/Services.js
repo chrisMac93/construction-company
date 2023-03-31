@@ -2,9 +2,10 @@ import { useState, useEffect } from "react";
 
 import styles from "../styles/Home.module.css";
 
-const Services = () => {
+const Services = ({ scrollToRef, servicesRef }) => {
   const [visibleServices, setVisibleServices] = useState(0);
   const [currentServices, setCurrentServices] = useState([]);
+  const [isSmallScreen, setIsSmallScreen] = useState(false);
   const [fadeIn, setFadeIn] = useState(true);
 
   const servicesList = [
@@ -88,13 +89,32 @@ const Services = () => {
     );
   }, [visibleServices]);
 
+  useEffect(() => {
+    const checkScreenSize = () => {
+      setIsSmallScreen(window.innerWidth <= 640);
+    };
+  
+    checkScreenSize();
+    window.addEventListener("resize", checkScreenSize);
+  
+    return () => {
+      window.removeEventListener("resize", checkScreenSize);
+    };
+  }, []);
+
   const loadMoreServices = () => {
-    setFadeIn(!fadeIn);
+    setFadeIn(false);
     setTimeout(() => {
       setVisibleServices((visibleServices + 6) % 12);
-      setFadeIn(!fadeIn);
+      setFadeIn(true);
     }, 500);
+  
+    // Scroll to the top of the Services component on small screens
+    if (isSmallScreen) {
+      scrollToRef(servicesRef);
+    }
   };
+
   return (
     <section className="relative bg-gradient-to-b from-slate-300 via-neutral-800 to-neutral-900 pt-36 py-12">
       <div className="px-4 sm:px-8 md:px-16 lg:px-24 mx-auto">
@@ -103,7 +123,7 @@ const Services = () => {
         </h2>
         <div
           className={`grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 ${
-            fadeIn ? "fade fade-in" : "fade"
+            fadeIn ? `${styles.fadeIn}` : `${styles.fadeOut}`
           }`}
         >
           {currentServices.map((service) => (
@@ -128,9 +148,9 @@ const Services = () => {
         <div className="">
           <button
             onClick={loadMoreServices}
-            className={`mt-12 block mx-auto px-6 py-2 rounded-md text-neutral-800 ${styles.mcBackColor}`}
+            className={`mt-12 block mx-auto px-6 py-2 rounded-md text-lg font-semibold text-neutral-800 ${styles.mcBackColor}`}
           >
-            {visibleServices === 0 ? "Next" : "Previous"}
+            {visibleServices === 0 ? "More" : "Previous"}
           </button>
         </div>
       </div>

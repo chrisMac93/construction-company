@@ -4,8 +4,11 @@ import {
   faTools,
   faThumbsUp,
   faTruck,
-  faHeadset,
+  faScroll,
 } from "@fortawesome/free-solid-svg-icons";
+import Link from "next/link";
+
+import styles from "../styles/Home.module.css";
 
 const WhyChooseUs = () => {
   const reasons = [
@@ -28,10 +31,10 @@ const WhyChooseUs = () => {
         "We understand the importance of delivering projects on time and strive to meet deadlines without compromising on quality.",
     },
     {
-      icon: faHeadset,
-      title: "Excellent Support",
+      icon: faScroll,
+      title: "Get a Quote",
       description:
-        "Our customer support team is available to address any concerns or questions throughout the project.",
+        "We believe customers should have a clear idea of the cost of a project before it is started. You can click the link below to get a free quote!",
     },
   ];
 
@@ -55,7 +58,7 @@ const WhyChooseUs = () => {
             <ul className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
               {reasons.map((reason, index) => (
                 <li key={index} className="flex items-start space-x-4">
-                  <div className="text-3xl">
+                  <div className={`text-3xl ${styles.mcColor}`}>
                     <FontAwesomeIcon icon={reason.icon} />
                   </div>
                   <div>
@@ -70,13 +73,13 @@ const WhyChooseUs = () => {
               ))}
             </ul>
             <div className="flex justify-center mt-8">
-              <button
-                onClick={() => scrollToRef(quoteRef)}
+              <Link
+                href={"/quote"}
                 className="px-8 py-3 text-lg sm:text-xl font-bold text-neutral-900 rounded hover:bg-neutral-200 transition duration-300"
                 style={{ backgroundColor: "#B6B024" }}
               >
                 Get a Quote
-              </button>
+              </Link>
             </div>
           </div>
         </div>

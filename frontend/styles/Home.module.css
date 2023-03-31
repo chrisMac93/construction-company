@@ -141,8 +141,14 @@
   transition: opacity 0.5s ease-in-out;
 }
 
-.fade.fade-in {
+.fadeIn {
   opacity: 1;
+  transition: opacity 500ms;
+}
+
+.fadeOut {
+  opacity: 0;
+  transition: opacity 500ms;
 }
 
 .service-card {

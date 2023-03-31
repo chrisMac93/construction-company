@@ -12,6 +12,7 @@ export default function Home({
   whyChooseUsRef,
   galleryRef,
   testimonialsRef,
+  scrollToRef
 }) {
   return (
     <div>
@@ -23,7 +24,7 @@ export default function Home({
           <AboutUs />
         </section>
         <section ref={servicesRef}>
-          <Services />
+          <Services scrollToRef={scrollToRef} servicesRef={servicesRef}/>
         </section>
         <section ref={whyChooseUsRef}>
           <WhyChooseUs />

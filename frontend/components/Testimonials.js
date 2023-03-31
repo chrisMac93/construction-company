@@ -28,6 +28,69 @@ const Testimonials = () => {
         "We've been working with Martin Construction & Coatings for years, and they consistently deliver high-quality work. Their team is reliable and always goes the extra mile.",
       image: "/gallery/reviewPhotos/MichaelJohnson.jpg",
     },
+    {
+      name: "John Doe",
+      position: "CEO",
+      testimonial:
+        "Martin Construction & Coatings did an excellent job on our project. Their attention to detail and professional approach were impressive. We highly recommend them!",
+      image: "/gallery/reviewPhotos/JohnDoe.jpg",
+    },
+    {
+      name: "Jane Smith",
+      position: "Homeowner",
+      testimonial:
+        "The team at Martin Construction & Coatings transformed our home with a beautiful new paint job. They were prompt, professional, and a pleasure to work with.",
+      image: "/gallery/reviewPhotos/JaneSmith.jpg",
+    },
+    {
+      name: "Mike Johnson",
+      position: "butthead",
+      testimonial:
+        "We've been working with Martin Construction & Coatings for years, and they consistently deliver high-quality work. Their team is reliable and always goes the extra mile.",
+      image: "/gallery/reviewPhotos/MichaelJohnson.jpg",
+    },
+    {
+      name: "John Doe",
+      position: "CEO",
+      testimonial:
+        "Martin Construction & Coatings did an excellent job on our project. Their attention to detail and professional approach were impressive. We highly recommend them!",
+      image: "/gallery/reviewPhotos/JohnDoe.jpg",
+    },
+    {
+      name: "Jane Smith",
+      position: "Homeowner",
+      testimonial:
+        "The team at Martin Construction & Coatings transformed our home with a beautiful new paint job. They were prompt, professional, and a pleasure to work with.",
+      image: "/gallery/reviewPhotos/JaneSmith.jpg",
+    },
+    {
+      name: "Mike Johnson",
+      position: "butthead",
+      testimonial:
+        "We've been working with Martin Construction & Coatings for years, and they consistently deliver high-quality work. Their team is reliable and always goes the extra mile.",
+      image: "/gallery/reviewPhotos/MichaelJohnson.jpg",
+    },
+    {
+      name: "Mike Johnson",
+      position: "butthead",
+      testimonial:
+        "We've been working with Martin Construction & Coatings for years, and they consistently deliver high-quality work. Their team is reliable and always goes the extra mile.",
+      image: "/gallery/reviewPhotos/MichaelJohnson.jpg",
+    },
+    {
+      name: "Mike Johnson",
+      position: "butthead",
+      testimonial:
+        "We've been working with Martin Construction & Coatings for years, and they consistently deliver high-quality work. Their team is reliable and always goes the extra mile.",
+      image: "/gallery/reviewPhotos/MichaelJohnson.jpg",
+    },
+    {
+      name: "Mike Johnson",
+      position: "butthead",
+      testimonial:
+        "We've been working with Martin Construction & Coatings for years, and they consistently deliver high-quality work. Their team is reliable and always goes the extra mile.",
+      image: "/gallery/reviewPhotos/MichaelJohnson.jpg",
+    },
   ];
 
   return (
@@ -38,8 +101,20 @@ const Testimonials = () => {
       <Swiper
         spaceBetween={30}
         centeredSlides={true}
-        autoplay={{ delay: 4000, disableOnInteraction: false }}
+        autoplay={{ delay: 5000, disableOnInteraction: false }}
         className="text-neutral-100"
+        slidesPerView={1}
+        breakpoints={{
+          640: {
+            slidesPerView: 2,
+            centeredSlides: false,
+            slidesPerGroup: 2,
+          },
+          1024: {
+            slidesPerView: 3,
+            slidesPerGroup: 3,
+          },
+        }}
       >
         {testimonials.map((testimonial, index) => (
           <SwiperSlide key={index}>
@@ -60,7 +135,7 @@ const Testimonials = () => {
                     {testimonial.position}
                   </p>
                 </div>
-                <div className="flex-0 px-4 md:m-4 md:px-1 text-lg font-semibold text-neutral-800 text-center md:text-neutral-200 md:text-start">
+                <div className="flex-0 px-4 md:m-4 md:px-1 text-lg font-semibold text-neutral-800 text-center md:text-neutral-100 md:text-start">
                   <p className="min-h-[3.5rem]">"{testimonial.testimonial}"</p>
                 </div>
               </div>

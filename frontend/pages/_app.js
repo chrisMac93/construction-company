@@ -46,6 +46,7 @@ function MyApp({ Component, pageProps }) {
               galleryRef={galleryRef}
               testimonialsRef={testimonialsRef}
               quoteRef={quoteRef}
+              scrollToRef={scrollToRef}
             />
           ) : (
             <Component {...pageProps} />

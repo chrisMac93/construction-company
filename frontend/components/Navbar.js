@@ -2,6 +2,7 @@ import Link from "next/link";
 import Image from "next/image";
 import MobileMenu from "./MobileMenu";
 import { useState } from "react";
+import { useAnimation } from "framer-motion";
 
 import styles from "../styles/Home.module.css";
 
@@ -13,28 +14,51 @@ const Navbar = ({
   galleryRef,
   testimonialsRef,
 }) => {
-  const [isNavHidden, setIsNavHidden] = useState(true);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const controls = useAnimation();
 
-  const toggleMobileMenu = () => {
-    setIsMobileMenuOpen(!isMobileMenuOpen);
+  const toggleMobileMenu = async () => {
+    if (isMobileMenuOpen) {
+      await controls.start({
+        opacity: 0,
+        y: -20,
+        transition: { duration: 0.3, ease: "easeIn" },
+      }).finished;
+      setIsMobileMenuOpen(false);
+    } else {
+      await controls.start({
+        opacity: 1,
+        y: 0,
+        transition: { duration: 0.3, ease: "easeOut" },
+      }).finished;
+      setIsMobileMenuOpen(true);
+    }
   };
 
-  const closeMobileMenu = () => {
-    setIsMobileMenuOpen(false);
-  };
+  // const closeMobileMenu = async () => {
+  //   if (isMobileMenuOpen) {
+  //     await controls.start({
+  //       opacity: 0,
+  //       y: -20,
+  //       transition: { duration: 0.3, ease: "easeOut" },
+  //     }).finished;
+  //     setIsMobileMenuOpen(false);
+  //   }
+  // };
 
   return (
     <nav className="fixed z-20 top-0 flex w-full flex-wrap items-center justify-between bg-gradient-to-r from-slate-300 via-neutral-800 to-neutral-900 py-3 text-neutral-200 shadow-lg lg:flex-wrap lg:justify-start">
       <MobileMenu
         isMobileMenuOpen={isMobileMenuOpen}
-        closeMobileMenu={closeMobileMenu}
+        // closeMobileMenu={closeMobileMenu}
         scrollToRef={scrollToRef}
         aboutUsRef={aboutUsRef}
         servicesRef={servicesRef}
         whyChooseUsRef={whyChooseUsRef}
         galleryRef={galleryRef}
         testimonialsRef={testimonialsRef}
+        mobileMenuControls={controls}
+        toggleMobileMenu={toggleMobileMenu}
       />
       <div className="flex w-full flex-wrap items-center justify-between px-6">
         <div className="flex items-center">
@@ -74,8 +98,8 @@ const Navbar = ({
           </button>
           <ul
             className={`list-style-none mr-auto flex flex-col pl-0 text-center lg:text-left lg:flex lg:flex-row lg:space-x-2 lg:items-center lg:mr-auto ${
-              isNavHidden ? "hidden" : ""
-            }`}
+              isMobileMenuOpen ? "hidden" : ""
+            } hidden lg:flex`}
           >
             <li className="p-2">
               <Link

@@ -1,35 +1,30 @@
-import { motion, useAnimation } from "framer-motion";
+import { motion } from "framer-motion";
 import { useEffect } from "react";
 import Link from "next/link";
 import styles from "../styles/navbar.module.css";
 
 const MobileMenu = ({
   isMobileMenuOpen,
-  closeMobileMenu,
+  toggleMobileMenu,
   scrollToRef,
   aboutUsRef,
   servicesRef,
   whyChooseUsRef,
   galleryRef,
   testimonialsRef,
+  mobileMenuControls,
 }) => {
-  const controls = useAnimation();
 
   useEffect(() => {
     if (isMobileMenuOpen) {
-      controls.start({
+      mobileMenuControls.start({
         opacity: 1,
         y: 0,
         transition: { duration: 0.3, ease: "easeOut" },
       });
-    } else {
-      controls.start({
-        opacity: 1,
-        y: -20,
-        transition: { duration: 0.3, ease: "easeIn" },
-      });
     }
-  }, [isMobileMenuOpen, controls]);
+  }, [isMobileMenuOpen, mobileMenuControls]);
+
   return (
     <motion.div
       className={`${
@@ -38,14 +33,14 @@ const MobileMenu = ({
         styles.dropdownMenu
       }`}
       initial={{ opacity: 0, y: -20 }}
-      animate={controls}
+      animate={mobileMenuControls}
     >
       {/* Place your mobile menu links/buttons here */}
       <ul className="list-style-none mr-auto flex flex-col pl-0 text-center lg:text-left lg:flex lg:flex-row lg:space-x-2 lg:items-center lg:mr-auto">
         <li className="p-2">
           <Link
             href="/"
-            onClick={() => closeMobileMenu()}
+            onClick={() => toggleMobileMenu()}
             className="p-0 text-white font-bold opacity-60 hover:opacity-80 focus:opacity-80 disabled:text-black/30 lg:px-2 [&.active]:text-black/90 dark:[&.active]:text-neutral-400"
           >
             Home
@@ -55,7 +50,7 @@ const MobileMenu = ({
           <button
             onClick={() => {
               scrollToRef(aboutUsRef);
-              closeMobileMenu();
+              toggleMobileMenu();
             }}
             className="p-0 text-white font-bold opacity-60 hover:opacity-80 focus:opacity-80 disabled:text-black/30 lg:px-2 [&.active]:text-black/90 dark:[&.active]:text-neutral-400"
           >
@@ -66,7 +61,7 @@ const MobileMenu = ({
           <button
             onClick={() => {
               scrollToRef(servicesRef);
-              closeMobileMenu();
+              toggleMobileMenu();
             }}
             className="p-0 text-white font-bold opacity-60 hover:opacity-80 focus:opacity-80 disabled:text-black/30 lg:px-2 [&.active]:text-black/90 dark:[&.active]:text-neutral-400"
           >
@@ -77,7 +72,7 @@ const MobileMenu = ({
           <button
             onClick={() => {
               scrollToRef(whyChooseUsRef);
-              closeMobileMenu();
+              toggleMobileMenu();
             }}
             className="p-0 text-white font-bold opacity-60 hover:opacity-80 focus:opacity-80 disabled:text-black/30 lg:px-2 [&.active]:text-black/90 dark:[&.active]:text-neutral-400"
           >
@@ -88,7 +83,7 @@ const MobileMenu = ({
           <button
             onClick={() => {
               scrollToRef(testimonialsRef);
-              closeMobileMenu();
+              toggleMobileMenu();
             }}
             className="p-0 text-white font-bold opacity-60 hover:opacity-80 focus:opacity-80 disabled:text-black/30 lg:px-2 [&.active]:text-black/90 dark:[&.active]:text-neutral-400"
           >
@@ -99,7 +94,7 @@ const MobileMenu = ({
           <button
             onClick={() => {
               scrollToRef(galleryRef);
-              closeMobileMenu();
+              toggleMobileMenu();
             }}
             className="p-0 white font-bold opacity-60 hover:opacity-80 focus:opacity-80 disabled:text-black/30 lg:px-2 [&.active]:text-black/90 dark:[&.active]:text-neutral-400"
           >
@@ -111,7 +106,7 @@ const MobileMenu = ({
             href="/quote"
             className="font-bold disabled:text-black/30 lg:px-2 [&.active]:text-black/90 dark:[&.active]:text-neutral-400"
             style={{ color: "#B6B024" }}
-            onClick={() => closeMobileMenu()}
+            onClick={() => toggleMobileMenu()}
           >
             Get a Quote
           </Link>
