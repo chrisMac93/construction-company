@@ -145,11 +145,31 @@
   opacity: 1;
 }
 
+.service-card {
+  opacity: 0;
+  transition: opacity 0.5s;
+}
+
+.service-card.fade-in {
+  opacity: 1;
+}
+
+.services-container > div:nth-child(n + 4):nth-child(-n + 6) {
+  display: none;
+}
+
+
 /* Media Queries*/
 
 @media (max-width: 600px) {
   .grid {
     width: 100%;
     flex-direction: column;
+  }
+}
+
+@media (min-width: 640px) {
+  .services-container > div:nth-child(n + 4):nth-child(-n + 6) {
+    display: block;
   }
 }

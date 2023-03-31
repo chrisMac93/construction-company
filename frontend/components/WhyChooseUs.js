@@ -1,6 +1,40 @@
 import React from "react";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {
+  faTools,
+  faThumbsUp,
+  faTruck,
+  faHeadset,
+} from "@fortawesome/free-solid-svg-icons";
 
 const WhyChooseUs = () => {
+  const reasons = [
+    {
+      icon: faTools,
+      title: "High-Quality Workmanship",
+      description:
+        "Our team of professionals is dedicated to providing high-quality construction and coatings services.",
+    },
+    {
+      icon: faThumbsUp,
+      title: "Customer Satisfaction",
+      description:
+        "We prioritize customer satisfaction and work closely with our clients to meet their unique requirements.",
+    },
+    {
+      icon: faTruck,
+      title: "Timely Delivery",
+      description:
+        "We understand the importance of delivering projects on time and strive to meet deadlines without compromising on quality.",
+    },
+    {
+      icon: faHeadset,
+      title: "Excellent Support",
+      description:
+        "Our customer support team is available to address any concerns or questions throughout the project.",
+    },
+  ];
+
   return (
     <section className="relative py-20 px-4 sm:px-8 md:px-16 lg:px-24">
       <div
@@ -18,50 +52,31 @@ const WhyChooseUs = () => {
             <h2 className="text-3xl md:text-4xl font-semibold mb-8 text-center">
               Why Choose Martin Construction & Coatings
             </h2>
-            <p className="mb-6 text-lg leading-relaxed text-center">
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam
-              semper nulla nisi, non faucibus elit congue nec. Lorem ipsum dolor
-              sit amet, consectetur adipiscing elit. Nullam semper nulla nisi,
-              non faucibus elit congue nec. Lorem ipsum dolor sit amet,
-              consectetur adipiscing elit. Nullam semper nulla nisi, non
-              faucibus elit congue nec.
-            </p>
-            <p className="text-lg leading-relaxed text-center">
-              Duis et justo odio. Fusce nec mattis dui, ac faucibus tellus.
-              Integer vel ullamcorper nisi. Aliquam consequat risus ante, a
-              tincidunt ante porttitor eget. Duis et justo odio. Fusce nec
-              mattis dui, ac faucibus tellus. Integer vel ullamcorper nisi.
-              Aliquam consequat risus ante, a tincidunt ante porttitor eget.
-              Duis et justo odio. Fusce nec mattis dui, ac faucibus tellus.
-              Integer vel ullamcorper nisi. Aliquam consequat risus ante, a
-              tincidunt ante porttitor eget.
-            </p>
-            <p className="mb-6 text-lg leading-relaxed text-center">
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam
-              semper nulla nisi, non faucibus elit congue nec. Lorem ipsum dolor
-              sit amet, consectetur adipiscing elit. Nullam semper nulla nisi,
-              non faucibus elit congue nec. Lorem ipsum dolor sit amet,
-              consectetur adipiscing elit. Nullam semper nulla nisi, non
-              faucibus elit congue nec.
-            </p>
-            <p className="text-lg leading-relaxed text-center">
-              Duis et justo odio. Fusce nec mattis dui, ac faucibus tellus.
-              Integer vel ullamcorper nisi. Aliquam consequat risus ante, a
-              tincidunt ante porttitor eget. Duis et justo odio. Fusce nec
-              mattis dui, ac faucibus tellus. Integer vel ullamcorper nisi.
-              Aliquam consequat risus ante, a tincidunt ante porttitor eget.
-              Duis et justo odio. Fusce nec mattis dui, ac faucibus tellus.
-              Integer vel ullamcorper nisi. Aliquam consequat risus ante, a
-              tincidunt ante porttitor eget.
-            </p>
+            <ul className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+              {reasons.map((reason, index) => (
+                <li key={index} className="flex items-start space-x-4">
+                  <div className="text-3xl">
+                    <FontAwesomeIcon icon={reason.icon} />
+                  </div>
+                  <div>
+                    <h3 className="font-semibold text-xl mb-2">
+                      {reason.title}
+                    </h3>
+                    <p className="text-base leading-relaxed">
+                      {reason.description}
+                    </p>
+                  </div>
+                </li>
+              ))}
+            </ul>
             <div className="flex justify-center mt-8">
-            <button
-              onClick={() => scrollToRef(quoteRef)}
-              className="px-8 py-3 text-lg sm:text-xl font-bold text-neutral-900 rounded hover:bg-neutral-200 transition duration-300"
-              style={{ backgroundColor: "#B6B024" }}
-            >
-              Get a Quote
-            </button>
+              <button
+                onClick={() => scrollToRef(quoteRef)}
+                className="px-8 py-3 text-lg sm:text-xl font-bold text-neutral-900 rounded hover:bg-neutral-200 transition duration-300"
+                style={{ backgroundColor: "#B6B024" }}
+              >
+                Get a Quote
+              </button>
             </div>
           </div>
         </div>

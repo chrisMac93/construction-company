@@ -9,7 +9,7 @@ const Testimonials = () => {
   const testimonials = [
     {
       name: "John Doe",
-      position: "CEO, XYZ Company",
+      position: "CEO",
       testimonial:
         "Martin Construction & Coatings did an excellent job on our project. Their attention to detail and professional approach were impressive. We highly recommend them!",
       image: "/gallery/reviewPhotos/JohnDoe.jpg",
@@ -22,8 +22,8 @@ const Testimonials = () => {
       image: "/gallery/reviewPhotos/JaneSmith.jpg",
     },
     {
-      name: "Michael Johnson",
-      position: "Property Manager",
+      name: "Mike Johnson",
+      position: "butthead",
       testimonial:
         "We've been working with Martin Construction & Coatings for years, and they consistently deliver high-quality work. Their team is reliable and always goes the extra mile.",
       image: "/gallery/reviewPhotos/MichaelJohnson.jpg",
@@ -38,24 +38,32 @@ const Testimonials = () => {
       <Swiper
         spaceBetween={30}
         centeredSlides={true}
-        autoplay={{ delay: 3000, disableOnInteraction: false }}
+        autoplay={{ delay: 4000, disableOnInteraction: false }}
         className="text-neutral-100"
       >
         {testimonials.map((testimonial, index) => (
           <SwiperSlide key={index}>
             <div className="flex flex-col items-center justify-center max-w-md mx-auto">
-              <p className="italic text-lg md:text-xl text-center mb-5">
-                "{testimonial.testimonial}"
-              </p>
-              <img
-                src={testimonial.image}
-                alt={`${testimonial.name}'s avatar`}
-                className="w-28 h-28 object-cover rounded-full border-2 border-neutral-100"
-              />
-              <h3 className="font-semibold text-xl text-center text-neutral-800">
-                {testimonial.name}
-              </h3>
-              <p className="text-center text-neutral-600">{testimonial.position}</p>
+              <div className="flex flex-col md:flex-row items-center md:items-start overflow-hidden">
+                <div className="flex-1 flex flex-col items-center m-6 md:mb-0">
+                  <div className="md:w-24 md:h-24 w-28 h-28 border-2 rounded-full border-neutral-300 overflow-hidden">
+                    <img
+                      src={testimonial.image}
+                      alt={`${testimonial.name}'s avatar`}
+                      className="object-cover w-full h-full"
+                    />
+                  </div>
+                  <h3 className="font-bold text-center md:text-neutral-600 mt-4">
+                    {testimonial.name}
+                  </h3>
+                  <p className="text-center italic md:text-neutral-500 text-neutral-300">
+                    {testimonial.position}
+                  </p>
+                </div>
+                <div className="flex-0 px-4 md:m-4 md:px-1 text-lg font-semibold text-neutral-800 text-center md:text-neutral-200 md:text-start">
+                  <p className="min-h-[3.5rem]">"{testimonial.testimonial}"</p>
+                </div>
+              </div>
             </div>
           </SwiperSlide>
         ))}

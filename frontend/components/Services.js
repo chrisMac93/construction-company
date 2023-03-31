@@ -3,7 +3,7 @@ import { useState, useEffect } from "react";
 import styles from "../styles/Home.module.css";
 
 const Services = () => {
-  const [visibleServices, setVisibleServices] = useState(6);
+  const [visibleServices, setVisibleServices] = useState(0);
   const [currentServices, setCurrentServices] = useState([]);
   const [fadeIn, setFadeIn] = useState(true);
 
@@ -83,26 +83,22 @@ const Services = () => {
   ];
 
   useEffect(() => {
-    setCurrentServices(servicesList.slice(0, visibleServices));
+    setCurrentServices(
+      servicesList.slice(visibleServices, visibleServices + 6)
+    );
   }, [visibleServices]);
 
   const loadMoreServices = () => {
     setFadeIn(!fadeIn);
     setTimeout(() => {
-      if (visibleServices === 6) {
-        setCurrentServices(servicesList.slice(6));
-        setVisibleServices(servicesList.length);
-      } else {
-        setCurrentServices(servicesList.slice(0, 6));
-        setVisibleServices(6);
-      }
+      setVisibleServices((visibleServices + 6) % 12);
       setFadeIn(!fadeIn);
     }, 500);
   };
   return (
-    <section className="relative bg-gradient-to-b from-slate-300 via-neutral-800 to-neutral-900 py-36">
+    <section className="relative bg-gradient-to-b from-slate-300 via-neutral-800 to-neutral-900 pt-36 py-12">
       <div className="px-4 sm:px-8 md:px-16 lg:px-24 mx-auto">
-        <h2 className="text-3xl md:text-4xl text-neutral-900 font-semibold mb-8 text-center">
+        <h2 className="text-3xl md:text-4xl text-neutral-200 font-semibold mb-8 text-center">
           Our Services
         </h2>
         <div
@@ -111,15 +107,14 @@ const Services = () => {
           }`}
         >
           {currentServices.map((service) => (
-            <div
-              key={service.title}
-              className="bg-neutral-800 text-neutral-100 shadow-md rounded-md p-6"
-            >
-              <img
-                src={service.image}
-                alt={service.title}
-                className="w-full h-48 object-cover rounded-md mb-4"
-              />
+            <div key={service.title} className=" text-neutral-100 ">
+              <div className="relative w-full h-48 overflow-hidden rounded-md mb-4 transition-transform duration-300 ease-in-out transform hover:scale-110">
+                <img
+                  src={service.image}
+                  alt={service.title}
+                  className="absolute inset-0 w-full h-full object-cover rounded-md"
+                />
+              </div>
               <div>
                 <h3 className="text-xl text-center font-semibold mb-2">
                   {service.title}
@@ -133,9 +128,9 @@ const Services = () => {
         <div className="">
           <button
             onClick={loadMoreServices}
-            className={`mt-4 block mx-auto p-3 rounded-md text-neutral-800 ${styles.mcBackColor}`}
+            className={`mt-12 block mx-auto px-6 py-2 rounded-md text-neutral-800 ${styles.mcBackColor}`}
           >
-            {visibleServices === 6 ? "Load More" : "Show Less"}
+            {visibleServices === 0 ? "Next" : "Previous"}
           </button>
         </div>
       </div>
