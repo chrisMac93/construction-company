@@ -1,10 +1,12 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import Link from "next/link";
 import { motion } from "framer-motion";
-import { getStorage, ref, getDownloadURL } from "firebase/storage";
-import { app } from "../firebase";
+import useImages from "../hooks/useImages";
 
 const Jumbotron = () => {
+
+  const images = useImages();
+  const bgImageUrl = images["Flooring"]
   const headerVariants = {
     hidden: { opacity: 0, y: -50 },
     visible: { opacity: 1, y: 0 },
@@ -15,18 +17,10 @@ const Jumbotron = () => {
     visible: { opacity: 1, scale: 1 },
   };
 
-  const [bgImageUrl, setBgImageUrl] = useState("");
-
-  useEffect(() => {
-    const storage = getStorage(app);
-    const imageRef = ref(storage, "jumbotron/image2.jpg");
-    getDownloadURL(imageRef).then(setBgImageUrl);
-  }, []);
-
   return (
     <div
       className="relative mt-16 w-full minus-navbar parallax"
-      style={{ backgroundImage: `url(${bgImageUrl})` }}
+      style={{ backgroundImage: `url(${bgImageUrl || "../gallery/Gallery/Services/flooring.jpg"})` }}
     >
       <div className="absolute inset-0 bg-black opacity-50"></div>
       <div className="absolute inset-0 flex flex-col items-center text-center justify-center space-y-4 px-6 text-white">

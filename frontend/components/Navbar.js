@@ -35,22 +35,10 @@ const Navbar = ({
     }
   };
 
-  // const closeMobileMenu = async () => {
-  //   if (isMobileMenuOpen) {
-  //     await controls.start({
-  //       opacity: 0,
-  //       y: -20,
-  //       transition: { duration: 0.3, ease: "easeOut" },
-  //     }).finished;
-  //     setIsMobileMenuOpen(false);
-  //   }
-  // };
-
   return (
     <nav className="fixed z-20 top-0 flex w-full flex-wrap items-center justify-between bg-gradient-to-r from-slate-300 via-neutral-800 to-neutral-900 py-3 text-neutral-200 shadow-lg lg:flex-wrap lg:justify-start">
       <MobileMenu
         isMobileMenuOpen={isMobileMenuOpen}
-        // closeMobileMenu={closeMobileMenu}
         scrollToRef={scrollToRef}
         aboutUsRef={aboutUsRef}
         servicesRef={servicesRef}

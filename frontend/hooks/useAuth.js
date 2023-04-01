@@ -1,28 +1,34 @@
 import { useState } from "react";
 import Router from "next/router";
+import { GoogleAuthProvider, signInWithPopup } from "firebase/auth";
+import { auth } from "../lib/firebase";
 
 const useAuth = () => {
   const [error, setError] = useState(null);
 
-  const login = async (email, password) => {
-    try {
-      const res = await fetch("/api/auth/login", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, password }),
-      });
+  const allowedEmails = [
+    "christopher.j.mcelwain@gmail.com",
+    "martinconstruction0911@gmail.com",
+  ];
 
-      if (res.status === 200) {
-        const { token } = await res.json();
-        localStorage.setItem("token", token);
-        Router.push("/admin");
-        return true;
-      } else {
-        setError("Invalid email or password");
+  const login = async () => {
+    try {
+      const provider = new GoogleAuthProvider();
+      const userCredential = await signInWithPopup(auth, provider);
+      const user = userCredential.user;
+
+      if (!allowedEmails.includes(user.email)) {
+        setError("You are not authorized to access this page.");
         return false;
       }
+      
+      const token = await user.getIdToken();
+      localStorage.setItem("token", token); 
+      Router.push("/admin");
+      return true;
     } catch (error) {
-      setError("An error occurred, please try again");
+      const errorMessage = error.message;
+      setError(errorMessage);
       return false;
     }
   };

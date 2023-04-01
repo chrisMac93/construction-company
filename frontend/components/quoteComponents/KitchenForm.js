@@ -1,6 +1,7 @@
 import React from "react";
-import { Switch, Listbox } from '@headlessui/react';
 import FlooringForm from "./FlooringForm";
+import { calculateFlooringCost } from "./FlooringForm";
+import { renderSwitch } from "./RenderSwitch";
 
 export const calculateKitchenCost = (formData) => {
   const cabinetMaterialsCost = {
@@ -87,49 +88,32 @@ const KitchenForm = ({ handleChange, formData }) => {
     "Wood",
   ];
 
-  const renderSwitch = (id, name, checked) => (
-    <Switch
-      id={id}
-      name={name}
-      checked={checked}
-      onChange={(value) => handleChange({ target: { name, value } })}
-      className={`${
-        checked ? 'bg-indigo-600' : 'bg-gray-200'
-      } relative inline-flex items-center h-6 rounded-full w-11 transition-colors focus:outline-none`}
-    >
-      <span className="sr-only">{name}</span>
-      <span
-        className={`${
-          checked ? 'translate-x-6' : 'translate-x-1'
-        } inline-block w-4 h-4 transform bg-white rounded-full transition-transform`}
-      />
-    </Switch>
-  );
-
   return (
     <>
+      <div className="flex justify-center">
+        <h1 className="text-lg font-bold">
+          Please check any options you would like to be included in your quote
+        </h1>
+      </div>
       <div className="form-control">
-        <label htmlFor="flooringIncluded">Flooring Included</label>
-        <input
-          type="checkbox"
-          name="flooringIncluded"
-          id="flooringIncluded"
-          checked={formData.flooringIncluded}
-          onChange={handleChange}
-        />
+        {renderSwitch(
+          "flooringIncluded",
+          "flooringIncluded",
+          formData.flooringIncluded,
+          handleChange
+        )}
+        <label htmlFor="flooringIncluded" className="ml-1 text-lg">
+          Flooring Included
+        </label>
       </div>
       {formData.flooringIncluded && (
         <FlooringForm handleChange={handleChange} formData={formData} />
       )}
       <div className="form-control">
-        <label htmlFor="island">Island</label>
-        <input
-          type="checkbox"
-          name="island"
-          id="island"
-          checked={formData.island}
-          onChange={handleChange}
-        />
+        {renderSwitch("island", "island", formData.island, handleChange)}
+        <label htmlFor="island" className="ml-1 text-lg">
+          Island Included
+        </label>
       </div>
       {formData.island && (
         <>
@@ -138,6 +122,7 @@ const KitchenForm = ({ handleChange, formData }) => {
             <select
               name="islandBaseMaterial"
               id="islandBaseMaterial"
+              className="w-full p-3 bg-neutral-700 rounded-md text-neutral-100"
               value={formData.islandBaseMaterial}
               onChange={handleChange}
             >
@@ -154,10 +139,11 @@ const KitchenForm = ({ handleChange, formData }) => {
             <select
               name="islandCountertop"
               id="islandCountertop"
+              className="w-full p-3 bg-neutral-700 rounded-md text-neutral-100"
               value={formData.islandCountertop}
               onChange={handleChange}
             >
-              <option value="">Select a countertop material</option>
+              <option value="">Select a material</option>
               {countertopMaterials.map((material) => (
                 <option key={material} value={material}>
                   {material}
@@ -166,26 +152,28 @@ const KitchenForm = ({ handleChange, formData }) => {
             </select>
           </div>
           <div className="form-control">
-            <label htmlFor="islandStovetop">Stovetop</label>
-            <input
-              type="checkbox"
-              name="islandStovetop"
-              id="islandStovetop"
-              checked={formData.islandStovetop}
-              onChange={handleChange}
-            />
+            {renderSwitch(
+              "islandStovetop",
+              "islandStovetop",
+              formData.islandStovetop,
+              handleChange
+            )}
+            <label htmlFor="islandStovetop" className="ml-1 text-lg">
+              Stovetop
+            </label>
           </div>
         </>
       )}
       <div className="form-control">
-        <label htmlFor="countertops">Updated Countertops</label>
-        <input
-          type="checkbox"
-          name="countertops"
-          id="countertops"
-          checked={formData.countertops}
-          onChange={handleChange}
-        />
+        {renderSwitch(
+          "countertops",
+          "countertops",
+          formData.countertops,
+          handleChange
+        )}
+        <label htmlFor="countertops" className="ml-1 text-lg">
+          Updated Countertops
+        </label>
       </div>
       {formData.countertops && (
         <div className="form-control">
@@ -193,6 +181,7 @@ const KitchenForm = ({ handleChange, formData }) => {
           <select
             name="countertopMaterial"
             id="countertopMaterial"
+            className="w-full p-3 bg-neutral-700 rounded-md text-neutral-100"
             value={formData.countertopMaterial}
             onChange={handleChange}
           >
@@ -206,14 +195,10 @@ const KitchenForm = ({ handleChange, formData }) => {
         </div>
       )}
       <div className="form-control">
-        <label htmlFor="cabinets">Updated Cabinets</label>
-        <input
-          type="checkbox"
-          name="cabinets"
-          id="cabinets"
-          checked={formData.cabinets}
-          onChange={handleChange}
-        />
+        {renderSwitch("cabinets", "cabinets", formData.cabinets, handleChange)}
+        <label htmlFor="cabinets" className="ml-1 text-lg">
+          Updated Cabinets
+        </label>
       </div>
       {formData.cabinets && (
         <div className="form-control">
@@ -221,6 +206,7 @@ const KitchenForm = ({ handleChange, formData }) => {
           <select
             name="cabinetMaterial"
             id="cabinetMaterial"
+            className="w-full p-3 bg-neutral-700 rounded-md text-neutral-100"
             value={formData.cabinetMaterial}
             onChange={handleChange}
           >
@@ -234,34 +220,27 @@ const KitchenForm = ({ handleChange, formData }) => {
         </div>
       )}
       <div className="form-control">
-        <label htmlFor="appliances">Appliances</label>
-        <input
-          type="checkbox"
-          name="appliances"
-          id="appliances"
-          checked={formData.appliances}
-          onChange={handleChange}
-        />
+        {renderSwitch(
+          "appliances",
+          "appliances",
+          formData.appliances,
+          handleChange
+        )}
+        <label htmlFor="appliances" className="ml-1 text-lg">
+          Appliances
+        </label>
       </div>
       <div className="form-control">
-        <label htmlFor="plumbing">Plumbing</label>
-        <input
-          type="checkbox"
-          name="plumbing"
-          id="plumbing"
-          checked={formData.plumbing}
-          onChange={handleChange}
-        />
+        {renderSwitch("plumbing", "plumbing", formData.plumbing, handleChange)}
+        <label htmlFor="plumbing" className="ml-1 text-lg">
+          Plumbing
+        </label>
       </div>
       <div className="form-control">
-        <label htmlFor="lighting">Lighting</label>
-        <input
-          type="checkbox"
-          name="lighting"
-          id="lighting"
-          checked={formData.lighting}
-          onChange={handleChange}
-        />
+        {renderSwitch("lighting", "lighting", formData.lighting, handleChange)}
+        <label htmlFor="lighting" className="ml-1 text-lg">
+          Lighting
+        </label>
       </div>
     </>
   );

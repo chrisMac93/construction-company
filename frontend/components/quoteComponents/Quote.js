@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
-import { sendEmail } from "../../utils/emailService";
+import { sendQuoteEmail } from "../../utils/emailService";
 
 import FlooringForm, {
   calculateFlooringCost,
@@ -260,7 +260,7 @@ const Quote = () => {
   };
 
   const submitQuote = () => {
-    sendEmail(formData, estimate);
+    sendQuoteEmail(formData, estimate);
   };
 
   return (

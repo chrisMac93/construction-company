@@ -1,5 +1,5 @@
 import React from "react";
-import { Switch } from "@headlessui/react";
+import { renderSwitch } from "./RenderSwitch";
 
 export const calculatePatioCost = (
   material,
@@ -90,60 +90,17 @@ const PatioForm = ({ handleChange, formData }) => {
         />
       </div>
       <div className="form-control mb-4">
-        <p className="mb-2">Do you want handrails?</p>
-        <Switch.Group>
-          <Switch.Label className="flex items-center">
-            <Switch
-              id="handrails"
-              name="handrails"
-              checked={formData.handrails}
-              onChange={() =>
-                handleChange({
-                  target: { name: "handrails", value: !formData.handrails },
-                })
-              }
-              className={`${
-                formData.handrails ? "bg-B6B024" : "bg-gray-200"
-              } relative inline-flex items-center h-6 rounded-full w-11 focus:outline-none`}
-            >
-              <span className="sr-only">Handrails</span>
-              <span
-                className={`${
-                  formData.handrails ? "translate-x-6" : "translate-x-1"
-                } inline-block w-4 h-4 transform bg-white rounded-full`}
-              />
-            </Switch>
-            <span className="ml-3">Handrails</span>
-          </Switch.Label>
-        </Switch.Group>
+        {renderSwitch(
+          "handrails",
+          "handrails",
+          formData.handrails,
+          handleChange
+        )}
+        <label className="ml-1 text-lg">Do you want handrails?</label>
       </div>
       <div className="form-control">
-        <p className="mb-2">Do you want lighting?</p>
-        <Switch.Group>
-          <Switch.Label className="flex items-center">
-            <Switch
-              id="lighting"
-              name="lighting"
-              checked={formData.lighting}
-              onChange={() =>
-                handleChange({
-                  target: { name: "lighting", value: !formData.lighting },
-                })
-              }
-              className={`${
-                formData.lighting ? "bg-B6B024" : "bg-gray-200"
-              } relative inline-flex items-center h-6 rounded-full w-11 focus:outline-none`}
-            >
-              <span className="sr-only">Lighting</span>
-              <span
-                className={`${
-                  formData.lighting ? "translate-x-6" : "translate-x-1"
-                } inline-block w-4 h-4 transform bg-white rounded-full`}
-              />
-            </Switch>
-            <span className="ml-3">Lighting</span>
-          </Switch.Label>
-        </Switch.Group>
+        {renderSwitch("lighting", "lighting", formData.lighting, handleChange)}
+        <label className="ml-1 text-lg">Do you want lighting?</label>
       </div>
     </>
   );

@@ -6,14 +6,12 @@ import styles from "../../styles/Home.module.css";
 
 const AdminPage = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
   const { login, logout, error } = useAuth();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const success = await login(email, password);
+      const success = await login();
       if (success) {
         setIsLoggedIn(true);
       }
@@ -32,8 +30,6 @@ const AdminPage = () => {
   const handleLogout = useCallback(() => {
     logout();
     setIsLoggedIn(false);
-    setEmail("");
-    setPassword("");
   }, [logout]);
 
   useEffect(() => {
@@ -69,32 +65,6 @@ const AdminPage = () => {
               onSubmit={handleSubmit}
               className="bg-neutral-700 p-6 rounded-md space-y-6"
             >
-              <div>
-                <label htmlFor="email" className="block mb-2">
-                  Email address
-                </label>
-                <input
-                  type="email"
-                  id="email"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  required
-                  className="w-full p-3 bg-neutral-600 rounded-md text-neutral-100"
-                />
-              </div>
-              <div>
-                <label htmlFor="password" className="block mb-2">
-                  Password
-                </label>
-                <input
-                  type="password"
-                  id="password"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  required
-                  className="w-full p-3 bg-neutral-600 rounded-md text-neutral-100"
-                />
-              </div>
               {error && (
                 <div className="bg-red-700 hover:bg-red-600 p-2 rounded-md">
                   {error}
@@ -104,7 +74,7 @@ const AdminPage = () => {
                 type="submit"
                 className={`w-full p-3 rounded-md text-neutral-800 font-bold ${styles.mcBackColor} ${styles.backHov}`}
               >
-                LOGIN
+                LOGIN WITH GOOGLE
               </button>
             </form>
           </div>

@@ -1,18 +1,18 @@
 import { useState, useEffect } from "react";
 import { useRouter } from "next/router";
-import { isAuthenticated } from "../../lib/auth";
+import useAuth from "../../hooks/useAuth";
 
 import JobListings from "./JobListings";
-import ImageHandler from './ImageHandler';
+import ImageHandler from "./ImageHandler";
 import ServicesHandler from "./ServicesHandler";
 
 const AdminDashboard = () => {
-  const [selectedTab, setSelectedTab] = useState("jobListings");
-
+  const [selectedTab, setSelectedTab] = useState("images");
+  const { isLoggedIn } = useAuth();
   const router = useRouter();
 
   useEffect(() => {
-    if (!isAuthenticated()) {
+    if (!isLoggedIn) {
       router.push("/admin");
     }
   }, []);

@@ -1,13 +1,20 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faTools, faThumbsUp, faTruck, faScroll } from "@fortawesome/free-solid-svg-icons";
+import {
+  faTools,
+  faThumbsUp,
+  faTruck,
+  faScroll,
+} from "@fortawesome/free-solid-svg-icons";
 import Link from "next/link";
-import { getStorage, ref, getDownloadURL } from "firebase/storage";
-import { app } from "../firebase";
+import useImages from "../hooks/useImages"; // Import the custom hook
 
 import styles from "../styles/Home.module.css";
 
 const WhyChooseUs = () => {
+  const images = useImages(); // Call the custom hook
+  const bgImageUrl = images["Patio Build"]
+
   const reasons = [
     {
       icon: faTools,
@@ -35,20 +42,12 @@ const WhyChooseUs = () => {
     },
   ];
 
-  const [bgImageUrl, setBgImageUrl] = useState("");
-
-  useEffect(() => {
-    const storage = getStorage(app);
-    const imageRef = ref(storage, "why-choose-us/image1.jpg");
-    getDownloadURL(imageRef).then(setBgImageUrl);
-  }, []);
-
   return (
     <section className="relative py-20 px-4 sm:px-8 md:px-16 lg:px-24">
       <div
         className="absolute inset-0 h-full w-full py-20"
         style={{
-          backgroundImage: `url(${bgImageUrl})`,
+          backgroundImage: `url(${bgImageUrl || "../gallery/Gallery/Services/flooring.jpg"})`,
           backgroundPosition: "center",
           backgroundSize: "cover",
           backgroundAttachment: "fixed",

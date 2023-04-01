@@ -22,18 +22,18 @@ import styles from "../../styles/Home.module.css";
 
 const ImageHandler = () => {
   const [imageURLs, setImageURLs] = useState([]);
-  const [selectedFile, setSelectedFile] = useState(null);
-  const [loading, setLoading] = useState(false);
   const [removeImagesMode, setRemoveImagesMode] = useState(false);
   const [selectedImages, setSelectedImages] = useState([]);
+  const [isTitleModalVisible, setIsTitleModalVisible] = useState(false);
+  // const [currentFile, setCurrentFile] = useState(null);
+  const [filesWithTitle, setFilesWithTitle] = useState([]);
+  const [imageTitle, setImageTitle] = useState("");
 
-  const handleImageUpload = async (file) => {
+  const handleImageUpload = async (file, title) => {
     if (!file) {
       alert("Please select a file.");
       return;
     }
-
-    setLoading(true);
 
     try {
       const storageRef = ref(storage, `images/${file.name}`);
@@ -43,27 +43,42 @@ const ImageHandler = () => {
       const imageURL = await getDownloadURL(storageRef);
       console.log("Download URL retrieved:", imageURL);
 
-      await saveImageURLToFirestore(imageURL);
+      await saveImageURLToFirestore(imageURL, title);
       console.log("URL saved to Firestore.");
-
-      setLoading(false);
     } catch (error) {
       console.error("Error uploading image:", error);
-      setLoading(false);
     }
+  };
+
+  const openTitleModal = () => {
+    setIsTitleModalVisible(true);
+  };
+
+  const handleTitleChange = (index, e) => {
+    const updatedFilesWithTitle = [...filesWithTitle];
+    updatedFilesWithTitle[index].title = e.target.value;
+    setFilesWithTitle(updatedFilesWithTitle);
+  };
+
+  const handleTitleSubmit = () => {
+    filesWithTitle.forEach(({ file, title }) => {
+      handleImageUpload(file, title);
+    });
+    setFilesWithTitle([]);
+    setIsTitleModalVisible(false);
   };
 
   const handleFileChange = (e) => {
     console.log("Files selected:", e.target.files);
     const files = Array.from(e.target.files); // Convert FileList to an array
-    files.forEach((file) => {
-      handleImageUpload(file);
-    });
+    const filesWithTitle = files.map((file) => ({ file, title: "" }));
+    setFilesWithTitle(filesWithTitle);
+    openTitleModal();
   };
-  
-  const saveImageURLToFirestore = async (imageURL) => {
+
+  const saveImageURLToFirestore = async (imageURL, title) => {
     const imagesRef = collection(firestore, "images");
-    await addDoc(imagesRef, { url: imageURL });
+    await addDoc(imagesRef, { url: imageURL, title });
   };
 
   const deleteImage = async (url) => {
@@ -134,6 +149,34 @@ const ImageHandler = () => {
 
   return (
     <div>
+      {isTitleModalVisible && (
+        <>
+          <div className="fixed inset-0 bg-gray-500 opacity-50 z-40"></div>
+          <div className="fixed inset-0 flex items-center justify-center z-50">
+            <div className="bg-neutral-700 p-6 rounded shadow">
+              <h2 className="text-lg font-semibold mb-4">Enter image titles</h2>
+              {filesWithTitle.map((fileWithTitle, index) => (
+                <div key={index} className="mb-2">
+                  <label className="block mb-1">Image {index + 1}:</label>
+                  <input
+                    type="text"
+                    className="w-full p-2 border border-gray-300 text-neutral-800 rounded"
+                    placeholder="Image title"
+                    value={fileWithTitle.title}
+                    onChange={(e) => handleTitleChange(index, e)}
+                  />
+                </div>
+              ))}
+              <button
+                onClick={handleTitleSubmit}
+                className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded"
+              >
+                Submit
+              </button>
+            </div>
+          </div>
+        </>
+      )}
       <div className="flex items-center flex-row justify-between">
         <label className="cursor-pointer">
           <input

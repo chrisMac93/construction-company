@@ -1,6 +1,7 @@
 import React from "react";
 import FlooringForm from "./FlooringForm";
 import { calculateFlooringCost } from "./FlooringForm";
+import { renderSwitch } from "./RenderSwitch";
 
 export const calculateBathroomCost = (formData) => {
   const sinkCabinetCosts = {
@@ -85,118 +86,95 @@ const BathroomForm = ({ handleChange, formData }) => {
 
   return (
     <>
-      <div className="form-control">
-        <label>
-          Do you need a sink?
-          <input
-            type="checkbox"
-            name="sinkNeeded"
-            checked={formData.sinkNeeded}
-            onChange={handleChange}
-          />
-        </label>
-      </div>
-
-      {formData.sinkNeeded && (
-        <>
-          <div className="form-control">
-            <label>
-              Sink Type:
-              <select
-                name="sinkType"
-                value={formData.sinkType}
-                onChange={handleChange}
-              >
-                <option value="">Select a Sink Type</option>
-                {sinkMaterialTypes.map((type) => (
-                  <option key={type} value={type}>
-                    {type}
-                  </option>
-                ))}
-              </select>
-            </label>
-          </div>
-        </>
+    <div className="form-control">
+      {renderSwitch(
+        "flooringIncluded",
+        "flooringIncluded",
+        formData.flooringIncluded,
+        handleChange
       )}
-      <div className="form-control">
-        <label>
-          Do you need a toilet?
-          <input
-            type="checkbox"
-            name="toiletNeeded"
-            checked={formData.toiletNeeded}
-            onChange={handleChange}
-          />
-        </label>
-      </div>
+      <label className="ml-1 text-lg">Do you need flooring?</label>
+    </div>
 
-      {formData.toiletNeeded && (
+    {formData.flooringIncluded && (
+      <FlooringForm handleChange={handleChange} formData={formData} />
+    )}
+    <div className="form-control">
+      {renderSwitch("sinkNeeded", "sinkNeeded", formData.sinkNeeded, handleChange)}
+      <label className="ml-1 text-lg">Do you need a sink?</label>
+    </div>
+
+    {formData.sinkNeeded && (
+      <>
         <div className="form-control">
-          <label>
-            Toilet Type:
+          <label className="text-lg">
+            Sink Type:
             <select
-              name="toiletType"
-              value={formData.toiletType}
+              name="sinkType"
+              value={formData.sinkType}
               onChange={handleChange}
+              className="w-full p-3 bg-neutral-700 rounded-md text-neutral-100"
             >
-              <option value="">Select a Toilet Tier</option>
-              <option value="Standard">Standard</option>
-              <option value="Premium">Premium</option>
-              <option value="Luxury">Luxury</option>
+              <option value="">Select a Sink Type</option>
+              {sinkMaterialTypes.map((type) => (
+                <option key={type} value={type}>
+                  {type}
+                </option>
+              ))}
             </select>
           </label>
         </div>
-      )}
+      </>
+    )}
+    <div className="form-control">
+      {renderSwitch("toiletNeeded", "toiletNeeded", formData.toiletNeeded, handleChange)}
+      <label className="ml-1 text-lg">Do you need a toilet?</label>
+    </div>
 
+    {formData.toiletNeeded && (
       <div className="form-control">
-        <label>
-          Do you need a shower/tub?
-          <input
-            type="checkbox"
-            name="showerTubNeeded"
-            checked={formData.showerTubNeeded}
+        <label className="text-lg">
+          Toilet Type:
+          <select
+            name="toiletType"
+            value={formData.toiletType}
             onChange={handleChange}
-          />
+            className="w-full p-3 bg-neutral-700 rounded-md text-neutral-100"
+          >
+            <option value="">Select a Toilet Tier</option>
+            <option value="Standard">Standard</option>
+            <option value="Premium">Premium</option>
+            <option value="Luxury">Luxury</option>
+          </select>
         </label>
       </div>
+    )}
 
-      {formData.showerTubNeeded && (
-        <div className="form-control">
-          <label>
-            Shower/Tub Type:
-            <select
-              name="showerTubType"
-              value={formData.showerTubType}
-              onChange={handleChange}
-            >
-              <option value="">Select a Shower/Tub Tier</option>
-              <option value="Standard">Standard</option>
-              <option value="Premium">Premium</option>
-              <option value="Luxury">Luxury</option>
-            </select>
-          </label>
-        </div>
-      )}
+    <div className="form-control">
+      {renderSwitch("showerTubNeeded", "showerTubNeeded", formData.showerTubNeeded, handleChange)}
+      <label className="ml-1 text-lg">Do you need a shower/tub?</label>
+    </div>
 
+    {formData.showerTubNeeded && (
       <div className="form-control">
-        <label>
-          Do you need flooring?
-          <input
-            type="checkbox"
-            name="flooringNeeded"
-            checked={formData.flooringNeeded}
+        <label className="text-lg">
+          Shower/Tub Type:
+          <select
+            name="showerTubType"
+            value={formData.showerTubType}
             onChange={handleChange}
-          />
+            className="w-full p-3 bg-neutral-700 rounded-md text-neutral-100"
+          >
+            <option value="">Select a Shower/Tub Tier</option>
+            <option value="Standard">Standard</option>
+            <option value="Premium">Premium</option>
+            <option value="Luxury">Luxury</option>
+          </select>
         </label>
       </div>
-
-      {formData.flooringNeeded && (
-        <>
-          <FlooringForm handleChange={handleChange} formData={formData} />
-        </>
-      )}
-    </>
-  );
+    )}
+  </>
+);
 };
 
 export default BathroomForm;
