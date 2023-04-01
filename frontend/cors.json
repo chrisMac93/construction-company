@@ -1,0 +1,8 @@
+[
+    {
+      "origin": ["*"],
+      "method": ["GET", "POST", "PUT", "DELETE"],
+      "maxAgeSeconds": 3600,
+      "responseHeader": ["Content-Type", "x-goog-meta-FirebaseStorageDownloadTokens", "x-goog-storage-class", "x-goog-hash", "x-goog-generation", "x-goog-metageneration", "x-goog-stored-content-encoding", "x-goog-stored-content-length", "x-goog-storage-class", "x-goog-content-length", "x-goog-hash", "x-goog-generation", "x-goog-metageneration", "x-goog-stored-content-encoding", "x-goog-stored-content-length"]
+    }
+  ]

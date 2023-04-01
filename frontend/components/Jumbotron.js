@@ -1,6 +1,8 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import { motion } from "framer-motion";
+import { getStorage, ref, getDownloadURL } from "firebase/storage";
+import { app } from "../firebase";
 
 const Jumbotron = () => {
   const headerVariants = {
@@ -13,10 +15,18 @@ const Jumbotron = () => {
     visible: { opacity: 1, scale: 1 },
   };
 
+  const [bgImageUrl, setBgImageUrl] = useState("");
+
+  useEffect(() => {
+    const storage = getStorage(app);
+    const imageRef = ref(storage, "jumbotron/image2.jpg");
+    getDownloadURL(imageRef).then(setBgImageUrl);
+  }, []);
+
   return (
     <div
       className="relative mt-16 w-full minus-navbar parallax"
-      style={{ backgroundImage: 'url("/gallery/image2.jpg")' }}
+      style={{ backgroundImage: `url(${bgImageUrl})` }}
     >
       <div className="absolute inset-0 bg-black opacity-50"></div>
       <div className="absolute inset-0 flex flex-col items-center text-center justify-center space-y-4 px-6 text-white">

@@ -1,12 +1,9 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  faTools,
-  faThumbsUp,
-  faTruck,
-  faScroll,
-} from "@fortawesome/free-solid-svg-icons";
+import { faTools, faThumbsUp, faTruck, faScroll } from "@fortawesome/free-solid-svg-icons";
 import Link from "next/link";
+import { getStorage, ref, getDownloadURL } from "firebase/storage";
+import { app } from "../firebase";
 
 import styles from "../styles/Home.module.css";
 
@@ -38,12 +35,20 @@ const WhyChooseUs = () => {
     },
   ];
 
+  const [bgImageUrl, setBgImageUrl] = useState("");
+
+  useEffect(() => {
+    const storage = getStorage(app);
+    const imageRef = ref(storage, "why-choose-us/image1.jpg");
+    getDownloadURL(imageRef).then(setBgImageUrl);
+  }, []);
+
   return (
     <section className="relative py-20 px-4 sm:px-8 md:px-16 lg:px-24">
       <div
         className="absolute inset-0 h-full w-full py-20"
         style={{
-          backgroundImage: "url('/gallery/image1.jpg')",
+          backgroundImage: `url(${bgImageUrl})`,
           backgroundPosition: "center",
           backgroundSize: "cover",
           backgroundAttachment: "fixed",

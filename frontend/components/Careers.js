@@ -1,5 +1,8 @@
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import { firestore } from "../lib/firebase";
+import { collection, getDocs } from "firebase/firestore";
+
 import styles from "../styles/Home.module.css";
 
 const Careers = () => {
@@ -9,9 +12,22 @@ const Careers = () => {
   const [fileName, setFileName] = useState("");
 
   useEffect(() => {
-    fetch("http://localhost:3001/api/job-listings")
-      .then((res) => res.json())
-      .then((data) => setJobListings(data));
+    const fetchJobListings = async () => {
+      try {
+        const jobListingsRef = collection(firestore, "jobListings");
+        const querySnapshot = await getDocs(jobListingsRef);
+        const data = querySnapshot.docs.map((doc) => ({
+          id: doc.id,
+          ...doc.data(),
+        }));
+        console.log("Job listings fetched successfully:", data);
+        setJobListings(data);
+      } catch (error) {
+        console.error("Error fetching job listings:", error);
+      }
+    };
+
+    fetchJobListings();
   }, []);
 
   const handleFileInputClick = () => {

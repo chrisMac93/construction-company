@@ -1,5 +1,12 @@
 import { useState, useEffect } from "react";
-
+import {
+  collection,
+  addDoc,
+  onSnapshot,
+  deleteDoc,
+  doc,
+} from "firebase/firestore";
+import { firestore } from "../../lib/firebase";
 import styles from "../../styles/Home.module.css";
 
 
@@ -14,39 +21,40 @@ const JobListings = () => {
   });
 
   useEffect(() => {
-    fetch("http://localhost:3001/api/job-Listings")
-      .then((res) => res.json())
-      .then((data) => setJobListings(data));
+    const jobListingsRef = collection(firestore, "jobListings");
+    const unsubscribe = onSnapshot(jobListingsRef, (snapshot) => {
+      const jobs = snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
+      setJobListings(jobs);
+    });
+
+    return () => unsubscribe();
   }, []);
 
-  const handleAddJob = () => {
-    fetch("http://localhost:3001/api/job-Listings", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(newJob),
-    })
-      .then((res) => res.json())
-      .then((data) => {
-        console.log(data);
-        setJobListings([...jobListings, data]);
-        setNewJob({
-          title: "",
-          location: "",
-          salary: "",
-          jobType: "",
-          shiftAndSchedule: "",
-        });
+  const handleAddJob = async () => {
+    try {
+      const jobListingsRef = collection(firestore, "jobListings");
+      const newDoc = await addDoc(jobListingsRef, newJob);
+      setJobListings([...jobListings, { id: newDoc.id, ...newJob }]);
+      setNewJob({
+        title: "",
+        location: "",
+        salary: "",
+        jobType: "",
+        shiftAndSchedule: "",
       });
+    } catch (error) {
+      console.error("Error adding new job:", error);
+    }
   };
 
-  const handleDeleteJob = (id) => {
-    fetch(`http://localhost:3001/api/job-Listings/${id}`, {
-      method: "DELETE",
-    }).then(() => {
+  const handleDeleteJob = async (id) => {
+    try {
+      const jobRef = doc(firestore, "jobListings", id);
+      await deleteDoc(jobRef);
       setJobListings(jobListings.filter((job) => job.id !== id));
-    });
+    } catch (error) {
+      console.error("Error deleting job:", error);
+    }
   };
 
   return (

@@ -11,7 +11,7 @@ export const sendEmail = (formData, estimate) => {
   };
 
   return emailjs
-    .sendForm(process.env.EMAILJS_SERVICE_ID, YOUR_TEMPLATE_ID, templateParams, process.env.EMAILJS_PUBLIC_KEY)
+    .sendForm(process.env.NEXT_PUBLIC_EMAILJS_SERVICE_ID, process.env.NEXT_PUBLIC_EMAILJS_TEMPLATE_ID, templateParams, process.env.NEXT_PUBLIC_EMAILJS_PUBLIC_KEY)
     .then(
       (result) => {
         console.log("Email sent successfully!", result);

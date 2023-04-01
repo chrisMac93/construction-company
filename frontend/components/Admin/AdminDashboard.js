@@ -3,6 +3,8 @@ import { useRouter } from "next/router";
 import { isAuthenticated } from "../../lib/auth";
 
 import JobListings from "./JobListings";
+import ImageHandler from './ImageHandler';
+import ServicesHandler from "./ServicesHandler";
 
 const AdminDashboard = () => {
   const [selectedTab, setSelectedTab] = useState("jobListings");
@@ -19,10 +21,16 @@ const AdminDashboard = () => {
     return (
       <div className="flex mb-8 justify-center">
         <button
-          className={`p-2 ${selectedTab === "jobListings" && "font-extrabold"}`}
+          className={`p-2 ${selectedTab === "jobListings" && "font-bold"}`}
           onClick={() => setSelectedTab("jobListings")}
         >
           Job Listings
+        </button>
+        <button
+          className={`p-2 ${selectedTab === "services" && "font-bold"}`}
+          onClick={() => setSelectedTab("services")}
+        >
+          Services
         </button>
         <button
           className={`p-2 ${selectedTab === "images" && "font-bold"}`}
@@ -48,6 +56,8 @@ const AdminDashboard = () => {
         </h2>
         {renderTabs()}
         {selectedTab === "jobListings" && <JobListings />}
+        {selectedTab === "images" && <ImageHandler />}
+        {selectedTab === "services" && <ServicesHandler />}
       </div>
     </div>
   );

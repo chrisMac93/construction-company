@@ -1,4 +1,6 @@
 import { useState, useEffect } from "react";
+import { collection, getDocs } from "firebase/firestore";
+import { firestore } from "../lib/firebase";
 
 import styles from "../styles/Home.module.css";
 
@@ -8,86 +10,45 @@ const Services = ({ scrollToRef, servicesRef }) => {
   const [isSmallScreen, setIsSmallScreen] = useState(false);
   const [fadeIn, setFadeIn] = useState(true);
 
-  const servicesList = [
-    {
-      title: "Whole-Home Remodel",
-      description:
-        "Lorem ipsum dolor sit amet, consectetur adipiscing elit.Lorem ipsum dolor sit amet, consectetur adipiscing elit.Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
-      image: "/gallery/actual/whole-home.jpg",
-    },
-    {
-      title: "Interior Remodel",
-      description:
-        "Lorem ipsum dolor sit amet, consectetur adipiscing elit.Lorem ipsum dolor sit amet, consectetur adipiscing elit.Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
-      image: "/gallery/actual/interior.jpg",
-    },
-    {
-      title: "Exterior",
-      description:
-        "Lorem ipsum dolor sit amet, consectetur adipiscing elit.Lorem ipsum dolor sit amet, consectetur adipiscing elit.Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
-      image: "/gallery/actual/exterior.jpg",
-    },
-    {
-      title: "Flooring",
-      description:
-        "Lorem ipsum dolor sit amet, consectetur adipiscing elit.Lorem ipsum dolor sit amet, consectetur adipiscing elit.Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
-      image: "/gallery/actual/flooring.jpg",
-    },
-    {
-      title: "Deck Build",
-      description:
-        "Lorem ipsum dolor sit amet, consectetur adipiscing elit.Lorem ipsum dolor sit amet, consectetur adipiscing elit.Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
-      image: "/gallery/actual/deck.jpg",
-    },
-    {
-      title: "Patio Build",
-      description:
-        "Lorem ipsum dolor sit amet, consectetur adipiscing elit.Lorem ipsum dolor sit amet, consectetur adipiscing elit.Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
-      image: "/gallery/image1.jpg",
-    },
-    {
-      title: "Drywall",
-      description:
-        "Lorem ipsum dolor sit amet, consectetur adipiscing elit.Lorem ipsum dolor sit amet, consectetur adipiscing elit.Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
-      image: "/gallery/actual/interior.jpg",
-    },
-    {
-      title: "Epoxy",
-      description:
-        "Lorem ipsum dolor sit amet, consectetur adipiscing elit.Lorem ipsum dolor sit amet, consectetur adipiscing elit.Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
-      image: "/gallery/actual/epoxy1.jpg",
-    },
-    {
-      title: "Kitchen",
-      description:
-        "Lorem ipsum dolor sit amet, consectetur adipiscing elit.Lorem ipsum dolor sit amet, consectetur adipiscing elit.Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
-      image: "/gallery/actual/kitchen.jpg",
-    },
-    {
-      title: "Bath",
-      description:
-        "Lorem ipsum dolor sit amet, consectetur adipiscing elit.Lorem ipsum dolor sit amet, consectetur adipiscing elit.Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
-      image: "/gallery/actual/bathroom.jpg",
-    },
-    {
-      title: "Concrete Pour",
-      description:
-        "Lorem ipsum dolor sit amet, consectetur adipiscing elit.Lorem ipsum dolor sit amet, consectetur adipiscing elit.Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
-      image: "/gallery/actual/concrete.jpg",
-    },
-    {
-      title: "Roofing",
-      description:
-        "Lorem ipsum dolor sit amet, consectetur adipiscing elit.Lorem ipsum dolor sit amet, consectetur adipiscing elit.Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
-      image: "/gallery/actual/roofing.jpg",
-    },
-  ];
+  const [servicesList, setServicesList] = useState([]);
+
+  const fetchServicesWithImages = async () => {
+    const servicesSnap = await getDocs(collection(firestore, "services"));
+    const servicesData = servicesSnap.docs.map((doc) => ({
+      id: doc.id,
+      ...doc.data(),
+    }));
+
+    const imagesSnap = await getDocs(collection(firestore, "images"));
+    const imagesData = imagesSnap.docs.map((doc) => ({
+      id: doc.id,
+      ...doc.data(),
+    }));
+
+    const matchedServices = servicesData.map((service) => {
+      const matchedImage = imagesData.find(
+        (image) => image.title === service.title
+      );
+      return { ...service, image: matchedImage ? matchedImage.url : "" };
+    });
+
+    return matchedServices;
+  };
+
+  useEffect(() => {
+    const fetchAndSetServices = async () => {
+      const fetchedServices = await fetchServicesWithImages();
+      setServicesList(fetchedServices);
+    };
+
+    fetchAndSetServices();
+  }, []);
 
   useEffect(() => {
     setCurrentServices(
       servicesList.slice(visibleServices, visibleServices + 6)
     );
-  }, [visibleServices]);
+  }, [visibleServices, servicesList]);
 
   useEffect(() => {
     const checkScreenSize = () => {

@@ -1,9 +1,10 @@
+import { useState, useEffect } from "react";
 import Image from "next/legacy/image";
 import Link from "next/link";
 import SwiperCore, { Navigation, Autoplay } from "swiper";
 import { Swiper, SwiperSlide } from "swiper/react";
-// import "swiper/swiper.min.css";
-// import "swiper/components/navigation/navigation.min.css";
+import { firestore } from "../lib/firebase";
+import { collection, getDocs } from "firebase/firestore";
 
 import "swiper/css";
 import "swiper/css/navigation";
@@ -13,22 +14,19 @@ import "react-responsive-carousel/lib/styles/carousel.min.css";
 SwiperCore.use([Navigation, Autoplay]);
 
 const Gallery = () => {
-  const images = [
-    "/gallery/image1.jpg",
-    "/gallery/image2.jpg",
-    "/gallery/image3.jpg",
-    "/gallery/image4.jpg",
-    "/gallery/actual/bathroom.jpg",
-    "/gallery/actual/concrete.jpg",
-    "/gallery/actual/deck.jpg",
-    "/gallery/actual/epoxy1.jpg",
-    "/gallery/actual/exterior.jpg",
-    "/gallery/actual/flooring.jpg",
-    "/gallery/actual/interior.jpg",
-    "/gallery/actual/kitchen.jpg",
-    "/gallery/actual/roofing.jpg",
-    "/gallery/actual/whole-home.jpg",
-  ];
+  const [images, setImages] = useState([]);
+
+  useEffect(() => {
+    const fetchImages = async () => {
+      const imageCollection = collection(firestore, "images");
+      const imageSnapshot = await getDocs(imageCollection);
+      const imageUrls = imageSnapshot.docs.map((doc) => doc.data().url);
+
+      setImages(imageUrls);
+    };
+
+    fetchImages();
+  }, []);
 
   return (
     <section className="bg-gradient-to-b from-slate-300 via-neutral-800 to-neutral-900 w-full mx-auto px-6 pt-28 pb-24">

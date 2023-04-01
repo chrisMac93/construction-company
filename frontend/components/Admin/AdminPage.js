@@ -1,6 +1,6 @@
 import useAuth from "../../hooks/useAuth";
 import AdminDashboard from "./AdminDashboard";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 
 import styles from "../../styles/Home.module.css";
 
@@ -22,17 +22,28 @@ const AdminPage = () => {
     }
   };
 
+  const autoLogoutTimeout = 30 * 60 * 1000; // 30 minutes
+
   useEffect(() => {
     const token = localStorage.getItem("token");
     setIsLoggedIn(!!token);
   }, []);
 
-  const handleLogout = () => {
+  const handleLogout = useCallback(() => {
     logout();
     setIsLoggedIn(false);
     setEmail("");
     setPassword("");
-  };
+  }, [logout]);
+
+  useEffect(() => {
+    if (isLoggedIn) {
+      const timer = setTimeout(handleLogout, autoLogoutTimeout);
+      return () => clearTimeout(timer);
+    }
+  }, [isLoggedIn, handleLogout]);
+
+  
 
   return (
     <div className="bg-neutral-800 text-neutral-100 py-20 px-4 sm:px-8 md:px-16 lg:px-24">
@@ -85,7 +96,9 @@ const AdminPage = () => {
                 />
               </div>
               {error && (
-                <div className="bg-red-700 hover:bg-red-600 p-2 rounded-md">{error}</div>
+                <div className="bg-red-700 hover:bg-red-600 p-2 rounded-md">
+                  {error}
+                </div>
               )}
               <button
                 type="submit"
