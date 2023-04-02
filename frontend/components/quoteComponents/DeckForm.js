@@ -40,6 +40,7 @@ export const calculateDeckingCost = (
 };
 
 const DeckForm = ({ handleChange, formData }) => {
+
   const deckMaterials = [
     "Hardwood Decking Materials",
     "Redwood Decking",
@@ -90,16 +91,11 @@ const DeckForm = ({ handleChange, formData }) => {
         />
       </div>
       <div className="form-control mb-4">
-        {renderSwitch(
-          "handrails",
-          "handrails",
-          formData.handrails,
-          handleChange
-        )}
+      {renderSwitch("handrails", "handrails", formData.handrails || false, handleChange)}
         <label className="ml-1 text-lg">Do you want handrails?</label>
       </div>
       <div className="form-control">
-        {renderSwitch("lighting", "lighting", formData.lighting, handleChange)}
+      {renderSwitch("lighting", "lighting", formData.lighting || false, handleChange)}
         <label className="ml-1 text-lg">Do you want lighting?</label>
       </div>
     </>

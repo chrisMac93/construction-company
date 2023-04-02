@@ -154,12 +154,14 @@ const Quote = () => {
   const calculateEstimate = () => {
     let cost = 0;
 
+    console.log('Form Data:', formData); // Log form data
+
     if (
       formData.projectType === "whole-home" ||
       formData.projectType === "interior-remodel" ||
       formData.projectType === "exterior-remodel"
     ) {
-      switch (formData.tier) {
+      switch (tier) {
         case "basic":
           cost =
             formData.projectType === "whole-home"
@@ -194,7 +196,9 @@ const Quote = () => {
     } else {
       // Handle other project types
 
-      switch (formData.projectType) {
+      console.log('Project Type:', formData.projectType); // Log project type
+
+      switch (projectType) {
         case "flooring":
           cost = calculateFlooringCost(
             formData.flooringMaterial,
@@ -204,9 +208,9 @@ const Quote = () => {
         case "deck":
           cost = calculateDeckingCost(
             formData.deckMaterial,
-            formData.deckSqFootage,
-            formData.deckLighting,
-            formData.deckHandrails
+            formData.sqFootage,
+            formData.lighting,
+            formData.handrails
           );
           break;
         case "patio":
@@ -252,6 +256,8 @@ const Quote = () => {
         default:
           break;
       }
+
+      console.log('Calculated Cost:', cost); // Log calculated cost
 
       const total = cost;
       setEstimate(total);
