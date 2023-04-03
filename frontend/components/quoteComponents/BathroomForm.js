@@ -55,7 +55,18 @@ export const calculateBathroomCost = (formData) => {
   }
 
   if (formData.flooringNeeded) {
-    totalCost += calculateFlooringCost(formData.material, formData.sqFootage);
+    totalCost += calculateFlooringCost(
+      formData.flooringMaterial,
+      formData.flooringSqFootage
+    );
+  }
+
+  if (formData.plumbing) {
+    totalCost += 2000; // Assuming a fixed cost for plumbing
+  }
+
+  if (formData.lighting) {
+    totalCost += 1500; // Assuming a fixed cost for lighting
   }
 
   return totalCost;
@@ -86,95 +97,141 @@ const BathroomForm = ({ handleChange, formData }) => {
 
   return (
     <>
-    <div className="form-control">
-      {renderSwitch(
-        "flooringIncluded",
-        "flooringIncluded",
-        formData.flooringIncluded,
-        handleChange
+      <div className="form-control">
+        {renderSwitch(
+          "flooringIncluded",
+          "flooringIncluded",
+          formData.flooringIncluded,
+          handleChange
+        )}
+        <label className="ml-1 text-lg">Do you need flooring?</label>
+      </div>
+
+      {formData.flooringIncluded && (
+        <FlooringForm handleChange={handleChange} formData={formData} />
       )}
-      <label className="ml-1 text-lg">Do you need flooring?</label>
-    </div>
+      <div className="form-control">
+        {renderSwitch(
+          "sinkNeeded",
+          "sinkNeeded",
+          formData.sinkNeeded,
+          handleChange
+        )}
+        <label className="ml-1 text-lg">Do you need a sink?</label>
+      </div>
 
-    {formData.flooringIncluded && (
-      <FlooringForm handleChange={handleChange} formData={formData} />
-    )}
-    <div className="form-control">
-      {renderSwitch("sinkNeeded", "sinkNeeded", formData.sinkNeeded, handleChange)}
-      <label className="ml-1 text-lg">Do you need a sink?</label>
-    </div>
+      {formData.sinkNeeded && (
+        <>
+          <div className="form-control">
+            <label className="text-lg">
+              Sink Cabinet Material
+              <select
+                name="sinkCabinetMaterial"
+                value={formData.sinkCabinetMaterial}
+                onChange={handleChange}
+                className="w-full p-3 bg-neutral-700 rounded-md text-neutral-100"
+              >
+                <option value="">Select a Cabinet Material</option>
+                {cabinetMaterials.map((material) => (
+                  <option key={material} value={material}>
+                    {material}
+                  </option>
+                ))}
+              </select>
+            </label>
+          </div>
 
-    {formData.sinkNeeded && (
-      <>
+          <div className="form-control">
+            <label className="text-lg">
+              Sink Type
+              <select
+                name="sinkType"
+                value={formData.sinkType}
+                onChange={handleChange}
+                className="w-full p-3 bg-neutral-700 rounded-md text-neutral-100"
+              >
+                <option value="">Select a Sink Type</option>
+                {sinkMaterialTypes.map((type) => (
+                  <option key={type} value={type}>
+                    {type}
+                  </option>
+                ))}
+              </select>
+            </label>
+          </div>
+        </>
+      )}
+      <div className="form-control">
+        {renderSwitch(
+          "toiletNeeded",
+          "toiletNeeded",
+          formData.toiletNeeded,
+          handleChange
+        )}
+        <label className="ml-1 text-lg">Do you need a toilet?</label>
+      </div>
+
+      {formData.toiletNeeded && (
         <div className="form-control">
           <label className="text-lg">
-            Sink Type:
+            Toilet Type
             <select
-              name="sinkType"
-              value={formData.sinkType}
+              name="toiletType"
+              value={formData.toiletType}
               onChange={handleChange}
               className="w-full p-3 bg-neutral-700 rounded-md text-neutral-100"
             >
-              <option value="">Select a Sink Type</option>
-              {sinkMaterialTypes.map((type) => (
-                <option key={type} value={type}>
-                  {type}
-                </option>
-              ))}
+              <option value="">Select a Toilet Tier</option>
+              <option value="Standard">Standard</option>
+              <option value="Premium">Premium</option>
+              <option value="Luxury">Luxury</option>
             </select>
           </label>
         </div>
-      </>
-    )}
-    <div className="form-control">
-      {renderSwitch("toiletNeeded", "toiletNeeded", formData.toiletNeeded, handleChange)}
-      <label className="ml-1 text-lg">Do you need a toilet?</label>
-    </div>
+      )}
 
-    {formData.toiletNeeded && (
       <div className="form-control">
-        <label className="text-lg">
-          Toilet Type:
-          <select
-            name="toiletType"
-            value={formData.toiletType}
-            onChange={handleChange}
-            className="w-full p-3 bg-neutral-700 rounded-md text-neutral-100"
-          >
-            <option value="">Select a Toilet Tier</option>
-            <option value="Standard">Standard</option>
-            <option value="Premium">Premium</option>
-            <option value="Luxury">Luxury</option>
-          </select>
+        {renderSwitch(
+          "showerTubNeeded",
+          "showerTubNeeded",
+          formData.showerTubNeeded,
+          handleChange
+        )}
+        <label className="ml-1 text-lg">Do you need a shower/tub?</label>
+      </div>
+
+      {formData.showerTubNeeded && (
+        <div className="form-control">
+          <label className="text-lg">
+            Shower/Tub Type
+            <select
+              name="showerTubType"
+              value={formData.showerTubType}
+              onChange={handleChange}
+              className="w-full p-3 bg-neutral-700 rounded-md text-neutral-100"
+            >
+              <option value="">Select a Shower/Tub Tier</option>
+              <option value="Standard">Standard</option>
+              <option value="Premium">Premium</option>
+              <option value="Luxury">Luxury</option>
+            </select>
+          </label>
+        </div>
+      )}
+      <div className="form-control">
+        {renderSwitch("plumbing", "plumbing", formData.plumbing, handleChange)}
+        <label htmlFor="plumbing" className="ml-1 text-lg">
+          Plumbing
         </label>
       </div>
-    )}
-
-    <div className="form-control">
-      {renderSwitch("showerTubNeeded", "showerTubNeeded", formData.showerTubNeeded, handleChange)}
-      <label className="ml-1 text-lg">Do you need a shower/tub?</label>
-    </div>
-
-    {formData.showerTubNeeded && (
       <div className="form-control">
-        <label className="text-lg">
-          Shower/Tub Type:
-          <select
-            name="showerTubType"
-            value={formData.showerTubType}
-            onChange={handleChange}
-            className="w-full p-3 bg-neutral-700 rounded-md text-neutral-100"
-          >
-            <option value="">Select a Shower/Tub Tier</option>
-            <option value="Standard">Standard</option>
-            <option value="Premium">Premium</option>
-            <option value="Luxury">Luxury</option>
-          </select>
+        {renderSwitch("lighting", "lighting", formData.lighting, handleChange)}
+        <label htmlFor="lighting" className="ml-1 text-lg">
+          Lighting
         </label>
       </div>
-    )}
-  </>
-);
+    </>
+  );
 };
 
 export default BathroomForm;

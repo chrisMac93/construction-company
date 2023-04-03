@@ -1,7 +1,7 @@
 import React from "react";
 
-export const calculateConcreteCost = (material, concreteSqFootage) => {
-    const materialCosts = {
+export const calculateConcreteCost = (concreteMaterial, concreteSqFootage) => {
+    const concreteMaterialCosts = {
       "Normal Strength Concrete": 95,
       "Plain or Ordinary Concrete": 85,
       "Reinforced Concrete": 110,
@@ -29,7 +29,7 @@ export const calculateConcreteCost = (material, concreteSqFootage) => {
       "Glass Concrete": 160,
     };
   
-    const costPerSqFoot = materialCosts[material];
+    const costPerSqFoot = concreteMaterialCosts[concreteMaterial];
     const totalCost = costPerSqFoot * concreteSqFootage;
   
     return totalCost;

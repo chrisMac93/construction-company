@@ -2,12 +2,12 @@ import React from "react";
 import { renderSwitch } from "./RenderSwitch";
 
 export const calculatePatioCost = (
-  material,
-  sqFootage,
-  lighting,
-  handrails
+  patioMaterial,
+  patioSqFootage,
+  patioLighting,
+  patioHandrails
 ) => {
-  const materialCosts = {
+  const patioMaterialCosts = {
     "Hardwood Patio Materials": 15,
     "Redwood Patio": 12,
     Cedar: 10,
@@ -22,18 +22,18 @@ export const calculatePatioCost = (
     Rubber: 9,
   };
 
-  const lightingCostPerSqFoot = 2;
-  const handrailsCostPerSqFoot = 3;
+  const patioLightingCostPerSqFoot = 2;
+  const patioHandrailsCostPerSqFoot = 3;
 
-  const costPerSqFoot = materialCosts[material];
-  let totalCost = costPerSqFoot * sqFootage;
+  const costPerSqFoot = patioMaterialCosts[patioMaterial];
+  let totalCost = costPerSqFoot * patioSqFootage;
 
-  if (lighting) {
-    totalCost += lightingCostPerSqFoot * sqFootage;
+  if (patioLighting) {
+    totalCost += patioLightingCostPerSqFoot * patioSqFootage;
   }
 
-  if (handrails) {
-    totalCost += handrailsCostPerSqFoot * sqFootage;
+  if (patioHandrails) {
+    totalCost += patioHandrailsCostPerSqFoot * patioSqFootage;
   }
 
   return totalCost;
@@ -59,7 +59,7 @@ const PatioForm = ({ handleChange, formData }) => {
     <>
       <div className="form-control mb-4">
         <label htmlFor="patioMaterial" className="block mb-2">
-          Patio Material:
+          Patio Material
         </label>
         <select
           name="patioMaterial"
@@ -68,33 +68,33 @@ const PatioForm = ({ handleChange, formData }) => {
           onChange={handleChange}
           className="w-full p-3 bg-neutral-700 rounded-md text-neutral-100"
         >
-          <option value="">Select a patio material</option>
-          {patioMaterials.map((material) => (
-            <option key={material} value={material}>
-              {material}
+          <option value="">Select a patio Material</option>
+          {patioMaterials.map((patioMaterial) => (
+            <option key={patioMaterial} value={patioMaterial}>
+              {patioMaterial}
             </option>
           ))}
         </select>
       </div>
       <div className="form-control mb-4">
-        <label htmlFor="sqFootage" className="block mb-2">
-          Square Footage:
+        <label htmlFor="patioSqFootage" className="block mb-2">
+          Square Footage
         </label>
         <input
           type="number"
-          name="sqFootage"
-          id="sqFootage"
-          value={formData.sqFootage}
+          name="patioSqFootage"
+          id="patioSqFootage"
+          value={formData.patioSqFootage}
           onChange={handleChange}
           className="w-full p-3 bg-neutral-700 rounded-md text-neutral-100"
         />
       </div>
       <div className="form-control mb-4">
-      {renderSwitch("handrails", "handrails", formData.handrails || false, handleChange)}
+      {renderSwitch("patioHandrails", "patioHandrails", formData.patioHandrails || false, handleChange)}
         <label className="ml-1 text-lg">Do you want handrails?</label>
       </div>
       <div className="form-control">
-      {renderSwitch("lighting", "lighting", formData.lighting || false, handleChange)}
+      {renderSwitch("patioLighting", "patioLighting", formData.patioLighting || false, handleChange)}
         <label className="ml-1 text-lg">Do you want lighting?</label>
       </div>
     </>

@@ -1,39 +1,39 @@
 import React from "react";
 import { renderSwitch } from "./RenderSwitch";
 
-export const calculateDeckingCost = (
-  material,
-  sqFootage,
-  lighting,
-  handrails
+export const calculateDeckCost = (
+  deckMaterial,
+  deckSqFootage,
+  deckLighting,
+  deckHandrails
 ) => {
-  const materialCosts = {
-    "Hardwood Decking Materials": 15,
-    "Redwood Decking": 12,
+  const deckMaterialCosts = {
+    "Hardwood Deck Materials": 15,
+    "Redwood Deck": 12,
     Cedar: 10,
-    "Bamboo Decking Materials": 8,
+    "Bamboo Deck Materials": 8,
     Mahogany: 18,
     "Pressure-Treated Pine": 7,
     "Composite, Plastic & PVC": 12,
-    "Aluminum Decking": 15,
+    "Aluminum Deck": 15,
     "Fiberglass Deck Materials": 14,
     "Cement Board or Concrete Deck": 13,
     "Solid Stone": 20,
     Rubber: 9,
   };
 
-  const lightingCostPerSqFoot = 2;
-  const handrailsCostPerSqFoot = 3;
+  const deckLightingCostPerSqFoot = 2;
+  const deckHandrailsCostPerSqFoot = 3;
 
-  const costPerSqFoot = materialCosts[material];
-  let totalCost = costPerSqFoot * sqFootage;
+  const costPerSqFoot = deckMaterialCosts[deckMaterial];
+  let totalCost = costPerSqFoot * deckSqFootage;
 
-  if (lighting) {
-    totalCost += lightingCostPerSqFoot * sqFootage;
+  if (deckLighting) {
+    totalCost += deckLightingCostPerSqFoot * deckSqFootage;
   }
 
-  if (handrails) {
-    totalCost += handrailsCostPerSqFoot * sqFootage;
+  if (deckHandrails) {
+    totalCost += deckHandrailsCostPerSqFoot * deckSqFootage;
   }
 
   return totalCost;
@@ -42,14 +42,14 @@ export const calculateDeckingCost = (
 const DeckForm = ({ handleChange, formData }) => {
 
   const deckMaterials = [
-    "Hardwood Decking Materials",
-    "Redwood Decking",
+    "Hardwood Deck Materials",
+    "Redwood Deck",
     "Cedar",
-    "Bamboo Decking Materials",
+    "Bamboo Deck Materials",
     "Mahogany",
     "Pressure-Treated Pine",
     "Composite, Plastic & PVC",
-    "Aluminum Decking",
+    "Aluminum Deck",
     "Fiberglass Deck Materials",
     "Cement Board or Concrete Deck",
     "Solid Stone",
@@ -69,33 +69,33 @@ const DeckForm = ({ handleChange, formData }) => {
           value={formData.deckMaterial}
           onChange={handleChange}
         >
-          <option value="">Select a deck material</option>
-          {deckMaterials.map((material) => (
-            <option key={material} value={material}>
-              {material}
+          <option value="">Select a deck Material</option>
+          {deckMaterials.map((deckMaterial) => (
+            <option key={deckMaterial} value={deckMaterial}>
+              {deckMaterial}
             </option>
           ))}
         </select>
       </div>
       <div className="form-control">
-        <label htmlFor="sqFootage" className="block mb-2">
+        <label htmlFor="deckSqFootage" className="block mb-2">
           Square Footage
         </label>
         <input
           type="number"
-          name="sqFootage"
-          id="sqFootage"
+          name="deckSqFootage"
+          id="deckSqFootage"
           className="w-full p-3 bg-neutral-700 rounded-md text-neutral-100"
-          value={formData.sqFootage}
+          value={formData.deckSqFootage}
           onChange={handleChange}
         />
       </div>
       <div className="form-control mb-4">
-      {renderSwitch("handrails", "handrails", formData.handrails || false, handleChange)}
+      {renderSwitch("deckHandrails", "deckHandrails", formData.deckHandrails || false, handleChange)}
         <label className="ml-1 text-lg">Do you want handrails?</label>
       </div>
       <div className="form-control">
-      {renderSwitch("lighting", "lighting", formData.lighting || false, handleChange)}
+      {renderSwitch("deckLighting", "deckLighting", formData.deckLighting || false, handleChange)}
         <label className="ml-1 text-lg">Do you want lighting?</label>
       </div>
     </>

@@ -1,49 +1,59 @@
 import React from "react";
 
-export const calculateDrywallCost = (material, size, thickness, sqFootage) => {
-    const materialCosts = {
-      standard: 1,
-      mold_resistant: 1.5,
-      moisture_resistant: 1.6,
-      fire_resistant: 1.8,
-      soundproof: 2.2,
-    };
-  
-    const sizeMultiplier = {
-      "4x8": 1,
-      "4x10": 1.25,
-      "4x12": 1.5,
-    };
-  
-    const thicknessMultiplier = {
-      "1/4": 1,
-      "3/8": 1.2,
-      "1/2": 1.4,
-      "5/8": 1.6,
-    };
-  
-    const baseCostPerSqFoot = materialCosts[material];
-    const sizeCostMultiplier = sizeMultiplier[size];
-    const thicknessCostMultiplier = thicknessMultiplier[thickness];
-    const totalCost = baseCostPerSqFoot * sizeCostMultiplier * thicknessCostMultiplier * sqFootage;
-  
-    return totalCost;
+export const calculateDrywallCost = (
+  drywallMaterial,
+  size,
+  thickness,
+  drywallSqFootage
+) => {
+  const drywallMaterialCosts = {
+    standard: 1,
+    mold_resistant: 1.5,
+    moisture_resistant: 1.6,
+    fire_resistant: 1.8,
+    soundproof: 2.2,
   };
+
+  const sizeMultiplier = {
+    "4x8": 1,
+    "4x10": 1.25,
+    "4x12": 1.5,
+  };
+
+  const thicknessMultiplier = {
+    "1/4": 1,
+    "3/8": 1.2,
+    "1/2": 1.4,
+    "5/8": 1.6,
+  };
+
+  const baseCostPerSqFoot = drywallMaterialCosts[drywallMaterial];
+  const sizeCostMultiplier = sizeMultiplier[size];
+  const thicknessCostMultiplier = thicknessMultiplier[thickness];
+  const totalCost =
+    baseCostPerSqFoot *
+    sizeCostMultiplier *
+    thicknessCostMultiplier *
+    drywallSqFootage;
+  const roundedTotalCost = parseFloat(totalCost.toFixed(2));
+
+  return roundedTotalCost;
+};
 
 const DrywallForm = ({ handleChange, formData }) => {
   return (
     <>
-    <div className="form-control mb-4">
-      <label htmlFor="material" className="block mb-2">
-        Material:
-      </label>
-      <select
-        name="material"
-        id="material"
-        value={formData.material}
-        onChange={handleChange}
-        className="w-full p-3 bg-neutral-700 rounded-md text-neutral-100"
-      >
+      <div className="form-control mb-4">
+        <label htmlFor="drywallMaterial" className="block mb-2">
+          Material
+        </label>
+        <select
+          name="drywallMaterial"
+          id="drywallMaterial"
+          value={formData.drywallMaterial}
+          onChange={handleChange}
+          className="w-full p-3 bg-neutral-700 rounded-md text-neutral-100"
+        >
           <option value="">Select a material</option>
           <option value="standard">Standard</option>
           <option value="mold_resistant">Mold Resistant</option>
@@ -54,7 +64,7 @@ const DrywallForm = ({ handleChange, formData }) => {
       </div>
       <div className="form-control mb-4">
         <label htmlFor="size" className="block mb-2">
-          Size:
+          Size
         </label>
         <select
           name="size"
@@ -71,7 +81,7 @@ const DrywallForm = ({ handleChange, formData }) => {
       </div>
       <div className="form-control mb-4">
         <label htmlFor="thickness" className="block mb-2">
-          Thickness:
+          Thickness
         </label>
         <select
           name="thickness"
@@ -88,14 +98,14 @@ const DrywallForm = ({ handleChange, formData }) => {
         </select>
       </div>
       <div className="form-control">
-        <label htmlFor="sqFootage" className="block mb-2">
-          Square Footage:
+        <label htmlFor="drywallSqFootage" className="block mb-2">
+          Square Footage
         </label>
         <input
           type="number"
-          name="sqFootage"
-          id="sqFootage"
-          value={formData.sqFootage}
+          name="drywallSqFootage"
+          id="drywallSqFootage"
+          value={formData.drywallSqFootage}
           onChange={handleChange}
           className="w-full p-3 bg-neutral-700 rounded-md text-neutral-100"
         />

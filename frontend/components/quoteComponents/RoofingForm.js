@@ -1,7 +1,7 @@
 import React from "react";
 
-export const calculateRoofingCost = (material, sqFootage) => {
-  const materialCosts = {
+export const calculateRoofingCost = (roofingMaterial, roofingSqFootage) => {
+  const roofingMaterialCosts = {
     "Rolled": 3,
     "BUR": 5,
     "Membrane": 7,
@@ -15,8 +15,8 @@ export const calculateRoofingCost = (material, sqFootage) => {
     "Synthetic(Rubber) Slate Tile": 14,
   };
 
-  const costPerSqFoot = materialCosts[material];
-  const totalCost = costPerSqFoot * sqFootage;
+  const costPerSqFoot = roofingMaterialCosts[roofingMaterial];
+  const totalCost = costPerSqFoot * roofingSqFootage;
 
   return totalCost;
 };
@@ -40,7 +40,7 @@ const RoofingForm = ({ handleChange, formData }) => {
     <>
       <div className="form-control">
         <label htmlFor="roofingMaterial" className="block mb-2">
-          Material:
+          Material
         </label>
         <select
           id="roofingMaterial"
@@ -49,10 +49,10 @@ const RoofingForm = ({ handleChange, formData }) => {
           onChange={handleChange}
           className="w-full p-3 bg-neutral-700 rounded-md text-neutral-100"
         >
-          <option value="">Select Material</option>
-          {roofingMaterials.map((material) => (
-            <option key={material} value={material}>
-              {material}
+          <option value="">Select a material</option>
+          {roofingMaterials.map((roofingMaterial) => (
+            <option key={roofingMaterial} value={roofingMaterial}>
+              {roofingMaterial}
             </option>
           ))}
         </select>
@@ -60,7 +60,7 @@ const RoofingForm = ({ handleChange, formData }) => {
 
       <div className="form-control">
         <label htmlFor="roofingSqFootage" className="block mb-2">
-          Square Footage:
+          Square Footage
         </label>
         <input
           type="number"

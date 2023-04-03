@@ -1,6 +1,6 @@
 import React from "react";
 
-import Quote from "../components/quoteComponents/Quote";
+import Quote from "../components/Quote/Quote";
 
 export default function Home() {
   return (
