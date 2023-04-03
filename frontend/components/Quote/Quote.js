@@ -49,16 +49,19 @@ const Quote = () => {
     // KitchenForm attributes
     flooringIncluded: false,
     island: false,
+    islandSqFootage: "",
     islandBaseMaterial: "",
     islandCountertop: "",
     islandStovetop: false,
     countertops: false,
     countertopMaterial: "",
     kitchenCabinets: false,
-    cabinetMaterial: "",
+    KitchenCabinetMaterial: "",
+    kitchenSink: false,
+    kitchenSinkMaterial: "",
     appliances: false,
-    plumbing: false,
-    lighting: false,
+    kitchenPlumbing: false,
+    kitchenLighting: false,
     // BathroomForm attributes
     sinkNeeded: false,
     sinkCabinetMaterial: "",
@@ -68,11 +71,14 @@ const Quote = () => {
     showerTubNeeded: false,
     showerTubType: "",
     flooringNeeded: false,
+    bathPlumbing: false,
+    bathLighting: false,
     // ContactForm attributes
     contactInfo: {
       name: "",
       email: "",
       phone: "",
+      message: "",
     },
   });
 
@@ -86,6 +92,18 @@ const Quote = () => {
 
   useEffect(() => {
     const relevantAttributes = {
+      wholeHome: [
+        "tier",
+        "wholeHomeSqFootage",
+      ],
+      interior: [
+        "tier",
+        "interiorSqFootage",
+      ],
+      exterior: [
+        "tier",
+        "exteriorSqFootage",
+      ],
       flooring: ["flooringMaterial", "flooringSqFootage"],
       bath: [
         "sinkCabinetMaterial",
@@ -94,9 +112,51 @@ const Quote = () => {
         "showerTubType",
         "flooringMaterial",
         "flooringSqFootage",
-        "plumbing",
-        "lighting",
+        "bathPlumbing",
+        "bathLighting",
       ],
+      kitchen: [
+        "flooringMaterial",
+        "flooringSqFootage",
+        "island",
+        "islandSqFootage",
+        "islandBaseMaterial",
+        "islandCountertop",
+        "islandStovetop",
+        "countertops",
+        "countertopMaterial",
+        "kitchenCabinets",
+        "KitchenCabinetMaterial",
+        "kitchenSink",
+        "kitchenSinkMaterial",
+        "appliances",
+        "kitchenPlumbing",
+        "kitchenLighting",
+      ],
+      drywall: [
+        "drywallMaterial",
+        "drywallSqFootage",
+        "size",
+        "thickness",
+        "flooringMaterial",
+        "flooringSqFootage",
+      ],
+      epoxy: ["epoxyMaterial", "epoxySqFootage"],
+      concrete: ["concreteMaterial", "concreteSqFootage"],
+      roofing: ["roofingMaterial", "roofingSqFootage"],
+      deck: [
+        "deckMaterial",
+        "deckSqFootage",
+        "deckLighting",
+        "deckHandrails",
+      ],
+      patio: [
+        "patioMaterial",
+        "patioSqFootage",
+        "patioLighting",
+        "patioHandrails",
+      ],
+
       // Add other project types and their relevant attributes
     };
 
@@ -111,10 +171,23 @@ const Quote = () => {
 
   const handleChange = (event) => {
     const { name, value, type, checked } = event.target;
-    setFormData((prevFormData) => ({
-      ...prevFormData,
-      [name]: type === "checkbox" ? checked : value,
-    }));
+    const inputValue = type === "checkbox" ? checked : value;
+  
+    if (name.includes("contactInfo")) {
+      const contactInfoKey = name.split(".")[1];
+      setFormData((prevFormData) => ({
+        ...prevFormData,
+        contactInfo: {
+          ...prevFormData.contactInfo,
+          [contactInfoKey]: inputValue,
+        },
+      }));
+    } else {
+      setFormData((prevFormData) => ({
+        ...prevFormData,
+        [name]: inputValue,
+      }));
+    }
   };
 
   // Calculate the estimate based on the form data

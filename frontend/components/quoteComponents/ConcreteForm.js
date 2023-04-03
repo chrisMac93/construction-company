@@ -36,7 +36,7 @@ export const calculateConcreteCost = (concreteMaterial, concreteSqFootage) => {
   };
 
 const ConcreteForm = ({ handleChange, formData }) => {
-  const concreteTypes = [
+  const concreteMaterials = [
     "Normal Strength Concrete",
     "Plain or Ordinary Concrete",
     "Reinforced Concrete",
@@ -67,16 +67,16 @@ const ConcreteForm = ({ handleChange, formData }) => {
   return (
     <>
       <div className="form-control">
-        <label htmlFor="concreteType" className="block mb-2">Concrete Type</label>
+        <label htmlFor="concreteMaterial" className="block mb-2">Concrete Type</label>
         <select
-          name="concreteType"
-          id="concreteType"
-          value={formData.concreteType}
+          name="concreteMaterial"
+          id="concreteMaterial"
+          value={formData.concreteMaterial}
           onChange={handleChange}
           className="w-full p-3 bg-neutral-700 rounded-md text-neutral-100"
         >
           <option value="">Select a concrete type</option>
-          {concreteTypes.map((type) => (
+          {concreteMaterials.map((type) => (
             <option key={type} value={type}>
               {type}
             </option>

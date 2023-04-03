@@ -25,6 +25,17 @@ export const calculateKitchenCost = (formData) => {
     Wood: 85,
   };
 
+  const kitchenSinkMaterialsCost = {
+    Porcelain: 100,
+    "Stainless steel": 150,
+    Ceramic: 120,
+    Glass: 200,
+    Granite: 250,
+    Marble: 300,
+    Stone: 350,
+    Wood: 400,
+  };
+
   let totalCost = 0;
 
   if (formData.flooringIncluded && formData.flooringMaterial) {
@@ -71,16 +82,21 @@ export const calculateKitchenCost = (formData) => {
         formData.sqFootage || 0;
   }
 
+  if (formData.kitchenSink && formData.kitchenSinkMaterial) {
+    totalCost += 1000; // Assuming a fixed cost for kitchen sink
+    totalCost += kitchenSinkMaterialsCost[formData.kitchenSinkMaterial];
+  }
+
   if (formData.appliances) {
     totalCost += 5000; // Assuming a fixed cost for appliances
   }
 
-  if (formData.plumbing) {
-    totalCost += 2000; // Assuming a fixed cost for plumbing
+  if (formData.kitchenPlumbing) {
+    totalCost += 2000; // Assuming a fixed cost for kitchenPlumbing
   }
 
-  if (formData.lighting) {
-    totalCost += 1500; // Assuming a fixed cost for lighting
+  if (formData.kitchenLighting) {
+    totalCost += 1500; // Assuming a fixed cost for kitchenLighting
   }
 
   return totalCost;
@@ -105,6 +121,17 @@ const KitchenForm = ({ handleChange, formData }) => {
     "Concrete",
     "Plastic Laminate",
     "Ceramic Tile",
+    "Wood",
+  ];
+
+  const kitchenSinkMaterials = [
+    "Porcelain",
+    "Stainless steel",
+    "Ceramic",
+    "Glass",
+    "Granite",
+    "Marble",
+    "Stone",
     "Wood",
   ];
 
@@ -259,6 +286,36 @@ const KitchenForm = ({ handleChange, formData }) => {
       )}
       <div className="form-control">
         {renderSwitch(
+          "kitchenSink",
+          "kitchenSink",
+          formData.kitchenSink,
+          handleChange
+        )}
+        <label htmlFor="kitchenSink" className="ml-1 text-lg">
+          Sink
+        </label>
+      </div>
+      {formData.kitchenSink && (
+        <div className="form-control">
+          <label htmlFor="kitchenSinkMaterial">Sink Material</label>
+          <select
+            name="kitchenSinkMaterial"
+            id="kitchenSinkMaterial"
+            className="w-full p-3 bg-neutral-700 rounded-md text-neutral-100"
+            value={formData.kitchenSinkMaterial}
+            onChange={handleChange}
+          >
+            <option value="">Select a material</option>
+            {kitchenSinkMaterials.map((material) => (
+              <option key={material} value={material}>
+                {material}
+              </option>
+            ))}
+          </select>
+        </div>
+      )}
+      <div className="form-control">
+        {renderSwitch(
           "appliances",
           "appliances",
           formData.appliances,
@@ -269,14 +326,24 @@ const KitchenForm = ({ handleChange, formData }) => {
         </label>
       </div>
       <div className="form-control">
-        {renderSwitch("plumbing", "plumbing", formData.plumbing, handleChange)}
-        <label htmlFor="plumbing" className="ml-1 text-lg">
+        {renderSwitch(
+          "kitchenPlumbing",
+          "kitchenPlumbing",
+          formData.kitchenPlumbing,
+          handleChange
+        )}
+        <label htmlFor="kitchenPlumbing" className="ml-1 text-lg">
           Plumbing
         </label>
       </div>
       <div className="form-control">
-        {renderSwitch("lighting", "lighting", formData.lighting, handleChange)}
-        <label htmlFor="lighting" className="ml-1 text-lg">
+        {renderSwitch(
+          "kitchenLighting",
+          "kitchenLighting",
+          formData.kitchenLighting,
+          handleChange
+        )}
+        <label htmlFor="kitchenLighting" className="ml-1 text-lg">
           Lighting
         </label>
       </div>

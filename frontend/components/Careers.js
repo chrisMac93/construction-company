@@ -54,26 +54,24 @@ const Careers = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-  
+
     // Retrieve form data
     const name = e.target.name.value;
     const email = e.target.email.value;
     const phone = e.target.phone.value;
     const resume = e.target.resume.files[0];
-  
+
     // Prepare formData to send the resume file
     const formData = new FormData();
     formData.append("from_name", name);
     formData.append("email", email);
     formData.append("phone", phone);
-    formData.append("message", `Application submitted for the position of ${selectedJob.title}.`);
+    formData.append(
+      "message",
+      `Application submitted for the position of ${selectedJob.title}.`
+    );
     formData.append("resume", resume);
-  
-    // Add templateParams to formData
-    for (const key in templateParams) {
-      formData.append(key, templateParams[key]);
-    }
-  
+
     try {
       await Apply(formData);
       alert(`Application submitted for the position of ${selectedJob.title}.`);
@@ -81,7 +79,7 @@ const Careers = () => {
       console.error("Error submitting application:", error);
       alert("Error submitting application. Please try again.");
     }
-  
+
     e.target.reset();
     setFileName("");
   };
@@ -91,8 +89,6 @@ const Careers = () => {
       // Your logic when the Enter key is pressed
     }
   };
-
-  
 
   return (
     <section className="bg-neutral-800 text-neutral-100 py-20 px-4 sm:px-8 md:px-16 lg:px-24">
@@ -224,7 +220,6 @@ const Careers = () => {
                 name="resume"
                 className="hidden"
                 accept=".pdf,.doc,.docx"
-                required
                 onChange={handleFileInputChange}
               />
               <span
@@ -241,7 +236,9 @@ const Careers = () => {
             <div className="mb-6 flex justify-center">
               <button
                 type="submit"
-                onClick={() => {handleSubmit}}
+                onClick={() => {
+                  handleSubmit;
+                }}
                 className={`text-neutral-800 font-semibold px-4 py-2 rounded-md ${styles.mcBackColor} ${styles.backHov} `}
               >
                 Submit Application

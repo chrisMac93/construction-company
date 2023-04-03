@@ -4,7 +4,7 @@ import { calculateFlooringCost } from "./FlooringForm";
 import { renderSwitch } from "./RenderSwitch";
 
 export const calculateBathroomCost = (formData) => {
-  const sinkCabinetCosts = {
+  const bathSinkCabinetCosts = {
     "Solid wood": 300,
     Particleboard: 100,
     "MDF (medium density fiberboard)": 150,
@@ -15,7 +15,7 @@ export const calculateBathroomCost = (formData) => {
     Thermofoil: 180,
   };
 
-  const sinkTypeCosts = {
+  const bathSinkTypeCosts = {
     Porcelain: 100,
     "Stainless steel": 150,
     Ceramic: 120,
@@ -40,10 +40,10 @@ export const calculateBathroomCost = (formData) => {
 
   let totalCost = 0;
 
-  if (formData.sinkNeeded) {
+  if (formData.bathSinkNeeded) {
     totalCost +=
-      sinkCabinetCosts[formData.sinkCabinetMaterial] +
-      sinkTypeCosts[formData.sinkType];
+      bathSinkCabinetCosts[formData.bathSinkCabinetMaterial] +
+      bathSinkTypeCosts[formData.bathSinkType];
   }
 
   if (formData.toiletNeeded) {
@@ -61,12 +61,12 @@ export const calculateBathroomCost = (formData) => {
     );
   }
 
-  if (formData.plumbing) {
-    totalCost += 2000; // Assuming a fixed cost for plumbing
+  if (formData.bathPlumbing) {
+    totalCost += 2000; // Assuming a fixed cost for bathPlumbing
   }
 
-  if (formData.lighting) {
-    totalCost += 1500; // Assuming a fixed cost for lighting
+  if (formData.bathLighting) {
+    totalCost += 1500; // Assuming a fixed cost for bathLighting
   }
 
   return totalCost;
@@ -84,7 +84,7 @@ const BathroomForm = ({ handleChange, formData }) => {
     "Thermofoil",
   ];
 
-  const sinkMaterialTypes = [
+  const bathSinkMaterialTypes = [
     "Porcelain",
     "Stainless steel",
     "Ceramic",
@@ -112,22 +112,22 @@ const BathroomForm = ({ handleChange, formData }) => {
       )}
       <div className="form-control">
         {renderSwitch(
-          "sinkNeeded",
-          "sinkNeeded",
-          formData.sinkNeeded,
+          "bathSinkNeeded",
+          "bathSinkNeeded",
+          formData.bathSinkNeeded,
           handleChange
         )}
-        <label className="ml-1 text-lg">Do you need a sink?</label>
+        <label className="ml-1 text-lg">Do you need a Sink?</label>
       </div>
 
-      {formData.sinkNeeded && (
+      {formData.bathSinkNeeded && (
         <>
           <div className="form-control">
             <label className="text-lg">
               Sink Cabinet Material
               <select
-                name="sinkCabinetMaterial"
-                value={formData.sinkCabinetMaterial}
+                name="bathSinkCabinetMaterial"
+                value={formData.bathSinkCabinetMaterial}
                 onChange={handleChange}
                 className="w-full p-3 bg-neutral-700 rounded-md text-neutral-100"
               >
@@ -145,13 +145,13 @@ const BathroomForm = ({ handleChange, formData }) => {
             <label className="text-lg">
               Sink Type
               <select
-                name="sinkType"
-                value={formData.sinkType}
+                name="bathSinkType"
+                value={formData.bathSinkType}
                 onChange={handleChange}
                 className="w-full p-3 bg-neutral-700 rounded-md text-neutral-100"
               >
                 <option value="">Select a Sink Type</option>
-                {sinkMaterialTypes.map((type) => (
+                {bathSinkMaterialTypes.map((type) => (
                   <option key={type} value={type}>
                     {type}
                   </option>
@@ -219,14 +219,14 @@ const BathroomForm = ({ handleChange, formData }) => {
         </div>
       )}
       <div className="form-control">
-        {renderSwitch("plumbing", "plumbing", formData.plumbing, handleChange)}
-        <label htmlFor="plumbing" className="ml-1 text-lg">
+        {renderSwitch("bathPlumbing", "bathPlumbing", formData.bathPlumbing, handleChange)}
+        <label htmlFor="bathPlumbing" className="ml-1 text-lg">
           Plumbing
         </label>
       </div>
       <div className="form-control">
-        {renderSwitch("lighting", "lighting", formData.lighting, handleChange)}
-        <label htmlFor="lighting" className="ml-1 text-lg">
+        {renderSwitch("bathLighting", "bathLighting", formData.bathLighting, handleChange)}
+        <label htmlFor="bathLighting" className="ml-1 text-lg">
           Lighting
         </label>
       </div>
