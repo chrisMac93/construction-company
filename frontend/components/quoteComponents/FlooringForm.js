@@ -1,7 +1,7 @@
 import React from "react";
 
-export const calculateFlooringCost = (material, flooringSqFootage) => {
-    const materialCosts = {
+export const calculateFlooringCost = (flooringMaterial, flooringSqFootage) => {
+    const flooringMaterialCosts = {
       "Ceramic Tile": 5,
       "Marble Tile": 10,
       "Porcelain Tile": 6,
@@ -14,7 +14,7 @@ export const calculateFlooringCost = (material, flooringSqFootage) => {
       "Laminate Wood Flooring": 3.5,
     };
   
-    const costPerSqFoot = materialCosts[material];
+    const costPerSqFoot = flooringMaterialCosts[flooringMaterial];
     const totalCost = costPerSqFoot * flooringSqFootage;
     
     return totalCost;

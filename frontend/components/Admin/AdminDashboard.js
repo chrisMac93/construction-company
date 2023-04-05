@@ -5,6 +5,7 @@ import useAuth from "../../hooks/useAuth";
 import JobListings from "./JobListings";
 import ImageHandler from "./ImageHandler";
 import ServicesHandler from "./ServicesHandler";
+import EmployeeManagement from "./EmployeeHandler";
 
 const AdminDashboard = () => {
   const [selectedTab, setSelectedTab] = useState("images");
@@ -25,6 +26,12 @@ const AdminDashboard = () => {
           onClick={() => setSelectedTab("jobListings")}
         >
           Job Listings
+        </button>
+        <button
+          className={`p-2 ${selectedTab === "team" && "font-bold"}`}
+          onClick={() => setSelectedTab("team")}
+        >
+          Team
         </button>
         <button
           className={`p-2 ${selectedTab === "services" && "font-bold"}`}
@@ -55,6 +62,7 @@ const AdminDashboard = () => {
           Admin Dashboard
         </h2>
         {renderTabs()}
+        {selectedTab === "team" && <EmployeeManagement />}
         {selectedTab === "jobListings" && <JobListings />}
         {selectedTab === "images" && <ImageHandler />}
         {selectedTab === "services" && <ServicesHandler />}

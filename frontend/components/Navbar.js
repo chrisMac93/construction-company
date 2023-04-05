@@ -8,7 +8,7 @@ import styles from "../styles/Home.module.css";
 
 const Navbar = ({
   scrollToRef,
-  aboutUsRef,
+  whoWeAreRef,
   servicesRef,
   whyChooseUsRef,
   galleryRef,
@@ -40,7 +40,7 @@ const Navbar = ({
       <MobileMenu
         isMobileMenuOpen={isMobileMenuOpen}
         scrollToRef={scrollToRef}
-        aboutUsRef={aboutUsRef}
+        whoWeAreRef={whoWeAreRef}
         servicesRef={servicesRef}
         whyChooseUsRef={whyChooseUsRef}
         galleryRef={galleryRef}
@@ -100,11 +100,11 @@ const Navbar = ({
             <li className="p-2">
               <button
                 onClick={() => {
-                  scrollToRef(aboutUsRef);
+                  scrollToRef(whoWeAreRef);
                 }}
                 className="p-0 text-white font-bold opacity-60 hover:opacity-80 focus:opacity-80 disabled:text-black/30 lg:px-2 [&.active]:text-black/90 dark:[&.active]:text-neutral-400"
               >
-                About Us
+                Who We Are
               </button>
             </li>
             <li className="p-2">
@@ -146,6 +146,14 @@ const Navbar = ({
               >
                 Gallery
               </button>
+            </li>
+            <li className="p-2">
+              <Link
+                href="/aboutUs"
+                className="p-0 white font-bold opacity-60 hover:opacity-80 focus:opacity-80 disabled:text-black/30 lg:px-2 [&.active]:text-black/90 dark:[&.active]:text-neutral-400"
+              >
+                About Us
+              </Link>
             </li>
             <li className="p-2">
               <Link

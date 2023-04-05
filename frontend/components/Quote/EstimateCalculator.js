@@ -20,13 +20,13 @@ export function calculateEstimate(formData, callback) {
 
   switch (formData.projectType) {
     case "wholeHome":
-      cost = calculateWholeHomeCost(tier, wholeHomeSqFootage);
+      cost = calculateWholeHomeCost(formData.tier, formData.wholeHomeSqFootage);
       break;
     case "interior":
-      cost = calculateInteriorCost(tier, interiorSqFootage);
+      cost = calculateInteriorCost(formData.tier, formData.interiorSqFootage);
       break;
     case "exterior":
-      cost = calculateExteriorCost(tier, exteriorSqFootage);
+      cost = calculateExteriorCost(formData.tier, formData.exteriorSqFootage);
       break;
     case "flooring":
       cost = calculateFlooringCost(

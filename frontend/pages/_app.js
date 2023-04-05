@@ -7,7 +7,7 @@ import Head from "next/head";
 import Home from "./index";
 
 function MyApp({ Component, pageProps }) {
-  const aboutUsRef = useRef(null);
+  const whoWeAreRef = useRef(null);
   const servicesRef = useRef(null);
   const galleryRef = useRef(null);
   const testimonialsRef = useRef(null);
@@ -30,7 +30,7 @@ function MyApp({ Component, pageProps }) {
       <div className="flex flex-col min-h-screen">
         <Navbar
           scrollToRef={scrollToRef}
-          aboutUsRef={aboutUsRef}
+          whoWeAreRef={whoWeAreRef}
           servicesRef={servicesRef}
           whyChooseUsRef={whyChooseUsRef}
           galleryRef={galleryRef}
@@ -40,7 +40,7 @@ function MyApp({ Component, pageProps }) {
         <main className="flex-grow bg-neutral-900 text-neutral-100">
           {Component === Home ? (
             <Home
-              aboutUsRef={aboutUsRef}
+              whoWeAreRef={whoWeAreRef}
               servicesRef={servicesRef}
               whyChooseUsRef={whyChooseUsRef}
               galleryRef={galleryRef}

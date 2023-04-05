@@ -1,5 +1,5 @@
 import React from "react";
-import AboutUs from "../components/AboutUs";
+import WhoWeAre from "../components/WhoWeAre";
 import Gallery from "../components/Gallery";
 import Jumbotron from "../components/Jumbotron";
 import Services from "../components/Services";
@@ -7,7 +7,7 @@ import Testimonials from "../components/Testimonials";
 import WhyChooseUs from "../components/WhyChooseUs";
 
 export default function Home({
-  aboutUsRef,
+  whoWeAreRef,
   servicesRef,
   whyChooseUsRef,
   galleryRef,
@@ -20,8 +20,8 @@ export default function Home({
         <section>
           <Jumbotron />
         </section>
-        <section ref={aboutUsRef}>
-          <AboutUs />
+        <section ref={whoWeAreRef}>
+          <WhoWeAre />
         </section>
         <section ref={servicesRef}>
           <Services scrollToRef={scrollToRef} servicesRef={servicesRef}/>

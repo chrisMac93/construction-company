@@ -8,9 +8,9 @@ export const calculateDrywallCost = (
 ) => {
   const drywallMaterialCosts = {
     standard: 1,
-    mold_resistant: 1.5,
-    moisture_resistant: 1.6,
-    fire_resistant: 1.8,
+    "mold resistant": 1.5,
+    "moisture resistant": 1.6,
+    "fire resistant": 1.8,
     soundproof: 2.2,
   };
 
@@ -30,17 +30,38 @@ export const calculateDrywallCost = (
   const baseCostPerSqFoot = drywallMaterialCosts[drywallMaterial];
   const sizeCostMultiplier = sizeMultiplier[size];
   const thicknessCostMultiplier = thicknessMultiplier[thickness];
-  const totalCost =
-    baseCostPerSqFoot *
-    sizeCostMultiplier *
-    thicknessCostMultiplier *
-    drywallSqFootage;
+  const costPerSqFoot = baseCostPerSqFoot * sizeCostMultiplier * thicknessCostMultiplier;
+  const totalCost = costPerSqFoot * drywallSqFootage;
+
   const roundedTotalCost = parseFloat(totalCost.toFixed(2));
 
   return roundedTotalCost;
 };
 
 const DrywallForm = ({ handleChange, formData }) => {
+
+  const drywallMaterials = [
+    "standard",
+    "mold resistant",
+    "moisture resistant",
+    "fire resistant",
+    "soundproof",
+  ];
+
+  const drywallSizes = [
+    "4x8",
+    "4x10",
+    "4x12",
+  ];
+
+  const drywallThicknesses = [
+    "1/4",
+    "3/8",
+    "1/2",
+    "5/8",
+  ];
+
+
   return (
     <>
       <div className="form-control mb-4">
@@ -55,11 +76,11 @@ const DrywallForm = ({ handleChange, formData }) => {
           className="w-full p-3 bg-neutral-700 rounded-md text-neutral-100"
         >
           <option value="">Select a material</option>
-          <option value="standard">Standard</option>
-          <option value="mold_resistant">Mold Resistant</option>
-          <option value="moisture_resistant">Moisture-Resistant</option>
-          <option value="fire_resistant">Fire-Resistant</option>
-          <option value="soundproof">SoundProof</option>
+          {drywallMaterials.map((type) => (
+              <option key={type} value={type}>
+                {type}
+              </option>
+            ))}
         </select>
       </div>
       <div className="form-control mb-4">
@@ -74,9 +95,11 @@ const DrywallForm = ({ handleChange, formData }) => {
           className="w-full p-3 bg-neutral-700 rounded-md text-neutral-100"
         >
           <option value="">Select a size</option>
-          <option value="4x8">4x8 ft</option>
-          <option value="4x10">4x10 ft</option>
-          <option value="4x12">4x12 ft</option>
+          {drywallSizes.map((type) => (
+              <option key={type} value={type}>
+                {type}
+              </option>
+            ))}
         </select>
       </div>
       <div className="form-control mb-4">
@@ -91,10 +114,11 @@ const DrywallForm = ({ handleChange, formData }) => {
           className="w-full p-3 bg-neutral-700 rounded-md text-neutral-100"
         >
           <option value="">Select a thickness</option>
-          <option value="1/4">1/4-Inch</option>
-          <option value="3/8">3/8-Inch</option>
-          <option value="1/2">1/2-Inch</option>
-          <option value="5/8">5/8-Inch</option>
+          {drywallThicknesses.map((type) => (
+              <option key={type} value={type}>
+                {type}
+              </option>
+            ))}
         </select>
       </div>
       <div className="form-control">

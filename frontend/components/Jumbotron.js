@@ -6,7 +6,7 @@ import useImages from "../hooks/useImages";
 const Jumbotron = () => {
 
   const images = useImages();
-  const bgImageUrl = images["Flooring"]
+  const bgImageUrl = images["One"]
   const headerVariants = {
     hidden: { opacity: 0, y: -50 },
     visible: { opacity: 1, y: 0 },

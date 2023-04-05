@@ -28,6 +28,7 @@ const Footer = () => {
               <Link href="/terms" className="opacity-60 hover:opacity-80">Terms & Conditions</Link>
               <Link href="/privacy" className="opacity-60 hover:opacity-80">Privacy Policy</Link>
               <Link href="/careers" className="opacity-60 hover:opacity-80">Careers</Link>
+              <Link href="/aboutUs" className="opacity-60 hover:opacity-80">About Us</Link>
               <Link href="/quote" className={`${styles.mcColor} ${styles.hov}`}>Get a Quote</Link>
             </div>
           </div>

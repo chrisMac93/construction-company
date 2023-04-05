@@ -49,37 +49,30 @@ export const calculateKitchenCost = (formData) => {
     formData.island &&
     (formData.islandBaseMaterial || formData.islandCountertop)
   ) {
-    totalCost += 1500; // Assuming a fixed cost for island base
+    let islandBaseCost = formData.islandBaseMaterial
+      ? kitchenCabinetMaterialsCost[formData.islandBaseMaterial] / 10
+      : 0;
 
-    if (formData.islandBaseMaterial) {
-      totalCost +=
-        kitchenCabinetMaterialsCost[formData.islandBaseMaterial] *
-        formData.islandSqFootage;
-    }
-
-    if (formData.islandCountertop) {
-      totalCost +=
-        countertopMaterialsCost[formData.islandCountertop] *
-        formData.islandSqFootage;
-    }
+    let islandCountertopCost = formData.islandCountertop
+      ? countertopMaterialsCost[formData.islandCountertop] / 10
+      : 0;
 
     if (formData.islandStovetop) {
+      islandCountertopCost *= 0.2; // Reduce the islandCountertopCost by 80%
       totalCost += 1200; // Assuming a fixed cost for stovetop
     }
+
+    let islandCostPerSqFt = islandBaseCost + islandCountertopCost;
+    totalCost += islandCostPerSqFt * formData.islandSqFootage;
   }
 
   if (formData.countertops && formData.countertopMaterial) {
-    totalCost += 50 * formData.sqFootage; // Assuming $50 per sqft for countertops
-    totalCost +=
-      countertopMaterialsCost[formData.countertopMaterial] *
-        formData.sqFootage || 0;
+    totalCost += countertopMaterialsCost[formData.countertopMaterial] * 15 || 0;
   }
 
   if (formData.kitchenCabinets && formData.kitchenCabinetMaterial) {
-    totalCost += 75 * formData.sqFootage; // Assuming $75 per sqft for kitchenCabinets
     totalCost +=
-      kitchenCabinetMaterialsCost[formData.kitchenCabinetMaterial] *
-        formData.sqFootage || 0;
+      kitchenCabinetMaterialsCost[formData.kitchenCabinetMaterial] * 30 || 0;
   }
 
   if (formData.kitchenSink && formData.kitchenSinkMaterial) {
@@ -165,6 +158,19 @@ const KitchenForm = ({ handleChange, formData }) => {
       {formData.island && (
         <>
           <div className="form-control">
+            <label htmlFor="islandSqFootage" className="block mb-2">
+              Island Square Footage
+            </label>
+            <input
+              type="number"
+              name="islandSqFootage"
+              id="islandSqFootage"
+              value={formData.islandSqFootage}
+              onChange={handleChange}
+              className="w-full p-3 bg-neutral-700 rounded-md text-neutral-100"
+            />
+          </div>
+          <div className="form-control">
             <label htmlFor="islandBaseMaterial">Island Base Material</label>
             <select
               name="islandBaseMaterial"
@@ -182,20 +188,7 @@ const KitchenForm = ({ handleChange, formData }) => {
             </select>
           </div>
           <div className="form-control">
-            <label htmlFor="islandSqFootage" className="block mb-2">
-              Island Square Footage
-            </label>
-            <input
-              type="number"
-              name="islandSqFootage"
-              id="islandSqFootage"
-              value={formData.islandSqFootage}
-              onChange={handleChange}
-              className="w-full p-3 bg-neutral-700 rounded-md text-neutral-100"
-            />
-          </div>
-          <div className="form-control">
-            <label htmlFor="islandCountertop">Island Countertop</label>
+            <label htmlFor="islandCountertop">Island Countertop Material</label>
             <select
               name="islandCountertop"
               id="islandCountertop"

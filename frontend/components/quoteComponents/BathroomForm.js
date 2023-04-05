@@ -99,15 +99,15 @@ const BathroomForm = ({ handleChange, formData }) => {
     <>
       <div className="form-control">
         {renderSwitch(
-          "flooringIncluded",
-          "flooringIncluded",
-          formData.flooringIncluded,
+          "flooringNeeded",
+          "flooringNeeded",
+          formData.flooringNeeded,
           handleChange
         )}
         <label className="ml-1 text-lg">Do you need flooring?</label>
       </div>
 
-      {formData.flooringIncluded && (
+      {formData.flooringNeeded && (
         <FlooringForm handleChange={handleChange} formData={formData} />
       )}
       <div className="form-control">
