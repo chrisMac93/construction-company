@@ -1,29 +1,40 @@
-import React from "react";
+import { useState, useEffect } from "react";
+import { getFirestore, collection, getDocs, doc } from "firebase/firestore";
 
-export const calculateEpoxyCost = (epoxyMaterial, epoxySqFootage) => {
-    const epoxyMaterialCosts = {
-      "100Solids": 6,
-      "Water-Based": 4,
-      "Solvent-Based": 5,
-      "Heat-Cured": 8,
-      "Two-Part": 7,
-    };
-  
-    const costPerSqFoot = epoxyMaterialCosts[epoxyMaterial];
-    const totalCost = costPerSqFoot * epoxySqFootage;
-  
-    return totalCost;
-  };
+export const calculateEpoxyCost = (epoxyMaterial, epoxySqFootage, epoxyMaterialCosts) => {
+  const costPerSqFoot = epoxyMaterialCosts[epoxyMaterial];
+  const totalCost = costPerSqFoot * epoxySqFootage;
+
+  return totalCost;
+};
 
 const EpoxyForm = ({ handleChange, formData }) => {
+  const [epoxyMaterials, setEpoxyMaterials] = useState([]);
 
-  const epoxyMaterials = [
-    "100Solids",
-    "Water-Based",
-    "Solvent-Based",
-    "Heat-Cured",
-    "Two-Part",
-  ];
+  useEffect(() => {
+    const fetchEpoxyMaterials = async () => {
+      const db = getFirestore();
+      const priceUpdatesCollectionRef = collection(db, "priceUpdates");
+      const priceUpdatesSnapshot = await getDocs(priceUpdatesCollectionRef);
+      const priceUpdatesDocId = priceUpdatesSnapshot.docs[0].id; // Assuming there is at least one document in priceUpdates collection
+
+      const epoxyMaterialsCollectionRef = collection(db, `priceUpdates/${priceUpdatesDocId}/epoxyMaterials`);
+      const epoxySnapshot = await getDocs(epoxyMaterialsCollectionRef);
+      const materials = [];
+      const costs = {};
+
+      epoxySnapshot.forEach((doc) => {
+        const materialData = doc.data();
+        materials.push(materialData.name);
+        costs[materialData.name] = materialData.price;
+      });
+
+      setEpoxyMaterials(materials);
+      handleChange({ target: { name: "epoxyMaterialCosts", value: costs } });
+    };
+
+    fetchEpoxyMaterials();
+  }, []);
 
   return (
     <>

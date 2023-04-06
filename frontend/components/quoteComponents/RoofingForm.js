@@ -1,19 +1,7 @@
-import React from "react";
+import { useState, useEffect } from "react";
+import { getFirestore, collection, getDocs } from "firebase/firestore";
 
-export const calculateRoofingCost = (roofingMaterial, roofingSqFootage) => {
-  const roofingMaterialCosts = {
-    "Rolled": 3,
-    "BUR": 5,
-    "Membrane": 7,
-    "Asphalt Composite Shingles": 4,
-    "Standing Seam Metal": 10,
-    "Metal Shingles/shakes": 9,
-    "Wood Shingles/Shakes": 8,
-    "Clay Tile": 15,
-    "Concrete Tile": 12,
-    "Slate Shingles": 20,
-    "Synthetic(Rubber) Slate Tile": 14,
-  };
+export const calculateRoofingCost = (roofingMaterial, roofingSqFootage, roofingMaterialCosts) => {
 
   const costPerSqFoot = roofingMaterialCosts[roofingMaterial];
   const totalCost = costPerSqFoot * roofingSqFootage;
@@ -22,19 +10,32 @@ export const calculateRoofingCost = (roofingMaterial, roofingSqFootage) => {
 };
 
 const RoofingForm = ({ handleChange, formData }) => {
-  const roofingMaterials = [
-    "Rolled",
-    "BUR",
-    "Membrane",
-    "Asphalt Composite Shingles",
-    "Standing Seam Metal",
-    "Metal Shingles/shakes",
-    "Wood Shingles/Shakes",
-    "Clay Tile",
-    "Concrete Tile",
-    "Slate Shingles",
-    "Synthetic(Rubber) Slate Tile",
-  ];
+  const [roofingMaterials, setRoofingMaterials] = useState([]);
+
+  useEffect(() => {
+    const fetchRoofingMaterials = async () => {
+      const db = getFirestore();
+      const priceUpdatesCollectionRef = collection(db, "priceUpdates");
+      const priceUpdatesSnapshot = await getDocs(priceUpdatesCollectionRef);
+      const priceUpdatesDocId = priceUpdatesSnapshot.docs[0].id; // Assuming there is at least one document in priceUpdates collection
+
+      const roofingMaterialsCollectionRef = collection(db, `priceUpdates/${priceUpdatesDocId}/roofingMaterials`);
+      const roofingSnapshot = await getDocs(roofingMaterialsCollectionRef);
+      const materials = [];
+      const costs = {};
+
+      roofingSnapshot.forEach((doc) => {
+        const materialData = doc.data();
+        materials.push(materialData.name);
+        costs[materialData.name] = materialData.price;
+      });
+
+      setRoofingMaterials(materials);
+      handleChange({ target: { name: "roofingMaterialCosts", value: costs } });
+    };
+
+    fetchRoofingMaterials();
+  }, []);
 
   return (
     <>

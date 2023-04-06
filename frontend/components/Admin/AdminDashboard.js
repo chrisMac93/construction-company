@@ -6,9 +6,10 @@ import JobListings from "./JobListings";
 import ImageHandler from "./ImageHandler";
 import ServicesHandler from "./ServicesHandler";
 import EmployeeManagement from "./EmployeeHandler";
+import PriceUpdates from "./PriceUpdatesHandler";
 
 const AdminDashboard = () => {
-  const [selectedTab, setSelectedTab] = useState("images");
+  const [selectedTab, setSelectedTab] = useState("priceUpdates");
   const { isLoggedIn } = useAuth();
   const router = useRouter();
 
@@ -34,6 +35,12 @@ const AdminDashboard = () => {
           Team
         </button>
         <button
+          className={`p-2 ${selectedTab === "priceUpdates" && "font-bold"}`}
+          onClick={() => setSelectedTab("priceUpdates")}
+        >
+          Price Updates
+        </button>
+        <button
           className={`p-2 ${selectedTab === "services" && "font-bold"}`}
           onClick={() => setSelectedTab("services")}
         >
@@ -44,12 +51,6 @@ const AdminDashboard = () => {
           onClick={() => setSelectedTab("images")}
         >
           Images
-        </button>
-        <button
-          className={`p-2 ${selectedTab === "priceUpdates" && "font-bold"}`}
-          onClick={() => setSelectedTab("priceUpdates")}
-        >
-          Price Updates
         </button>
       </div>
     );
@@ -64,6 +65,7 @@ const AdminDashboard = () => {
         {renderTabs()}
         {selectedTab === "team" && <EmployeeManagement />}
         {selectedTab === "jobListings" && <JobListings />}
+        {selectedTab === "priceUpdates" && <PriceUpdates />}
         {selectedTab === "images" && <ImageHandler />}
         {selectedTab === "services" && <ServicesHandler />}
       </div>

@@ -8,6 +8,8 @@ import {
 } from "firebase/firestore";
 import { firestore } from "../../lib/firebase";
 
+import styles from "../../styles/Home.module.css";
+
 const EmployeeManagement = () => {
   const [employees, setEmployees] = useState([]);
   const [newEmployee, setNewEmployee] = useState({
@@ -116,7 +118,7 @@ const EmployeeManagement = () => {
         </div>
         <button
           type="submit"
-          className="w-full p-3 rounded-md text-neutral-800 bg-green-500 hover:bg-green-400"
+          className={`w-full p-3 rounded-md text-neutral-800 ${styles.mcBackColor} ${styles.backHov}`}
         >
           Add Employee
         </button>

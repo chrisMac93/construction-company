@@ -2,12 +2,13 @@ import Link from "next/link";
 import Image from "next/image";
 import MobileMenu from "./MobileMenu";
 import { useState } from "react";
+import { useRouter } from 'next/router';
 import { useAnimation } from "framer-motion";
 
 import styles from "../styles/Home.module.css";
 
 const Navbar = ({
-  scrollToRef,
+  navigateAndScroll,
   whoWeAreRef,
   servicesRef,
   whyChooseUsRef,
@@ -16,6 +17,16 @@ const Navbar = ({
 }) => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const controls = useAnimation();
+
+  const router = useRouter();
+
+  const handleNavigateAndScroll = async (ref) => {
+    if (router.pathname !== '/') {
+      await router.push('/');
+    }
+    navigateAndScroll(ref);
+  };
+
 
   const toggleMobileMenu = async () => {
     if (isMobileMenuOpen) {
@@ -35,11 +46,12 @@ const Navbar = ({
     }
   };
 
+  
   return (
     <nav className="fixed z-20 top-0 flex w-full flex-wrap items-center justify-between bg-gradient-to-r from-slate-300 via-neutral-800 to-neutral-900 py-3 text-neutral-200 shadow-lg lg:flex-wrap lg:justify-start">
       <MobileMenu
         isMobileMenuOpen={isMobileMenuOpen}
-        scrollToRef={scrollToRef}
+        handleNavigateAndScroll={handleNavigateAndScroll}
         whoWeAreRef={whoWeAreRef}
         servicesRef={servicesRef}
         whyChooseUsRef={whyChooseUsRef}
@@ -100,7 +112,7 @@ const Navbar = ({
             <li className="p-2">
               <button
                 onClick={() => {
-                  scrollToRef(whoWeAreRef);
+                  handleNavigateAndScroll(whoWeAreRef);
                 }}
                 className="p-0 text-white font-bold opacity-60 hover:opacity-80 focus:opacity-80 disabled:text-black/30 lg:px-2 [&.active]:text-black/90 dark:[&.active]:text-neutral-400"
               >
@@ -110,7 +122,7 @@ const Navbar = ({
             <li className="p-2">
               <button
                 onClick={() => {
-                  scrollToRef(servicesRef);
+                  handleNavigateAndScroll(servicesRef);
                 }}
                 className="p-0 text-white font-bold opacity-60 hover:opacity-80 focus:opacity-80 disabled:text-black/30 lg:px-2 [&.active]:text-black/90 dark:[&.active]:text-neutral-400"
               >
@@ -120,7 +132,7 @@ const Navbar = ({
             <li className="p-2">
               <button
                 onClick={() => {
-                  scrollToRef(whyChooseUsRef);
+                  handleNavigateAndScroll(whyChooseUsRef);
                 }}
                 className="p-0 text-white font-bold opacity-60 hover:opacity-80 focus:opacity-80 disabled:text-black/30 lg:px-2 [&.active]:text-black/90 dark:[&.active]:text-neutral-400"
               >
@@ -130,7 +142,7 @@ const Navbar = ({
             <li className="p-2">
               <button
                 onClick={() => {
-                  scrollToRef(testimonialsRef);
+                  handleNavigateAndScroll(testimonialsRef);
                 }}
                 className="p-0 text-white font-bold opacity-60 hover:opacity-80 focus:opacity-80 disabled:text-black/30 lg:px-2 [&.active]:text-black/90 dark:[&.active]:text-neutral-400"
               >
@@ -140,7 +152,7 @@ const Navbar = ({
             <li className="p-2">
               <button
                 onClick={() => {
-                  scrollToRef(galleryRef);
+                  handleNavigateAndScroll(galleryRef);
                 }}
                 className="p-0 white font-bold opacity-60 hover:opacity-80 focus:opacity-80 disabled:text-black/30 lg:px-2 [&.active]:text-black/90 dark:[&.active]:text-neutral-400"
               >

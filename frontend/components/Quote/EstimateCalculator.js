@@ -20,18 +20,31 @@ export function calculateEstimate(formData, callback) {
 
   switch (formData.projectType) {
     case "wholeHome":
-      cost = calculateWholeHomeCost(formData.tier, formData.wholeHomeSqFootage);
+      cost = calculateWholeHomeCost(
+        formData.wholeHomeTier,
+        formData.wholeHomeSqFootage,
+        formData.wholeHomeTierCosts
+      );
       break;
     case "interior":
-      cost = calculateInteriorCost(formData.tier, formData.interiorSqFootage);
+      cost = calculateInteriorCost(
+        formData.interiorTier,
+        formData.interiorSqFootage,
+        formData.interiorTierCosts
+      );
       break;
     case "exterior":
-      cost = calculateExteriorCost(formData.tier, formData.exteriorSqFootage);
+      cost = calculateExteriorCost(
+        formData.exteriorTier,
+        formData.exteriorSqFootage,
+        formData.exteriorTierCosts
+      );
       break;
     case "flooring":
       cost = calculateFlooringCost(
         formData.flooringMaterial,
-        formData.flooringSqFootage
+        formData.flooringSqFootage,
+        formData.flooringMaterialCosts
       );
       break;
     case "deck":
@@ -39,7 +52,10 @@ export function calculateEstimate(formData, callback) {
         formData.deckMaterial,
         formData.deckSqFootage,
         formData.deckLighting,
-        formData.deckHandrails
+        formData.deckHandrails,
+        formData.deckMaterialCosts,
+        formData.handrailsCost,
+        formData.lightingCost
       );
       break;
     case "patio":
@@ -47,7 +63,10 @@ export function calculateEstimate(formData, callback) {
         formData.patioMaterial,
         formData.patioSqFootage,
         formData.patioLighting,
-        formData.patioHandrails
+        formData.patioHandrails,
+        formData.patioMaterialCosts,
+        formData.handrailsCost,
+        formData.lightingCost
       );
       break;
     case "drywall":
@@ -61,7 +80,8 @@ export function calculateEstimate(formData, callback) {
     case "epoxy":
       cost = calculateEpoxyCost(
         formData.epoxyMaterial,
-        formData.epoxySqFootage
+        formData.epoxySqFootage,
+        formData.epoxyMaterialCosts
       );
       break;
     case "kitchen":
@@ -73,13 +93,15 @@ export function calculateEstimate(formData, callback) {
     case "concrete":
       cost = calculateConcreteCost(
         formData.concreteMaterial,
-        formData.concreteSqFootage
+        formData.concreteSqFootage,
+        formData.concreteMaterialCosts
       );
       break;
     case "roofing":
       cost = calculateRoofingCost(
         formData.roofingMaterial,
-        formData.roofingSqFootage
+        formData.roofingSqFootage,
+        formData.roofingMaterialCosts
       );
       break;
     default:

@@ -1,34 +1,63 @@
-import React from "react";
+import { useState, useEffect } from "react";
+import { getFirestore, collection, getDocs } from "firebase/firestore";
 
-export const calculateExteriorCost = (tier, exteriorSqFootage) => {
-    const tierCosts = {
-        Standard: 40,
-        Premium: 55,
-        Luxury: 82.5,
-    };
-    
-    const costPerSqFoot = tierCosts[tier];
-    const totalCost = costPerSqFoot * exteriorSqFootage;
-    
-    return totalCost;
+export const calculateExteriorCost = (
+  exteriorTier,
+  exteriorSqFootage,
+  exteriorTierCosts
+) => {
+  const costPerSqFoot = exteriorTierCosts[exteriorTier];
+  const totalCost = costPerSqFoot * exteriorSqFootage;
+
+  return totalCost;
 };
 
 const ExteriorForm = ({ handleChange, formData }) => {
-  const tiers = ["Standard", "Premium", "Luxury"];
+  const [exteriorTiers, setExteriorTiers] = useState([]);
+
+  useEffect(() => {
+    const fetchExteriorTiers = async () => {
+      const db = getFirestore();
+      const priceUpdatesCollectionRef = collection(db, "priceUpdates");
+      const priceUpdatesSnapshot = await getDocs(priceUpdatesCollectionRef);
+      const priceUpdatesDocId = priceUpdatesSnapshot.docs[0].id; // Assuming there is at least one document in priceUpdates collection
+
+      const exteriorCollectionRef = collection(
+        db,
+        `priceUpdates/${priceUpdatesDocId}/exteriorTiers`
+      );
+      const exteriorSnapshot = await getDocs(exteriorCollectionRef);
+      const tiers = [];
+      const costs = {};
+
+      exteriorSnapshot.forEach((doc) => {
+        const tierData = doc.data();
+        tiers.push(tierData.name);
+        costs[tierData.name] = tierData.price;
+      });
+
+      setExteriorTiers(tiers);
+      handleChange({ target: { name: "exteriorTierCosts", value: costs } });
+    };
+
+    fetchExteriorTiers();
+  }, []);
 
   return (
     <>
       <div>
-        <label htmlFor="tier" className="block mb-2">Tier</label>
+        <label htmlFor="exteriorTier" className="block mb-2">
+          Tier
+        </label>
         <select
-          name="tier"
-          id="tier"
+          name="exteriorTier"
+          id="exteriorTier"
           className="w-full p-3 bg-neutral-700 rounded-md text-neutral-100"
-          value={formData.tier}
+          value={formData.exteriorTier}
           onChange={handleChange}
         >
           <option value="">Select a Tier</option>
-          {tiers.map((type) => (
+          {exteriorTiers.map((type) => (
             <option key={type} value={type}>
               {type}
             </option>

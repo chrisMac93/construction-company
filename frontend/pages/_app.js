@@ -29,7 +29,7 @@ function MyApp({ Component, pageProps }) {
       </Head>
       <div className="flex flex-col min-h-screen">
         <Navbar
-          scrollToRef={scrollToRef}
+          navigateAndScroll={scrollToRef}
           whoWeAreRef={whoWeAreRef}
           servicesRef={servicesRef}
           whyChooseUsRef={whyChooseUsRef}

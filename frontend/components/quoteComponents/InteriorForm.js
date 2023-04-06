@@ -1,34 +1,63 @@
-import React from "react";
+import { useState, useEffect } from "react";
+import { getFirestore, collection, getDocs } from "firebase/firestore";
 
-export const calculateInteriorCost = (tier, interiorSqFootage) => {
-    const tierCosts = {
-        Standard: 60,
-        Premium: 82.5,
-        Luxury: 112.5,
-    };
-    
-    const costPerSqFoot = tierCosts[tier];
-    const totalCost = costPerSqFoot * interiorSqFootage;
-    
-    return totalCost;
+export const calculateInteriorCost = (
+  interiorTier,
+  interiorSqFootage,
+  interiorTierCosts
+) => {
+  const costPerSqFoot = interiorTierCosts[interiorTier];
+  const totalCost = costPerSqFoot * interiorSqFootage;
+
+  return totalCost;
 };
 
 const InteriorForm = ({ handleChange, formData }) => {
-  const tiers = ["Standard", "Premium", "Luxury"];
+  const [interiorTiers, setInteriorTiers] = useState([]);
+
+  useEffect(() => {
+    const fetchInteriorTiers = async () => {
+      const db = getFirestore();
+      const priceUpdatesCollectionRef = collection(db, "priceUpdates");
+      const priceUpdatesSnapshot = await getDocs(priceUpdatesCollectionRef);
+      const priceUpdatesDocId = priceUpdatesSnapshot.docs[0].id; // Assuming there is at least one document in priceUpdates collection
+
+      const interiorCollectionRef = collection(
+        db,
+        `priceUpdates/${priceUpdatesDocId}/interiorTiers`
+      );
+      const interiorSnapshot = await getDocs(interiorCollectionRef);
+      const tiers = [];
+      const costs = {};
+
+      interiorSnapshot.forEach((doc) => {
+        const tierData = doc.data();
+        tiers.push(tierData.name);
+        costs[tierData.name] = tierData.price;
+      });
+
+      setInteriorTiers(tiers);
+      handleChange({ target: { name: "interiorTierCosts", value: costs } });
+    };
+
+    fetchInteriorTiers();
+  }, []);
 
   return (
     <>
       <div>
-        <label htmlFor="tier" className="block mb-2">Tier</label>
+        <label htmlFor="interiorTier" className="block mb-2">
+          Tier
+        </label>
         <select
-          name="tier"
-          id="tier"
+          name="interiorTier"
+          id="interiorTier"
           className="w-full p-3 bg-neutral-700 rounded-md text-neutral-100"
-          value={formData.tier}
+          value={formData.interiorTier}
           onChange={handleChange}
         >
           <option value="">Select a Tier</option>
-          {tiers.map((type) => (
+          {interiorTiers.map((type) => (
             <option key={type} value={type}>
               {type}
             </option>

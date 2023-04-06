@@ -11,36 +11,49 @@ import ProjectTypes from "./ProjectTypes";
 const Quote = () => {
   const [formData, setFormData] = useState({
     //WholeHomeForm attributes
-    tier: "",
+    wholeHomeTier: "",
     wholeHomeSqFootage: "",
+    wholeHomeTierCosts: {},
     // InteriorForm attributes
-    tier: "",
+    interiorTier: "",
     interiorSqFootage: "",
+    interiorTierCosts: {},
     //ExteriorForm attributes
-    tier: "",
+    exteriorTier: "",
     exteriorSqFootage: "",
+    exteriorTierCosts: {},
     // FlooringForm attributes
     flooringMaterial: "",
     flooringSqFootage: "",
+    flooringMaterialCosts: {},
     // EpoxyForm attributes
     epoxyMaterial: "",
     epoxySqFootage: "",
+    epoxyMaterialCosts: {},
     // ConcreteForm attributes
     concreteMaterial: "",
     concreteSqFootage: "",
+    concreteMaterialCosts: {},
     // RoofingForm attributes
     roofingMaterial: "",
     roofingSqFootage: "",
+    roofingMaterialCosts: {},
     // DeckForm attributes
     deckMaterial: "",
     deckSqFootage: "",
     deckLighting: false,
     deckHandrails: false,
+    deckMaterialCosts: {},
+    handrailCost: "",
+    lightingCost: "",
     // PatioForm attributes
     patioMaterial: "",
     patioSqFootage: "",
     patioLighting: false,
     patioHandrails: false,
+    patioMaterialCosts: {},
+    handrailCost: "",
+    lightingCost: "",
     // DrywallForm attributes
     drywallMaterial: "",
     drywallSqFootage: "",
@@ -93,18 +106,9 @@ const Quote = () => {
 
   useEffect(() => {
     const relevantAttributes = {
-      wholeHome: [
-        "tier",
-        "wholeHomeSqFootage",
-      ],
-      interior: [
-        "tier",
-        "interiorSqFootage",
-      ],
-      exterior: [
-        "tier",
-        "exteriorSqFootage",
-      ],
+      wholeHome: ["wholeHomeTier", "wholeHomeSqFootage"],
+      interior: ["interiorTier", "interiorSqFootage"],
+      exterior: ["exteriorTier", "exteriorSqFootage"],
       flooring: ["flooringMaterial", "flooringSqFootage"],
       bath: [
         "bathSinkNeeded",
@@ -147,12 +151,7 @@ const Quote = () => {
       epoxy: ["epoxyMaterial", "epoxySqFootage"],
       concrete: ["concreteMaterial", "concreteSqFootage"],
       roofing: ["roofingMaterial", "roofingSqFootage"],
-      deck: [
-        "deckMaterial",
-        "deckSqFootage",
-        "deckLighting",
-        "deckHandrails",
-      ],
+      deck: ["deckMaterial", "deckSqFootage", "deckLighting", "deckHandrails"],
       patio: [
         "patioMaterial",
         "patioSqFootage",
@@ -175,7 +174,7 @@ const Quote = () => {
   const handleChange = (event) => {
     const { name, value, type, checked } = event.target;
     const inputValue = type === "checkbox" ? checked : value;
-  
+
     if (name.includes("contactInfo")) {
       const contactInfoKey = name.split(".")[1];
       setFormData((prevFormData) => ({

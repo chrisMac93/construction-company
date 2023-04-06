@@ -1,33 +1,7 @@
-import React from "react";
+import { useState, useEffect } from "react";
+import { getFirestore, collection, getDocs } from "firebase/firestore";
 
-export const calculateConcreteCost = (concreteMaterial, concreteSqFootage) => {
-    const concreteMaterialCosts = {
-      "Normal Strength Concrete": 9.5,
-      "Plain or Ordinary Concrete": 8.5,
-      "Reinforced Concrete": 11,
-      "Prestressed Concrete": 12,
-      "Precast Concrete": 13,
-      "Light-Weight Concrete": 10,
-      "High-Density Concrete": 15,
-      "Air Entrained Concrete": 10.5,
-      "Ready Mix Concrete": 11.5,
-      "Polymer Concrete": 14,
-      "Polymer Cement Concrete": 12.5,
-      "Polymer Impregnated Concrete": 13.5,
-      "High-Strength Concrete": 14.5,
-      "High-Performance Concrete": 16,
-      "Self-Consolidated Concrete": 15,
-      "Shotcrete Concrete": 13,
-      "Pervious Concrete": 12,
-      "Vacuum Concrete": 14,
-      "Pumped Concrete": 13.5,
-      "Stamped Concrete": 12.5,
-      "Limecrete": 10,
-      "Asphalt Concrete": 11,
-      "Roller Compacted Concrete": 14,
-      "Rapid Strength Concrete": 15,
-      "Glass Concrete": 16,
-    };
+export const calculateConcreteCost = (concreteMaterial, concreteSqFootage, concreteMaterialCosts) => {
   
     const costPerSqFoot = concreteMaterialCosts[concreteMaterial];
     const totalCost = costPerSqFoot * concreteSqFootage;
@@ -36,33 +10,32 @@ export const calculateConcreteCost = (concreteMaterial, concreteSqFootage) => {
   };
 
 const ConcreteForm = ({ handleChange, formData }) => {
-  const concreteMaterials = [
-    "Normal Strength Concrete",
-    "Plain or Ordinary Concrete",
-    "Reinforced Concrete",
-    "Prestressed Concrete",
-    "Precast Concrete",
-    "Light-Weight Concrete",
-    "High-Density Concrete",
-    "Air Entrained Concrete",
-    "Ready Mix Concrete",
-    "Polymer Concrete",
-    "Polymer Cement Concrete",
-    "Polymer Impregnated Concrete",
-    "High-Strength Concrete",
-    "High-Performance Concrete",
-    "Self-Consolidated Concrete",
-    "Shotcrete Concrete",
-    "Pervious Concrete",
-    "Vacuum Concrete",
-    "Pumped Concrete",
-    "Stamped Concrete",
-    "Limecrete",
-    "Asphalt Concrete",
-    "Roller Compacted Concrete",
-    "Rapid Strength Concrete",
-    "Glass Concrete",
-  ];
+  const [concreteMaterials, setConcreteMaterials] = useState([]);
+
+  useEffect(() => {
+    const fetchConcreteMaterials = async () => {
+      const db = getFirestore();
+      const priceUpdatesCollectionRef = collection(db, "priceUpdates");
+      const priceUpdatesSnapshot = await getDocs(priceUpdatesCollectionRef);
+      const priceUpdatesDocId = priceUpdatesSnapshot.docs[0].id; // Assuming there is at least one document in priceUpdates collection
+
+      const concreteMaterialsCollectionRef = collection(db, `priceUpdates/${priceUpdatesDocId}/concreteMaterials`);
+      const ConcreteSnapshot = await getDocs(concreteMaterialsCollectionRef);
+      const materials = [];
+      const costs = {};
+
+      ConcreteSnapshot.forEach((doc) => {
+        const materialData = doc.data();
+        materials.push(materialData.name);
+        costs[materialData.name] = materialData.price;
+      });
+
+      setConcreteMaterials(materials);
+      handleChange({ target: { name: "concreteMaterialCosts", value: costs } });
+    };
+
+    fetchConcreteMaterials();
+  }, []);
 
   return (
     <>
