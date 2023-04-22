@@ -40,20 +40,6 @@ const PriceUpdates = () => {
       );
     }
 
-    if (materialType === "patio" && nestedMaterialType) {
-      const patioRef = collection(
-        db,
-        `priceUpdates/${priceUpdatesDocId}/${materialType}`
-      );
-      const patioSnapshot = await getDocs(patioRef);
-      const patioDocId = patioSnapshot.docs[0].id;
-
-      return collection(
-        db,
-        `priceUpdates/${priceUpdatesDocId}/${materialType}/${patioDocId}/${nestedMaterialType}`
-      );
-    }
-
     return collection(db, `priceUpdates/${priceUpdatesDocId}/${materialType}`);
   };
 
@@ -105,44 +91,6 @@ const PriceUpdates = () => {
           setLighting(lightingData);
         });
       }
-      if (materialType === "patio") {
-        const handrailsRef = await getMaterialsRef(
-          materialType,
-          "patioHandrails"
-        );
-        const lightingRef = await getMaterialsRef(
-          materialType,
-          "patioLighting"
-        );
-        const patioMaterialsRef = await getMaterialsRef(
-          materialType,
-          "patioMaterials"
-        );
-
-        onSnapshot(patioMaterialsRef, (snapshot) => {
-          const patioMaterials = snapshot.docs.map((doc) => ({
-            id: doc.id,
-            ...doc.data(),
-          }));
-          setMaterials(patioMaterials);
-        });
-
-        unsubscribeHandrails = onSnapshot(handrailsRef, (snapshot) => {
-          const handrailsData = snapshot.docs.map((doc) => ({
-            id: doc.id,
-            ...doc.data(),
-          }));
-          setHandrails(handrailsData);
-        });
-
-        unsubscribeLighting = onSnapshot(lightingRef, (snapshot) => {
-          const lightingData = snapshot.docs.map((doc) => ({
-            id: doc.id,
-            ...doc.data(),
-          }));
-          setLighting(lightingData);
-        });
-      }
     };
 
     fetchMaterials(selectedTab);
@@ -158,8 +106,6 @@ const PriceUpdates = () => {
       let materialsRef;
       if (selectedTab === "deckMaterials") {
         materialsRef = await getMaterialsRef(selectedTab, "deckingMaterials");
-      } else if (selectedTab === "patio") {
-        materialsRef = await getMaterialsRef(selectedTab, "patioMaterials");
       } else {
         materialsRef = await getMaterialsRef(selectedTab);
       }
@@ -234,10 +180,9 @@ const PriceUpdates = () => {
       { label: "Exterior", value: "exteriorTiers" },
       { label: "Flooring", value: "flooringMaterials" },
       { label: "Epoxy", value: "epoxyMaterials" },
-      { label: "Roofing", value: "roofingMaterials" },
+      { label: "Coatings", value: "coatingsMaterials" },
       { label: "Concrete", value: "concreteMaterials" },
-      { label: "Deck", value: "deckMaterials" },
-      { label: "Patio", value: "patio" },
+      { label: "Deck/Patio", value: "deckMaterials" },
     ];
 
     return (
@@ -275,12 +220,10 @@ const PriceUpdates = () => {
             ? "Add Exterior Tier"
             : selectedTab === "epoxyMaterials"
             ? "Add Epoxy Material"
-            : selectedTab === "roofingMaterials"
-            ? "Add Roofing Material"
+            : selectedTab === "coatingsMaterials"
+            ? "Add Coatings Material"
             : selectedTab === "deckMaterials"
-            ? "Add Deck Material"
-            : selectedTab === "patio"
-            ? "Add Patio Material"
+            ? "Add Deck/Patio Material"
             : selectedTab === "concreteMaterials"
             ? "Add Concrete Material"
             : "Add Flooring Material"}
@@ -356,25 +299,6 @@ const PriceUpdates = () => {
           />
         </div>
       )}
-      {selectedTab === "patio" && (
-        <div>
-          <h3 className="text-2xl font-semibold mt-8 mb-4 text-center">
-            Handrails & lighting
-          </h3>
-          <DeckPatioExtras
-            data={handrails}
-            onUpdatePrice={(id, price) =>
-              handleUpdateMaterial(id, price, "patioHandrails")
-            }
-          />
-          <DeckPatioExtras
-            data={lighting}
-            onUpdatePrice={(id, price) =>
-              handleUpdateMaterial(id, price, "patioLighting")
-            }
-          />
-        </div>
-      )}
       {/* Material List */}
       <h3 className="text-2xl font-semibold my-8 text-center">
         {selectedTab === "wholeHomeTiers"
@@ -385,12 +309,10 @@ const PriceUpdates = () => {
           ? "Exterior"
           : selectedTab === "epoxyMaterials"
           ? "Epoxy"
-          : selectedTab === "roofingMaterials"
-          ? "Roofing"
+          : selectedTab === "coatingsMaterials"
+          ? "Coatings"
           : selectedTab === "deckMaterials"
-          ? "Deck"
-          : selectedTab === "patio"
-          ? "Patio"
+          ? "Deck/Patio"
           : selectedTab === "concreteMaterials"
           ? "Concrete"
           : "Flooring"}
@@ -420,8 +342,6 @@ const PriceUpdates = () => {
                     material.id,
                     selectedTab === "deckMaterials"
                       ? "deckingMaterials"
-                      : selectedTab === "patio"
-                      ? "patioMaterials"
                       : null
                   )
                 }

@@ -1,8 +1,8 @@
 import { useState, useEffect } from "react";
 import { collection, getDocs } from "firebase/firestore";
-import { firestore } from "../lib/firebase";
+import { firestore } from "../../lib/firebase";
 
-import styles from "../styles/Home.module.css";
+import styles from "../../styles/Home.module.css";
 
 const Services = ({ scrollToRef, servicesRef }) => {
   const [visibleServices, setVisibleServices] = useState(0);
@@ -77,7 +77,7 @@ const Services = ({ scrollToRef, servicesRef }) => {
   };
 
   return (
-    <section className="relative bg-gradient-to-b from-slate-300 via-neutral-800 to-neutral-900 pt-36 py-12">
+    <section className="relative bg-gradient-to-b from-slate-300 via-neutral-800 to-neutral-900 pt-24 py-12">
       <div className="px-4 sm:px-8 md:px-16 lg:px-24 mx-auto">
         <h2 className="text-3xl md:text-4xl text-neutral-200 font-semibold mb-8 text-center">
           Our Services

@@ -1,22 +1,16 @@
 import { calculateFlooringCost } from "../quoteComponents/FlooringForm";
 import { calculateEpoxyCost } from "../quoteComponents/EpoxyForm";
 import { calculateConcreteCost } from "../quoteComponents/ConcreteForm";
-import { calculateRoofingCost } from "../quoteComponents/RoofingForm";
-import { calculateDeckCost } from "../quoteComponents/DeckForm";
-import { calculatePatioCost } from "../quoteComponents/PatioForm";
-import { calculateDrywallCost } from "../quoteComponents/DrywallForm";
+import { calculateDeckPatioCost } from "../quoteComponents/DeckPatioForm";
 import { calculateKitchenCost } from "../quoteComponents/KitchenForm";
 import { calculateBathroomCost } from "../quoteComponents/BathroomForm";
 import { calculateWholeHomeCost } from "../quoteComponents/WholeHomeForm";
 import { calculateInteriorCost } from "../quoteComponents/InteriorForm";
 import { calculateExteriorCost } from "../quoteComponents/ExteriorForm";
+import { calculateCoatingsCost } from "../quoteComponents/CoatingsForm";
 
 export function calculateEstimate(formData, callback) {
   let cost = 0;
-
-  console.log("Form Data:", formData); // Log form data
-
-  console.log("Project Type:", formData.projectType); // Log project type
 
   switch (formData.projectType) {
     case "wholeHome":
@@ -47,34 +41,15 @@ export function calculateEstimate(formData, callback) {
         formData.flooringMaterialCosts
       );
       break;
-    case "deck":
-      cost = calculateDeckCost(
-        formData.deckMaterial,
-        formData.deckSqFootage,
-        formData.deckLighting,
-        formData.deckHandrails,
-        formData.deckMaterialCosts,
+    case "deckPatio":
+      cost = calculateDeckPatioCost(
+        formData.deckPatioMaterial,
+        formData.deckPatioSqFootage,
+        formData.deckPatioLighting,
+        formData.deckPatioHandrails,
+        formData.deckPatioMaterialCosts,
         formData.handrailsCost,
         formData.lightingCost
-      );
-      break;
-    case "patio":
-      cost = calculatePatioCost(
-        formData.patioMaterial,
-        formData.patioSqFootage,
-        formData.patioLighting,
-        formData.patioHandrails,
-        formData.patioMaterialCosts,
-        formData.handrailsCost,
-        formData.lightingCost
-      );
-      break;
-    case "drywall":
-      cost = calculateDrywallCost(
-        formData.drywallMaterial,
-        formData.size,
-        formData.thickness,
-        formData.drywallSqFootage
       );
       break;
     case "epoxy":
@@ -84,8 +59,20 @@ export function calculateEstimate(formData, callback) {
         formData.epoxyMaterialCosts
       );
       break;
+    case "coatings":
+      cost = calculateCoatingsCost(
+        formData.coatingsMaterial,
+        formData.coatingsSqFootage,
+        formData.coatingsMaterialCosts
+      );
+      break;
     case "kitchen":
-      cost = calculateKitchenCost(formData);
+      cost = calculateKitchenCost(
+        formData,
+        formData.countertopMaterialCosts,
+        formData.kitchenCabinetMaterialCosts,
+        formData.includedOptionsCosts
+      );
       break;
     case "bath":
       cost = calculateBathroomCost(formData);
@@ -97,17 +84,10 @@ export function calculateEstimate(formData, callback) {
         formData.concreteMaterialCosts
       );
       break;
-    case "roofing":
-      cost = calculateRoofingCost(
-        formData.roofingMaterial,
-        formData.roofingSqFootage,
-        formData.roofingMaterialCosts
-      );
-      break;
     default:
       break;
   }
-
+  console.log("Form Data update for calculateKitchenCost:", formData);
   console.log("Calculated Cost:", cost); // Log calculated cost
 
   callback(cost);

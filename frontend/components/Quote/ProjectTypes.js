@@ -21,14 +21,12 @@ const ProjectTypes = ({ handleChange, formData }) => {
         <option value="interior">Interior Remodel</option>
         <option value="exterior">Exterior Remodel</option>
         <option value="flooring">Flooring</option>
-        <option value="deck">Deck</option>
-        <option value="patio">Patio</option>
-        <option value="drywall">Drywall</option>
+        <option value="deckPatio">Deck/Patio</option>
         <option value="epoxy">Epoxy</option>
+        <option value="coatings">Coatings</option>
         <option value="kitchen">Kitchen</option>
-        <option value="bath">Bath</option>
+        <option value="bath">Bathroom</option>
         <option value="concrete">Concrete</option>
-        <option value="roofing">Roofing</option>
       </motion.select>
     </div>
   );

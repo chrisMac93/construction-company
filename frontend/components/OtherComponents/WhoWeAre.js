@@ -37,11 +37,13 @@ const WhoWeAre = () => {
 
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-8 items-center mt-10">
           <div>
+            <div className="mt-3">
             <img
               src="/icons/google-logo.png"
               alt="Google Logo"
               className="h-8 w-auto mx-auto mb-2"
             />
+            </div>
             <h3 className="text-gray-600 font-semibold">5 STARS ON GOOGLE</h3>
             <FontAwesomeIcon
               icon={faStar}
@@ -66,9 +68,9 @@ const WhoWeAre = () => {
           </div>
           <div>
             <img
-              src="/icons/yelp-logo.png"
-              alt="Yelp Logo"
-              className="h-8 w-auto mx-auto mb-2"
+              src="/icons/nextDoor-logo.png"
+              alt="NextDoor Logo"
+              className="h-10 w-auto mx-auto mb-2"
             />
             <h3 className="text-gray-600 font-semibold">5 STARS ON YELP</h3>
             <FontAwesomeIcon
@@ -123,7 +125,7 @@ const WhoWeAre = () => {
           {/* Add more platforms as needed */}
           <div>
             <img
-              src="/icons/houzz-logo.png"
+              src="/icons/houzz3-logo.png"
               alt="Houzz Logo"
               className="h-8 w-auto mx-auto mb-2"
             />

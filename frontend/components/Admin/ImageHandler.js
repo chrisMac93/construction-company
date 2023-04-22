@@ -25,9 +25,7 @@ const ImageHandler = () => {
   const [removeImagesMode, setRemoveImagesMode] = useState(false);
   const [selectedImages, setSelectedImages] = useState([]);
   const [isTitleModalVisible, setIsTitleModalVisible] = useState(false);
-  // const [currentFile, setCurrentFile] = useState(null);
   const [filesWithTitle, setFilesWithTitle] = useState([]);
-  const [imageTitle, setImageTitle] = useState("");
 
   const handleImageUpload = async (file, title) => {
     if (!file) {

@@ -1,7 +1,7 @@
 import React from "react";
 import Link from "next/link";
 import { motion } from "framer-motion";
-import useImages from "../hooks/useImages";
+import useImages from "../../hooks/useImages";
 
 const Jumbotron = () => {
 
@@ -31,7 +31,7 @@ const Jumbotron = () => {
           variants={headerVariants}
           transition={{ duration: 1 }}
         >
-          Martin Construction & Coatings
+          Martin Construction &amp; Coatings
         </motion.h1>
         <motion.p
           className="text-lg sm:text-xl text-slate-300"

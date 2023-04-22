@@ -1,12 +1,12 @@
 import { useState, useEffect } from "react";
 import { collection, getDocs } from "firebase/firestore";
-import { firestore } from "../lib/firebase";
+import { firestore } from "../../lib/firebase";
 import { motion } from "framer-motion";
 import Image from "next/image";
 import Link from "next/link";
-import useImages from "../hooks/useImages";
+import useImages from "../../hooks/useImages";
 
-import styles from "../styles/Home.module.css";
+import styles from "../../styles/Home.module.css";
 
 const AboutUs = () => {
   const [teamMembers, setTeamMembers] = useState({
@@ -104,7 +104,7 @@ const AboutUs = () => {
             <div>
               <h3 className="text-2xl font-semibold lg:mt-6">Who We Are</h3>
               <p className="mt-4">
-                Martin Construction & Coatings is a family-owned business that
+                Martin Construction &amp; Coatings is a family-owned business that
                 has been providing high-quality construction and coating
                 services for over 20 years. Our team of skilled professionals is
                 dedicated to ensuring customer satisfaction and delivering
@@ -138,9 +138,9 @@ const AboutUs = () => {
         <div className="max-w-7xl mx-auto">
           <h3 className="text-2xl font-semibold mb-8">Our Approach</h3>
           <p>
-            At Martin Construction & Coatings, our approach is rooted in our
+            At Martin Construction &amp; Coatings, our approach is rooted in our
             commitment to quality and customer satisfaction. We understand the
-            importance of listening to our clients' needs and working closely
+            importance of listening to our clients needs and working closely
             with them throughout the entire process. Our experienced team is
             dedicated to delivering the highest level of craftsmanship, using
             the latest techniques and materials to ensure long-lasting results.
@@ -181,7 +181,7 @@ const AboutUs = () => {
             <h3 className="text-2xl font-semibold">Our Mission</h3>
             <p className="mt-4">
               Our mission is to provide exceptional construction and coating
-              services that exceed our clients' expectations. We are committed
+              services that exceed our clients expectations. We are committed
               to continuous improvement, utilizing the latest industry
               techniques and materials to deliver high-quality, sustainable
               results. Our team is dedicated to maintaining the highest
@@ -275,7 +275,7 @@ const AboutUs = () => {
       >
         <div className="bg-neutral-800 bg-opacity-70 text-neutral-100 py-20 px-4 sm:px-8 md:px-16 lg:px-24 text-center">
           <h2 className="text-3xl md:text-4xl font-semibold">
-            Interested in Working with Martin Construction & Coatings?
+            Interested in Working with Martin Construction &amp; Coatings?
           </h2>
           <p className="mt-4">
             Join our team of professionals and contribute to the success of our

@@ -57,9 +57,9 @@ const FlooringForm = ({ handleChange, formData }) => {
           value={formData.flooringMaterial}
         >
           <option value="">Select a Flooring Material</option>
-          {flooringMaterials.map((type) => (
-            <option key={type} value={type}>
-              {type}
+          {flooringMaterials.map((flooringMaterial) => (
+            <option key={flooringMaterial} value={flooringMaterial}>
+              {flooringMaterial}
             </option>
           ))}
         </select>

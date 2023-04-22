@@ -1,10 +1,10 @@
 import React from "react";
-import WhoWeAre from "../components/WhoWeAre";
-import Gallery from "../components/Gallery";
-import Jumbotron from "../components/Jumbotron";
-import Services from "../components/Services";
-import Testimonials from "../components/Testimonials";
-import WhyChooseUs from "../components/WhyChooseUs";
+import WhoWeAre from "../components/OtherComponents/WhoWeAre";
+import Gallery from "../components/OtherComponents/Gallery";
+import Jumbotron from "../components/OtherComponents/Jumbotron";
+import Services from "../components/OtherComponents/Services";
+import Testimonials from "../components/OtherComponents/Testimonials";
+import WhyChooseUs from "../components/OtherComponents/WhyChooseUs";
 
 export default function Home({
   whoWeAreRef,

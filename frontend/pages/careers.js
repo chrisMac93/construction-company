@@ -1,4 +1,4 @@
-import Careers from '../components/Careers';
+import Careers from '../components/OtherComponents/Careers';
 
 const CareersPage = () => {
   return (

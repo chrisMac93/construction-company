@@ -1,132 +1,250 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
+import { getFirestore, collection, getDocs } from "firebase/firestore";
 import FlooringForm from "./FlooringForm";
 import { calculateFlooringCost } from "./FlooringForm";
 import { renderSwitch } from "./RenderSwitch";
 
-export const calculateKitchenCost = (formData) => {
-  const kitchenCabinetMaterialsCost = {
-    "Solid wood": 100,
-    Particleboard: 60,
-    "MDF (medium density fiberboard)": 80,
-    Plywood: 85,
-    Metal: 110,
-    Laminate: 70,
-    Melamine: 75,
-    Thermofoil: 90,
-  };
-
-  const countertopMaterialsCost = {
-    "Natural Stone": 100,
-    "Solid-Surfaces": 80,
-    "Engineered Stone": 110,
-    Concrete: 90,
-    "Plastic Laminate": 60,
-    "Ceramic Tile": 70,
-    Wood: 85,
-  };
-
-  const kitchenSinkMaterialsCost = {
-    Porcelain: 100,
-    "Stainless steel": 150,
-    Ceramic: 120,
-    Glass: 200,
-    Granite: 250,
-    Marble: 300,
-    Stone: 350,
-    Wood: 400,
-  };
+export const calculateKitchenCost = (
+  formData,
+  countertopMaterialCosts,
+  kitchenCabinetMaterialCosts,
+  includedOptionsCosts
+) => {
+  // if (!formData) return 0;
 
   let totalCost = 0;
 
-  if (formData.flooringIncluded && formData.flooringMaterial) {
+  if (formData.kitchenFlooringIncluded) {
     totalCost += calculateFlooringCost(
       formData.flooringMaterial,
-      formData.flooringSqFootage
+      formData.flooringSqFootage,
+      formData.flooringMaterialCosts
     );
   }
-
-  if (
-    formData.island &&
-    (formData.islandBaseMaterial || formData.islandCountertop)
-  ) {
-    let islandBaseCost = formData.islandBaseMaterial
-      ? kitchenCabinetMaterialsCost[formData.islandBaseMaterial] / 10
-      : 0;
-
-    let islandCountertopCost = formData.islandCountertop
-      ? countertopMaterialsCost[formData.islandCountertop] / 10
-      : 0;
-
-    if (formData.islandStovetop) {
-      islandCountertopCost *= 0.2; // Reduce the islandCountertopCost by 80%
-      totalCost += 1200; // Assuming a fixed cost for stovetop
-    }
-
-    let islandCostPerSqFt = islandBaseCost + islandCountertopCost;
-    totalCost += islandCostPerSqFt * formData.islandSqFootage;
-  }
+  // console.log("Cost after flooring:", totalCost);
 
   if (formData.countertops && formData.countertopMaterial) {
-    totalCost += countertopMaterialsCost[formData.countertopMaterial] * 15 || 0;
+    console.log("formData.countertopMaterial:", formData.countertopMaterial);
+    console.log("countertopMaterialCosts:", countertopMaterialCosts);
+    if (
+      countertopMaterialCosts &&
+      countertopMaterialCosts[formData.countertopMaterial]
+    ) {
+      totalCost += countertopMaterialCosts[formData.countertopMaterial] * 15;
+    }
   }
+  // console.log("Cost after countertops:", totalCost);
 
   if (formData.kitchenCabinets && formData.kitchenCabinetMaterial) {
-    totalCost +=
-      kitchenCabinetMaterialsCost[formData.kitchenCabinetMaterial] * 30 || 0;
+    console.log(
+      "formData.kitchenCabinetMaterial:",
+      formData.kitchenCabinetMaterial
+    );
+    console.log("kitchenCabinetMaterialCosts:", kitchenCabinetMaterialCosts);
+    if (
+      kitchenCabinetMaterialCosts &&
+      kitchenCabinetMaterialCosts[formData.kitchenCabinetMaterial]
+    ) {
+      totalCost +=
+        kitchenCabinetMaterialCosts[formData.kitchenCabinetMaterial] * 30;
+    }
   }
+  // console.log("Cost after kitchen cabinets:", totalCost);
 
-  if (formData.kitchenSink && formData.kitchenSinkMaterial) {
-    totalCost += 1000; // Assuming a fixed cost for kitchen sink
-    totalCost += kitchenSinkMaterialsCost[formData.kitchenSinkMaterial];
+  if (formData.island) {
+    console.log("formData.island:", formData.island);
+    if (includedOptionsCosts && includedOptionsCosts.island) {
+      console.log("includedOptionsCosts.island:", includedOptionsCosts.island);
+      totalCost += includedOptionsCosts.island;
+    }
   }
-
-  if (formData.appliances) {
-    totalCost += 5000; // Assuming a fixed cost for appliances
-  }
+  // console.log("Cost after island:", totalCost);
 
   if (formData.kitchenPlumbing) {
-    totalCost += 2000; // Assuming a fixed cost for kitchenPlumbing
+    console.log("formData.kitchenPlumbing:", formData.kitchenPlumbing);
+    if (includedOptionsCosts && includedOptionsCosts.plumbing) {
+      console.log(
+        "includedOptionsCosts.plumbing:",
+        includedOptionsCosts.plumbing
+      );
+      totalCost += includedOptionsCosts.plumbing;
+    }
   }
+  // console.log("Cost after kitchen plumbing:", totalCost);
 
   if (formData.kitchenLighting) {
-    totalCost += 1500; // Assuming a fixed cost for kitchenLighting
+    console.log("formData.kitchenLighting:", formData.kitchenLighting);
+    if (includedOptionsCosts && includedOptionsCosts.lighting) {
+      console.log(
+        "includedOptionsCosts.lighting:",
+        includedOptionsCosts.lighting
+      );
+      totalCost += includedOptionsCosts.lighting;
+    }
   }
-
+  console.log("Final Calculated Cost:", totalCost);
   return totalCost;
 };
 
 const KitchenForm = ({ handleChange, formData }) => {
-  const kitchenCabinetMaterials = [
-    "Solid wood",
-    "Particleboard",
-    "MDF (medium density fiberboard)",
-    "Plywood",
-    "Metal",
-    "Laminate",
-    "Melamine",
-    "Thermofoil",
-  ];
+  const [kitchenCabinetMaterials, setKitchenCabinetMaterials] = useState([]);
+  const [kitchenCabinetMaterialCosts, setKitchenCabinetMaterialCosts] =
+    useState({});
+  const [countertopMaterials, setCountertopMaterials] = useState([]);
+  const [countertopMaterialCosts, setCountertopMaterialCosts] = useState({});
+  const [includedOptions, setIncludedOptions] = useState([]);
+  const [includedOptionsCosts, setIncludedOptionsCosts] = useState({});
+  const [calculatedCost, setCalculatedCost] = useState(0);
+  const [switchChanged, setSwitchChanged] = useState(false);
 
-  const countertopMaterials = [
-    "Natural Stone",
-    "Solid-Surfaces",
-    "Engineered Stone",
-    "Concrete",
-    "Plastic Laminate",
-    "Ceramic Tile",
-    "Wood",
-  ];
+  useEffect(() => {
+    console.log("Running useEffect for fetching materials data");
+    const fetchMaterialsData = async () => {
+      const db = getFirestore();
+      const priceUpdatesCollectionRef = collection(db, "priceUpdates");
+      const priceUpdatesSnapshot = await getDocs(priceUpdatesCollectionRef);
+      const priceUpdatesDocId = priceUpdatesSnapshot.docs[0].id;
 
-  const kitchenSinkMaterials = [
-    "Porcelain",
-    "Stainless steel",
-    "Ceramic",
-    "Glass",
-    "Granite",
-    "Marble",
-    "Stone",
-    "Wood",
-  ];
+      const kitchenMaterialsCollectionRef = collection(
+        db,
+        `priceUpdates/${priceUpdatesDocId}/kitchenMaterials`
+      );
+
+      const kitchenMaterialsSnapShot = await getDocs(
+        kitchenMaterialsCollectionRef
+      );
+      const kitchenMaterialsDocId = kitchenMaterialsSnapShot.docs[0].id;
+
+      const countertopCollectionRef = collection(
+        db,
+        `priceUpdates/${priceUpdatesDocId}/kitchenMaterials/${kitchenMaterialsDocId}/countertopMaterials`
+      );
+      const kitchenCabinetCollectionRef = collection(
+        db,
+        `priceUpdates/${priceUpdatesDocId}/kitchenMaterials/${kitchenMaterialsDocId}/kitchenCabinetMaterials`
+      );
+      const includedCollectionRef = collection(
+        db,
+        `priceUpdates/${priceUpdatesDocId}/kitchenMaterials/${kitchenMaterialsDocId}/included`
+      );
+
+      const countertopMaterialsSnapshot = await getDocs(
+        countertopCollectionRef
+      );
+
+      const kitchenCabinetMaterialsSnapshot = await getDocs(
+        kitchenCabinetCollectionRef
+      );
+
+      const includedSnapshot = await getDocs(includedCollectionRef);
+
+      const newCountertopMaterialNames = [];
+      const newKitchenCabinetMaterialNames = [];
+      const newIncludedOptionNames = [];
+
+      const newCountertopMaterialCosts = {};
+      const newKitchenCabinetMaterialCosts = {};
+      const newIncludedOptionsCosts = {};
+
+      if (countertopMaterialsSnapshot.docs.length > 0) {
+        countertopMaterialsSnapshot.docs.forEach((doc) => {
+          const { name, price } = doc.data();
+          newCountertopMaterialNames.push(name);
+          newCountertopMaterialCosts[name] = price;
+        });
+        setCountertopMaterialCosts(newCountertopMaterialCosts);
+        setCountertopMaterials(newCountertopMaterialNames);
+      }
+
+      if (kitchenCabinetMaterialsSnapshot.docs.length > 0) {
+        kitchenCabinetMaterialsSnapshot.docs.forEach((doc) => {
+          const { name, price } = doc.data();
+          newKitchenCabinetMaterialNames.push(name);
+          newKitchenCabinetMaterialCosts[name] = price;
+        });
+        setKitchenCabinetMaterialCosts(newKitchenCabinetMaterialCosts);
+        setKitchenCabinetMaterials(newKitchenCabinetMaterialNames);
+      }
+
+      if (includedSnapshot.docs.length > 0) {
+        includedSnapshot.docs.forEach((doc) => {
+          const { name, price } = doc.data();
+          newIncludedOptionNames.push(name);
+          newIncludedOptionsCosts[name] = price;
+        });
+        setIncludedOptionsCosts(newIncludedOptionsCosts);
+        setIncludedOptions(newIncludedOptionNames);
+      }
+    };
+
+    fetchMaterialsData();
+  }, []);
+
+  useEffect(() => {
+    if (switchChanged) {
+      calculateCostAndUpdate();
+      setSwitchChanged(false);
+    }
+  }, [
+    formData,
+    setCalculatedCost,
+    countertopMaterialCosts,
+    kitchenCabinetMaterialCosts,
+    includedOptionsCosts,
+    switchChanged,
+  ]);
+
+  const calculateCostAndUpdate = () => {
+    const cost = calculateKitchenCost(
+      formData,
+      countertopMaterialCosts,
+      kitchenCabinetMaterialCosts,
+      includedOptionsCosts
+    );
+    setCalculatedCost(cost);
+  };
+
+  useEffect(() => {
+    setSwitchChanged(true);
+  }, [formData]);
+
+  const handleSwitchChange = (e, cost) => {
+    console.log("Running handleSwitchChange");
+    const { name } = e.target;
+
+    if (name === "kitchenCabinets") {
+      handleChange({
+        target: {
+          name: "kitchenCabinetMaterialCosts",
+          value: cost,
+        },
+      });
+    }
+
+    if (
+      name === "island" ||
+      name === "kitchenPlumbing" ||
+      name === "kitchenLighting"
+    ) {
+      handleChange({
+        target: {
+          name: "includedOptionsCosts",
+          value: cost,
+        },
+      });
+    }
+
+    if (name === "countertops") {
+      handleChange({
+        target: {
+          name: "countertopMaterialCosts",
+          value: cost,
+        },
+      });
+    }
+
+    handleChange(e);
+  };
 
   return (
     <>
@@ -137,92 +255,28 @@ const KitchenForm = ({ handleChange, formData }) => {
       </div>
       <div className="form-control">
         {renderSwitch(
-          "flooringIncluded",
-          "flooringIncluded",
-          formData.flooringIncluded,
+          "kitchenFlooringIncluded",
+          "kitchenFlooringIncluded",
+          Boolean(formData.kitchenFlooringIncluded),
           handleChange
         )}
-        <label htmlFor="flooringIncluded" className="ml-1 text-lg">
+        <label htmlFor="kitchenFlooringIncluded" className="ml-1 text-lg">
           Flooring Included
         </label>
       </div>
-      {formData.flooringIncluded && (
+      {formData.kitchenFlooringIncluded && (
         <FlooringForm handleChange={handleChange} formData={formData} />
-      )}
-      <div className="form-control">
-        {renderSwitch("island", "island", formData.island, handleChange)}
-        <label htmlFor="island" className="ml-1 text-lg">
-          Island Included
-        </label>
-      </div>
-      {formData.island && (
-        <>
-          <div className="form-control">
-            <label htmlFor="islandSqFootage" className="block mb-2">
-              Island Square Footage
-            </label>
-            <input
-              type="number"
-              name="islandSqFootage"
-              id="islandSqFootage"
-              value={formData.islandSqFootage}
-              onChange={handleChange}
-              className="w-full p-3 bg-neutral-700 rounded-md text-neutral-100"
-            />
-          </div>
-          <div className="form-control">
-            <label htmlFor="islandBaseMaterial">Island Base Material</label>
-            <select
-              name="islandBaseMaterial"
-              id="islandBaseMaterial"
-              className="w-full p-3 bg-neutral-700 rounded-md text-neutral-100"
-              value={formData.islandBaseMaterial}
-              onChange={handleChange}
-            >
-              <option value="">Select a material</option>
-              {kitchenCabinetMaterials.map((material) => (
-                <option key={material} value={material}>
-                  {material}
-                </option>
-              ))}
-            </select>
-          </div>
-          <div className="form-control">
-            <label htmlFor="islandCountertop">Island Countertop Material</label>
-            <select
-              name="islandCountertop"
-              id="islandCountertop"
-              className="w-full p-3 bg-neutral-700 rounded-md text-neutral-100"
-              value={formData.islandCountertop}
-              onChange={handleChange}
-            >
-              <option value="">Select a material</option>
-              {countertopMaterials.map((material) => (
-                <option key={material} value={material}>
-                  {material}
-                </option>
-              ))}
-            </select>
-          </div>
-          <div className="form-control">
-            {renderSwitch(
-              "islandStovetop",
-              "islandStovetop",
-              formData.islandStovetop,
-              handleChange
-            )}
-            <label htmlFor="islandStovetop" className="ml-1 text-lg">
-              Stovetop
-            </label>
-          </div>
-        </>
       )}
       <div className="form-control">
         {renderSwitch(
           "countertops",
           "countertops",
-          formData.countertops,
-          handleChange
+          formData.countertops || false,
+          (e) =>
+            handleSwitchChange(
+              e,
+              countertopMaterialCosts[formData.countertopMaterial]
+            )
         )}
         <label htmlFor="countertops" className="ml-1 text-lg">
           Updated Countertops
@@ -251,8 +305,12 @@ const KitchenForm = ({ handleChange, formData }) => {
         {renderSwitch(
           "kitchenCabinets",
           "kitchenCabinets",
-          formData.kitchenCabinets,
-          handleChange
+          formData.kitchenCabinets || false,
+          (e) =>
+            handleSwitchChange(
+              e,
+              kitchenCabinetMaterialCosts[formData.kitchenCabinetMaterial]
+            )
         )}
         <label htmlFor="kitchenCabinets" className="ml-1 text-lg">
           Updated Cabinets
@@ -278,52 +336,19 @@ const KitchenForm = ({ handleChange, formData }) => {
         </div>
       )}
       <div className="form-control">
-        {renderSwitch(
-          "kitchenSink",
-          "kitchenSink",
-          formData.kitchenSink,
-          handleChange
+        {renderSwitch("island", "island", formData.island || false, (e) =>
+          handleSwitchChange(e, includedOptionsCosts[e.target.name])
         )}
-        <label htmlFor="kitchenSink" className="ml-1 text-lg">
-          Sink
-        </label>
-      </div>
-      {formData.kitchenSink && (
-        <div className="form-control">
-          <label htmlFor="kitchenSinkMaterial">Sink Material</label>
-          <select
-            name="kitchenSinkMaterial"
-            id="kitchenSinkMaterial"
-            className="w-full p-3 bg-neutral-700 rounded-md text-neutral-100"
-            value={formData.kitchenSinkMaterial}
-            onChange={handleChange}
-          >
-            <option value="">Select a material</option>
-            {kitchenSinkMaterials.map((material) => (
-              <option key={material} value={material}>
-                {material}
-              </option>
-            ))}
-          </select>
-        </div>
-      )}
-      <div className="form-control">
-        {renderSwitch(
-          "appliances",
-          "appliances",
-          formData.appliances,
-          handleChange
-        )}
-        <label htmlFor="appliances" className="ml-1 text-lg">
-          Appliances
+        <label htmlFor="island" className="ml-1 text-lg">
+          Island Included
         </label>
       </div>
       <div className="form-control">
         {renderSwitch(
           "kitchenPlumbing",
           "kitchenPlumbing",
-          formData.kitchenPlumbing,
-          handleChange
+          formData.kitchenPlumbing || false,
+          (e) => handleSwitchChange(e, includedOptionsCosts[e.target.name])
         )}
         <label htmlFor="kitchenPlumbing" className="ml-1 text-lg">
           Plumbing
@@ -333,8 +358,8 @@ const KitchenForm = ({ handleChange, formData }) => {
         {renderSwitch(
           "kitchenLighting",
           "kitchenLighting",
-          formData.kitchenLighting,
-          handleChange
+          formData.kitchenLighting || false,
+          (e) => handleSwitchChange(e, includedOptionsCosts[e.target.name])
         )}
         <label htmlFor="kitchenLighting" className="ml-1 text-lg">
           Lighting

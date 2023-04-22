@@ -4,26 +4,10 @@ import { calculateFlooringCost } from "./FlooringForm";
 import { renderSwitch } from "./RenderSwitch";
 
 export const calculateBathroomCost = (formData) => {
-  const bathSinkCabinetCosts = {
-    "Solid wood": 300,
-    Particleboard: 100,
-    "MDF (medium density fiberboard)": 150,
-    Plywood: 200,
-    Metal: 250,
-    Laminate: 120,
-    Melamine: 130,
-    Thermofoil: 180,
-  };
-
-  const bathSinkTypeCosts = {
-    Porcelain: 100,
-    "Stainless steel": 150,
-    Ceramic: 120,
-    Glass: 200,
-    Granite: 250,
-    Marble: 300,
-    Stone: 350,
-    Wood: 400,
+  const sinkTypeCosts = {
+    Standard: 100,
+    Premium: 150,
+    Luxury: 200,
   };
 
   const toiletTypeCosts = {
@@ -40,10 +24,16 @@ export const calculateBathroomCost = (formData) => {
 
   let totalCost = 0;
 
+  if (formData.bathFlooringNeeded) {
+    totalCost += calculateFlooringCost(
+      formData.flooringMaterial,
+      formData.flooringSqFootage,
+      formData.flooringMaterialCosts
+    );
+  }
+
   if (formData.bathSinkNeeded) {
-    totalCost +=
-      bathSinkCabinetCosts[formData.bathSinkCabinetMaterial] +
-      bathSinkTypeCosts[formData.bathSinkType];
+    totalCost += sinkTypeCosts[formData.sinkType];
   }
 
   if (formData.toiletNeeded) {
@@ -52,13 +42,6 @@ export const calculateBathroomCost = (formData) => {
 
   if (formData.showerTubNeeded) {
     totalCost += showerTubTypeCosts[formData.showerTubType];
-  }
-
-  if (formData.flooringNeeded) {
-    totalCost += calculateFlooringCost(
-      formData.flooringMaterial,
-      formData.flooringSqFootage
-    );
   }
 
   if (formData.bathPlumbing) {
@@ -73,43 +56,33 @@ export const calculateBathroomCost = (formData) => {
 };
 
 const BathroomForm = ({ handleChange, formData }) => {
-  const cabinetMaterials = [
-    "Solid wood",
-    "Particleboard",
-    "MDF (medium density fiberboard)",
-    "Plywood",
-    "Metal",
-    "Laminate",
-    "Melamine",
-    "Thermofoil",
-  ];
+  const sinkType = ["Standard", "Premium", "Luxury"];
 
-  const bathSinkMaterialTypes = [
-    "Porcelain",
-    "Stainless steel",
-    "Ceramic",
-    "Glass",
-    "Granite",
-    "Marble",
-    "Stone",
-    "Wood",
-  ];
+  const toiletType = ["Standard", "Premium", "Luxury"];
+
+  const showerTubType = ["Standard", "Premium", "Luxury"];
 
   return (
     <>
+      <div className="flex justify-center">
+        <h1 className="text-lg font-bold">
+          Please check any options you would like to be included in your quote
+        </h1>
+      </div>
       <div className="form-control">
         {renderSwitch(
-          "flooringNeeded",
-          "flooringNeeded",
-          formData.flooringNeeded,
+          "bathFlooringNeeded",
+          "bathFlooringNeeded",
+          formData.bathFlooringNeeded,
           handleChange
         )}
         <label className="ml-1 text-lg">Do you need flooring?</label>
       </div>
 
-      {formData.flooringNeeded && (
+      {formData.bathFlooringNeeded && (
         <FlooringForm handleChange={handleChange} formData={formData} />
       )}
+
       <div className="form-control">
         {renderSwitch(
           "bathSinkNeeded",
@@ -121,46 +94,26 @@ const BathroomForm = ({ handleChange, formData }) => {
       </div>
 
       {formData.bathSinkNeeded && (
-        <>
-          <div className="form-control">
-            <label className="text-lg">
-              Sink Cabinet Material
-              <select
-                name="bathSinkCabinetMaterial"
-                value={formData.bathSinkCabinetMaterial}
-                onChange={handleChange}
-                className="w-full p-3 bg-neutral-700 rounded-md text-neutral-100"
-              >
-                <option value="">Select a Cabinet Material</option>
-                {cabinetMaterials.map((material) => (
-                  <option key={material} value={material}>
-                    {material}
-                  </option>
-                ))}
-              </select>
-            </label>
-          </div>
-
-          <div className="form-control">
-            <label className="text-lg">
-              Sink Type
-              <select
-                name="bathSinkType"
-                value={formData.bathSinkType}
-                onChange={handleChange}
-                className="w-full p-3 bg-neutral-700 rounded-md text-neutral-100"
-              >
-                <option value="">Select a Sink Type</option>
-                {bathSinkMaterialTypes.map((type) => (
-                  <option key={type} value={type}>
-                    {type}
-                  </option>
-                ))}
-              </select>
-            </label>
-          </div>
-        </>
+        <div className="form-control">
+          <label className="text-lg">
+            Sink Type
+            <select
+              name="sinkType"
+              value={formData.sinkType}
+              onChange={handleChange}
+              className="w-full p-3 bg-neutral-700 rounded-md text-neutral-100"
+            >
+              <option value="">Select a Sink Tier</option>
+              {sinkType.map((type) => (
+                <option key={type} value={type}>
+                  {type}
+                </option>
+              ))}
+            </select>
+          </label>
+        </div>
       )}
+
       <div className="form-control">
         {renderSwitch(
           "toiletNeeded",
@@ -182,9 +135,11 @@ const BathroomForm = ({ handleChange, formData }) => {
               className="w-full p-3 bg-neutral-700 rounded-md text-neutral-100"
             >
               <option value="">Select a Toilet Tier</option>
-              <option value="Standard">Standard</option>
-              <option value="Premium">Premium</option>
-              <option value="Luxury">Luxury</option>
+              {toiletType.map((type) => (
+                <option key={type} value={type}>
+                  {type}
+                </option>
+              ))}
             </select>
           </label>
         </div>
@@ -199,7 +154,6 @@ const BathroomForm = ({ handleChange, formData }) => {
         )}
         <label className="ml-1 text-lg">Do you need a shower/tub?</label>
       </div>
-
       {formData.showerTubNeeded && (
         <div className="form-control">
           <label className="text-lg">
@@ -211,21 +165,33 @@ const BathroomForm = ({ handleChange, formData }) => {
               className="w-full p-3 bg-neutral-700 rounded-md text-neutral-100"
             >
               <option value="">Select a Shower/Tub Tier</option>
-              <option value="Standard">Standard</option>
-              <option value="Premium">Premium</option>
-              <option value="Luxury">Luxury</option>
+              {showerTubType.map((type) => (
+                <option key={type} value={type}>
+                  {type}
+                </option>
+              ))}
             </select>
           </label>
         </div>
       )}
       <div className="form-control">
-        {renderSwitch("bathPlumbing", "bathPlumbing", formData.bathPlumbing, handleChange)}
+        {renderSwitch(
+          "bathPlumbing",
+          "bathPlumbing",
+          formData.bathPlumbing,
+          handleChange
+        )}
         <label htmlFor="bathPlumbing" className="ml-1 text-lg">
           Plumbing
         </label>
       </div>
       <div className="form-control">
-        {renderSwitch("bathLighting", "bathLighting", formData.bathLighting, handleChange)}
+        {renderSwitch(
+          "bathLighting",
+          "bathLighting",
+          formData.bathLighting,
+          handleChange
+        )}
         <label htmlFor="bathLighting" className="ml-1 text-lg">
           Lighting
         </label>

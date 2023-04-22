@@ -11,84 +11,84 @@ const Testimonials = () => {
       name: "John Doe",
       position: "CEO",
       testimonial:
-        "Martin Construction & Coatings did an excellent job on our project. Their attention to detail and professional approach were impressive. We highly recommend them!",
+        "Martin Construction &amp; Coatings did an excellent job on our project. Their attention to detail and professional approach were impressive. We highly recommend them!",
       image: "/gallery/reviewPhotos/JohnDoe.jpg",
     },
     {
       name: "Jane Smith",
       position: "Homeowner",
       testimonial:
-        "The team at Martin Construction & Coatings transformed our home with a beautiful new paint job. They were prompt, professional, and a pleasure to work with.",
+        "The team at Martin Construction &amp; Coatings transformed our home with a beautiful new paint job. They were prompt, professional, and a pleasure to work with.",
       image: "/gallery/reviewPhotos/JaneSmith.jpg",
     },
     {
       name: "Mike Johnson",
       position: "butthead",
       testimonial:
-        "We've been working with Martin Construction & Coatings for years, and they consistently deliver high-quality work. Their team is reliable and always goes the extra mile.",
+        "We've been working with Martin Construction &amp; Coatings for years, and they consistently deliver high-quality work. Their team is reliable and always goes the extra mile.",
       image: "/gallery/reviewPhotos/MichaelJohnson.jpg",
     },
     {
       name: "John Doe",
       position: "CEO",
       testimonial:
-        "Martin Construction & Coatings did an excellent job on our project. Their attention to detail and professional approach were impressive. We highly recommend them!",
+        "Martin Construction &amp; Coatings did an excellent job on our project. Their attention to detail and professional approach were impressive. We highly recommend them!",
       image: "/gallery/reviewPhotos/JohnDoe.jpg",
     },
     {
       name: "Jane Smith",
       position: "Homeowner",
       testimonial:
-        "The team at Martin Construction & Coatings transformed our home with a beautiful new paint job. They were prompt, professional, and a pleasure to work with.",
+        "The team at Martin Construction &amp; Coatings transformed our home with a beautiful new paint job. They were prompt, professional, and a pleasure to work with.",
       image: "/gallery/reviewPhotos/JaneSmith.jpg",
     },
     {
       name: "Mike Johnson",
       position: "butthead",
       testimonial:
-        "We've been working with Martin Construction & Coatings for years, and they consistently deliver high-quality work. Their team is reliable and always goes the extra mile.",
+        "We've been working with Martin Construction &amp; Coatings for years, and they consistently deliver high-quality work. Their team is reliable and always goes the extra mile.",
       image: "/gallery/reviewPhotos/MichaelJohnson.jpg",
     },
     {
       name: "John Doe",
       position: "CEO",
       testimonial:
-        "Martin Construction & Coatings did an excellent job on our project. Their attention to detail and professional approach were impressive. We highly recommend them!",
+        "Martin Construction &amp; Coatings did an excellent job on our project. Their attention to detail and professional approach were impressive. We highly recommend them!",
       image: "/gallery/reviewPhotos/JohnDoe.jpg",
     },
     {
       name: "Jane Smith",
       position: "Homeowner",
       testimonial:
-        "The team at Martin Construction & Coatings transformed our home with a beautiful new paint job. They were prompt, professional, and a pleasure to work with.",
+        "The team at Martin Construction &amp; Coatings transformed our home with a beautiful new paint job. They were prompt, professional, and a pleasure to work with.",
       image: "/gallery/reviewPhotos/JaneSmith.jpg",
     },
     {
       name: "Mike Johnson",
       position: "butthead",
       testimonial:
-        "We've been working with Martin Construction & Coatings for years, and they consistently deliver high-quality work. Their team is reliable and always goes the extra mile.",
+        "We've been working with Martin Construction &amp; Coatings for years, and they consistently deliver high-quality work. Their team is reliable and always goes the extra mile.",
       image: "/gallery/reviewPhotos/MichaelJohnson.jpg",
     },
     {
       name: "Mike Johnson",
       position: "butthead",
       testimonial:
-        "We've been working with Martin Construction & Coatings for years, and they consistently deliver high-quality work. Their team is reliable and always goes the extra mile.",
+        "We've been working with Martin Construction &amp; Coatings for years, and they consistently deliver high-quality work. Their team is reliable and always goes the extra mile.",
       image: "/gallery/reviewPhotos/MichaelJohnson.jpg",
     },
     {
       name: "Mike Johnson",
       position: "butthead",
       testimonial:
-        "We've been working with Martin Construction & Coatings for years, and they consistently deliver high-quality work. Their team is reliable and always goes the extra mile.",
+        "We've been working with Martin Construction &amp; Coatings for years, and they consistently deliver high-quality work. Their team is reliable and always goes the extra mile.",
       image: "/gallery/reviewPhotos/MichaelJohnson.jpg",
     },
     {
       name: "Mike Johnson",
       position: "butthead",
       testimonial:
-        "We've been working with Martin Construction & Coatings for years, and they consistently deliver high-quality work. Their team is reliable and always goes the extra mile.",
+        "We've been working with Martin Construction &amp; Coatings for years, and they consistently deliver high-quality work. Their team is reliable and always goes the extra mile.",
       image: "/gallery/reviewPhotos/MichaelJohnson.jpg",
     },
   ];

@@ -30,61 +30,42 @@ const Quote = () => {
     epoxyMaterial: "",
     epoxySqFootage: "",
     epoxyMaterialCosts: {},
+    // CoatingsForm attributes
+    coatingsMaterial: "",
+    coatingsSqFootage: "",
+    coatingsMaterialCosts: {},
     // ConcreteForm attributes
     concreteMaterial: "",
     concreteSqFootage: "",
     concreteMaterialCosts: {},
-    // RoofingForm attributes
-    roofingMaterial: "",
-    roofingSqFootage: "",
-    roofingMaterialCosts: {},
-    // DeckForm attributes
-    deckMaterial: "",
-    deckSqFootage: "",
-    deckLighting: false,
-    deckHandrails: false,
-    deckMaterialCosts: {},
+    // DeckPatioForm attributes
+    deckPatioMaterial: "",
+    deckPatioSqFootage: "",
+    deckPatioLighting: false,
+    deckPatioHandrails: false,
+    deckPatioMaterialCosts: {},
     handrailCost: "",
     lightingCost: "",
-    // PatioForm attributes
-    patioMaterial: "",
-    patioSqFootage: "",
-    patioLighting: false,
-    patioHandrails: false,
-    patioMaterialCosts: {},
-    handrailCost: "",
-    lightingCost: "",
-    // DrywallForm attributes
-    drywallMaterial: "",
-    drywallSqFootage: "",
-    size: "",
-    thickness: "",
     // KitchenForm attributes
-    flooringIncluded: false,
+    kitchenFlooringIncluded: false,
     island: false,
-    islandSqFootage: "",
-    islandBaseMaterial: "",
-    islandCountertop: "",
-    islandStovetop: false,
     countertops: false,
     countertopMaterial: "",
     kitchenCabinets: false,
     KitchenCabinetMaterial: "",
-    kitchenSinkNeedeed: false,
-    kitchenSink: false,
-    kitchenSinkMaterial: "",
-    appliances: false,
     kitchenPlumbing: false,
     kitchenLighting: false,
+    countertopMaterialCosts: {},
+    kitchenCabinetMaterialCosts: {},
+    includedOptionsCosts: {},
     // BathroomForm attributes
+    bathFlooringNeeded: false,
     bathSinkNeeded: false,
-    bathSinkCabinetMaterial: "",
     bathSinkType: "",
     toiletNeeded: false,
     toiletType: "",
     showerTubNeeded: false,
     showerTubType: "",
-    flooringNeeded: false,
     bathPlumbing: false,
     bathLighting: false,
     // ContactForm attributes
@@ -112,54 +93,37 @@ const Quote = () => {
       flooring: ["flooringMaterial", "flooringSqFootage"],
       bath: [
         "bathSinkNeeded",
-        "bathSinkCabinetMaterial",
         "bathSinkType",
         "toiletNeeded",
         "toiletType",
         "showerTubNeeded",
         "showerTubType",
-        "flooringNeeded",
+        "bathFlooringNeeded",
         "bathPlumbing",
         "bathLighting",
       ],
       kitchen: [
-        "flooringMaterial",
+        "kitchenFlooringMaterial",
         "flooringSqFootage",
         "island",
-        "islandSqFootage",
-        "islandBaseMaterial",
-        "islandCountertop",
-        "islandStovetop",
         "countertops",
         "countertopMaterial",
         "kitchenCabinets",
         "KitchenCabinetMaterial",
-        "kitchenSink",
-        "kitchenSinkMaterial",
-        "appliances",
         "kitchenPlumbing",
         "kitchenLighting",
       ],
-      drywall: [
-        "drywallMaterial",
-        "drywallSqFootage",
-        "size",
-        "thickness",
-        "flooringMaterial",
-        "flooringSqFootage",
-      ],
-      epoxy: ["epoxyMaterial", "epoxySqFootage"],
-      concrete: ["concreteMaterial", "concreteSqFootage"],
-      roofing: ["roofingMaterial", "roofingSqFootage"],
-      deck: ["deckMaterial", "deckSqFootage", "deckLighting", "deckHandrails"],
-      patio: [
-        "patioMaterial",
-        "patioSqFootage",
-        "patioLighting",
-        "patioHandrails",
-      ],
 
-      // Add other project types and their relevant attributes
+      epoxy: ["epoxyMaterial", "epoxySqFootage"],
+      coatings: ["coatingsMaterial", "coatingsSqFootage"],
+      concrete: ["concreteMaterial", "concreteSqFootage"],
+
+      deckPatio: [
+        "deckPatioMaterial",
+        "deckPatioSqFootage",
+        "deckPatioLighting",
+        "deckPatioHandrails",
+      ],
     };
 
     const shouldCalculateEstimate = relevantAttributes[
@@ -190,6 +154,7 @@ const Quote = () => {
         [name]: inputValue,
       }));
     }
+    // console.log("Form Data Updated: ", formData);
   };
 
   // Calculate the estimate based on the form data

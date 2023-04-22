@@ -5,7 +5,7 @@ import { useState } from "react";
 import { useRouter } from 'next/router';
 import { useAnimation } from "framer-motion";
 
-import styles from "../styles/Home.module.css";
+import styles from "../../styles/Home.module.css";
 
 const Navbar = ({
   navigateAndScroll,

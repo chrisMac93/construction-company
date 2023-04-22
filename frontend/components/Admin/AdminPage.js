@@ -6,14 +6,16 @@ import styles from "../../styles/Home.module.css";
 
 const AdminPage = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const { login, logout, error } = useAuth();
+  const [userEmail, setUserEmail] = useState('');
+  const { login, logout, error, user } = useAuth();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const success = await login();
-      if (success) {
+      const userObj = await login();
+      if (userObj) {
         setIsLoggedIn(true);
+        setUserEmail(userObj.email);
       }
     } catch (err) {
       console.error(err);
@@ -46,7 +48,7 @@ const AdminPage = () => {
       <div className="max-w-4xl mx-auto">
         {isLoggedIn ? (
           <>
-            <AdminDashboard />
+            <AdminDashboard userEmail={userEmail}/>
             <div className="flex justify-center">
               <button
                 onClick={handleLogout}

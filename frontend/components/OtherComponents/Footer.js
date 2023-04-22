@@ -1,8 +1,8 @@
 import React from "react";
 import Link from "next/link";
 import Image from "next/legacy/image";
-import { FaFacebook, FaTwitter, FaInstagram, FaLinkedin } from "react-icons/fa";
-import styles from "../styles/Home.module.css";
+import { FaFacebook, FaInstagram, FaSnapchatGhost } from "react-icons/fa";
+import styles from "../../styles/Home.module.css";
 
 const Footer = () => {
   return (
@@ -47,15 +47,6 @@ const Footer = () => {
 
               <Link
                 className="m-1 h-9 w-9 rounded-full border-2 opacity-60 hover:opacity-80"
-                href="https://www.twitter.com/"
-                target="_blank"
-                rel="noreferrer"
-              >
-                <FaTwitter className="mx-auto h-full w-4" />
-              </Link>
-
-              <Link
-                className="m-1 h-9 w-9 rounded-full border-2 opacity-60 hover:opacity-80"
                 href="https://www.instagram.com/"
                 target="_blank"
                 rel="noreferrer"
@@ -65,11 +56,11 @@ const Footer = () => {
 
               <Link
                 className="m-1 h-9 w-9 rounded-full border-2 opacity-60 hover:opacity-80"
-                href="https://www.linkedin.com/"
+                href="https://www.snapchat.com/"
                 target="_blank"
                 rel="noreferrer"
               >
-                <FaLinkedin className="mx-auto h-full w-4" />
+                <FaSnapchatGhost className="mx-auto h-full w-4" />
               </Link>
             </div>
             <div className="text-sm opacity-60">
@@ -85,7 +76,7 @@ const Footer = () => {
       </div>
       <div className=" my-2 text-lg text-neutral-200">
         © 2023 Copyright:
-        <Link href="/"> Martin Construction & Coatings</Link>
+        <Link href="/"> Martin Construction &amp; Coatings</Link>
       </div>
     </footer>
   );

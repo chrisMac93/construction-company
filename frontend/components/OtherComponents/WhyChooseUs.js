@@ -7,9 +7,9 @@ import {
   faScroll,
 } from "@fortawesome/free-solid-svg-icons";
 import Link from "next/link";
-import useImages from "../hooks/useImages"; // Import the custom hook
+import useImages from "../../hooks/useImages"; // Import the custom hook
 
-import styles from "../styles/Home.module.css";
+import styles from "../../styles/Home.module.css";
 
 const WhyChooseUs = () => {
   const images = useImages(); // Call the custom hook
@@ -26,7 +26,7 @@ const WhyChooseUs = () => {
       icon: faThumbsUp,
       title: "Customer Satisfaction",
       description:
-        "We prioritize customer satisfaction and work closely with our clients to meet their unique requirements.",
+        "We prioritize customer satisfaction and work closely with our clients to meet any requirements.",
     },
     {
       icon: faTruck,
@@ -57,7 +57,7 @@ const WhyChooseUs = () => {
         <div className="grid grid-cols-1 items-center justify-items-center">
           <div className="bg-gradient-to-br from-slate-300 via-neutral-800 to-neutral-900 text-neutral-100 p-8 rounded-md z-10 opacity-90">
             <h2 className="text-3xl md:text-4xl font-semibold mb-8 text-center">
-              Why Choose Martin Construction & Coatings
+              Why Choose Martin Construction &amp; Coatings
             </h2>
             <ul className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
               {reasons.map((reason, index) => (

@@ -3,7 +3,7 @@ import Image from "next/legacy/image";
 import Link from "next/link";
 import SwiperCore, { Navigation, Autoplay } from "swiper";
 import { Swiper, SwiperSlide } from "swiper/react";
-import { firestore } from "../lib/firebase";
+import { firestore } from "../../lib/firebase";
 import { collection, getDocs } from "firebase/firestore";
 
 import "swiper/css";
@@ -20,14 +20,15 @@ const Gallery = () => {
     const fetchImages = async () => {
       const imageCollection = collection(firestore, "images");
       const imageSnapshot = await getDocs(imageCollection);
-      const imageUrls = imageSnapshot.docs.map((doc) => doc.data().url);
+      const filteredImageUrls = imageSnapshot.docs
+        .filter((doc) => !doc.data().title.endsWith("#"))
+        .map((doc) => doc.data().url);
 
-      setImages(imageUrls);
+      setImages(filteredImageUrls);
     };
 
     fetchImages();
   }, []);
-
   return (
     <section className="bg-gradient-to-b from-slate-300 via-neutral-800 to-neutral-900 w-full mx-auto px-6 pt-28 pb-24">
       <h2 className="text-center text-3xl font-bold text-neutral-800 mb-8">

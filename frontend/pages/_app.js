@@ -1,8 +1,8 @@
 import React, { useRef } from "react";
 import "react-responsive-carousel/lib/styles/carousel.min.css";
 import "../styles/globals.css";
-import Navbar from "../components/Navbar";
-import Footer from "../components/Footer";
+import Navbar from "../components/OtherComponents/Navbar";
+import Footer from "../components/OtherComponents/Footer";
 import Head from "next/head";
 import Home from "./index";
 
@@ -24,7 +24,7 @@ function MyApp({ Component, pageProps }) {
     <>
       <Head>
         <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <title>Martin Construction & Coatings</title>
+        <title>Martin Construction &amp; Coatings</title>
         {/* Add any other common meta tags, styles, or scripts here */}
       </Head>
       <div className="flex flex-col min-h-screen">

@@ -8,7 +8,7 @@ import ServicesHandler from "./ServicesHandler";
 import EmployeeManagement from "./EmployeeHandler";
 import PriceUpdates from "./PriceUpdatesHandler";
 
-const AdminDashboard = () => {
+const AdminDashboard = ({ userEmail }) => {
   const [selectedTab, setSelectedTab] = useState("priceUpdates");
   const { isLoggedIn } = useAuth();
   const router = useRouter();
@@ -40,12 +40,14 @@ const AdminDashboard = () => {
         >
           Price Updates
         </button>
-        <button
-          className={`p-2 ${selectedTab === "services" && "font-bold"}`}
-          onClick={() => setSelectedTab("services")}
-        >
-          Services
-        </button>
+        {userEmail === "christopher.j.mcelwain@gmail.com" && (
+          <button
+            className={`p-2 ${selectedTab === "services" && "font-bold"}`}
+            onClick={() => setSelectedTab("services")}
+          >
+            Services
+          </button>
+        )}
         <button
           className={`p-2 ${selectedTab === "images" && "font-bold"}`}
           onClick={() => setSelectedTab("images")}
@@ -67,7 +69,10 @@ const AdminDashboard = () => {
         {selectedTab === "jobListings" && <JobListings />}
         {selectedTab === "priceUpdates" && <PriceUpdates />}
         {selectedTab === "images" && <ImageHandler />}
-        {selectedTab === "services" && <ServicesHandler />}
+        {selectedTab === "services" &&
+          userEmail === "christopher.j.mcelwain@gmail.com" && (
+            <ServicesHandler />
+          )}
       </div>
     </div>
   );

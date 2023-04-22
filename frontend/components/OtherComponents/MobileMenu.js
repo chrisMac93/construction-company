@@ -1,7 +1,7 @@
 import { motion } from "framer-motion";
 import { useEffect } from "react";
 import Link from "next/link";
-import styles from "../styles/navbar.module.css";
+import styles from "../../styles/Home.module.css";
 
 const MobileMenu = ({
   isMobileMenuOpen,

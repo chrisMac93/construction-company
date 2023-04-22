@@ -1,10 +1,10 @@
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { firestore } from "../lib/firebase";
+import { firestore } from "../../lib/firebase";
 import { collection, getDocs } from "firebase/firestore";
-import { Apply } from "../utils/emailService";
+import { Apply } from "../../utils/emailService";
 
-import styles from "../styles/Home.module.css";
+import styles from "../../styles/Home.module.css";
 
 const Careers = () => {
   const [jobListings, setJobListings] = useState([]);
@@ -97,7 +97,7 @@ const Careers = () => {
           Careers
         </h2>
         <p className="pb-6">
-          At Martin Construction & Coatings, we're passionate about delivering
+          At Martin Construction &amp; Coatings, we are passionate about delivering
           quality results to our clients. Our team is made up of dedicated
           professionals who take pride in their work and strive for excellence
           in everything they do. We offer a supportive and collaborative work

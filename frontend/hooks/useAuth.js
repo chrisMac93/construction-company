@@ -25,11 +25,11 @@ const useAuth = () => {
       const token = await user.getIdToken();
       localStorage.setItem("token", token); 
       Router.push("/admin");
-      return true;
+      return user;
     } catch (error) {
       const errorMessage = error.message;
       setError(errorMessage);
-      return false;
+      return null;
     }
   };
 
