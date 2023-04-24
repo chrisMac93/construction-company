@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import FlooringForm from "../quoteComponents/FlooringForm";
 import EpoxyForm from "../quoteComponents/EpoxyForm";
 import ConcreteForm from "../quoteComponents/ConcreteForm";
@@ -29,7 +29,12 @@ const ProjectForm = ({ formData, handleChange }) => {
     case "deckPatio":
       return <DeckPatioForm handleChange={handleChange} formData={formData} />;
     case "kitchen":
-      return <KitchenForm handleChange={handleChange} formData={formData} />;
+      return (
+        <KitchenForm
+          handleChange={handleChange}
+          formData={formData}
+        />
+      );
     case "bath":
       return <BathroomForm handleChange={handleChange} formData={formData} />;
     default:

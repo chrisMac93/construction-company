@@ -69,9 +69,13 @@ export function calculateEstimate(formData, callback) {
     case "kitchen":
       cost = calculateKitchenCost(
         formData,
+        formData.countertopMaterial,
         formData.countertopMaterialCosts,
+        formData.kitchenCabinetMaterial,
         formData.kitchenCabinetMaterialCosts,
-        formData.includedOptionsCosts
+        formData.islandCost,
+        formData.plumbingCost,
+        formData.lightingCost
       );
       break;
     case "bath":

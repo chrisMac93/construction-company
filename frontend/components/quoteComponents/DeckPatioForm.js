@@ -25,6 +25,7 @@ export const calculateDeckPatioCost = (
     totalCost += deckPatioHandrailsCostPerSqFoot * deckPatioSqFootage;
   }
 
+  console.log("Deck/Patio Cost: ", totalCost);
   return totalCost;
 };
 
