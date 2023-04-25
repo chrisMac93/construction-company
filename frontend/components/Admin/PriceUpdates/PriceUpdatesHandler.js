@@ -10,8 +10,10 @@ import {
   getDocs,
 } from "firebase/firestore";
 import { DeckPatioExtras } from "./DeckPatioExtras";
+import { KitchenExtrasNew } from "./KitchenExtrasNew";
+import MaterialListItem from "./MaterialListItem";
 
-import styles from "../../styles/Home.module.css";
+import styles from "../../../styles/Home.module.css";
 
 const PriceUpdates = () => {
   const [materials, setMaterials] = useState([]);
@@ -19,8 +21,19 @@ const PriceUpdates = () => {
   const [selectedTab, setSelectedTab] = useState("floorMaterials");
   const [handrails, setHandrails] = useState([]);
   const [lighting, setLighting] = useState([]);
+  const [countertops, setCountertops] = useState([]);
+  const [included, setIncluded] = useState([]);
+  const [kitchenCabinets, setKitchenCabinets] = useState([]);
+  const [kitchenIsland, setKitchenIsland] = useState([]);
+  const [kitchenLighting, setKitchenLighting] = useState([]);
+  const [kitchenPlumbing, setKitchenPlumbing] = useState([]);
+  const [selectedKitchenTab, setSelectedKitchenTab] = useState("countertops");
 
-  const getMaterialsRef = async (materialType, nestedMaterialType) => {
+  const getMaterialsRef = async (
+    materialType,
+    nestedMaterialType,
+    includedType
+  ) => {
     const db = getFirestore();
     const priceUpdatesCollectionRef = collection(db, "priceUpdates");
     const priceUpdatesSnapshot = await getDocs(priceUpdatesCollectionRef);
@@ -40,11 +53,40 @@ const PriceUpdates = () => {
       );
     }
 
+    if (materialType === "kitchenMaterials") {
+      const kitchenMaterialsRef = collection(
+        db,
+        `priceUpdates/${priceUpdatesDocId}/${materialType}`
+      );
+      const kitchenMaterialsSnapshot = await getDocs(kitchenMaterialsRef);
+      const kitchenMaterialsDocId = kitchenMaterialsSnapshot.docs[0].id;
+
+      if (nestedMaterialType) {
+        return collection(
+          db,
+          `priceUpdates/${priceUpdatesDocId}/${materialType}/${kitchenMaterialsDocId}/${nestedMaterialType}`
+        );
+      } else if (includedType) {
+        return doc(
+          db,
+          `priceUpdates/${priceUpdatesDocId}/${materialType}/${kitchenMaterialsDocId}/included/${includedType}`
+        );
+      }
+    }
+
     return collection(db, `priceUpdates/${priceUpdatesDocId}/${materialType}`);
   };
 
   useEffect(() => {
-    let unsubscribeMaterials, unsubscribeHandrails, unsubscribeLighting;
+    let unsubscribeMaterials,
+      unsubscribeHandrails,
+      unsubscribeLighting,
+      unsubscribeCountertops,
+      unsubscribeIncluded,
+      unsubscribeKitchenIsland,
+      unsubscribeKitchenPlumbing,
+      unsubscribeKitchenLighting,
+      unsubscribeCabinets;
 
     const fetchMaterials = async (materialType) => {
       const materialsRef = await getMaterialsRef(materialType);
@@ -90,6 +132,79 @@ const PriceUpdates = () => {
           }));
           setLighting(lightingData);
         });
+      } else if (materialType === "kitchenMaterials") {
+        const countertopsRef = await getMaterialsRef(
+          materialType,
+          "countertopMaterials"
+        );
+        const includedRef = await getMaterialsRef(materialType, "included");
+        const cabinetsRef = await getMaterialsRef(
+          materialType,
+          "kitchenCabinetMaterials"
+        );
+
+        const lightingRef = await getMaterialsRef(
+          materialType,
+          "included",
+          "lighting"
+        );
+        const plumbingRef = await getMaterialsRef(
+          materialType,
+          "plumbing"
+        );
+        const islandRef = await getMaterialsRef(
+          materialType,
+          "island"
+        );
+
+        unsubscribeKitchenIsland = onSnapshot(islandRef, (snapshot) => {
+          console.log("Snapshot:", snapshot);
+          const islandData = snapshot.docs.map((doc) => ({
+            id: doc.id,
+            ...doc.data(),
+          }));
+          setKitchenIsland(islandData);
+        });
+
+        unsubscribeKitchenLighting = onSnapshot(lightingRef, (snapshot) => {
+          const lightingData = snapshot.docs.map((doc) => ({
+            id: doc.id,
+            ...doc.data(),
+          }));
+          setKitchenLighting(lightingData);
+        });
+
+        unsubscribeKitchenPlumbing = onSnapshot(plumbingRef, (snapshot) => {
+          const plumbingData = snapshot.docs.map((doc) => ({
+            id: doc.id,
+            ...doc.data(),
+          }));
+          setKitchenPlumbing(plumbingData);
+        });
+
+        unsubscribeCountertops = onSnapshot(countertopsRef, (snapshot) => {
+          const countertopData = snapshot.docs.map((doc) => ({
+            id: doc.id,
+            ...doc.data(),
+          }));
+          setCountertops(countertopData);
+        });
+
+        unsubscribeIncluded = onSnapshot(includedRef, (snapshot) => {
+          const includedData = snapshot.docs.map((doc) => ({
+            id: doc.id,
+            ...doc.data(),
+          }));
+          setIncluded(includedData);
+        });
+
+        unsubscribeCabinets = onSnapshot(cabinetsRef, (snapshot) => {
+          const cabinetData = snapshot.docs.map((doc) => ({
+            id: doc.id,
+            ...doc.data(),
+          }));
+          setKitchenCabinets(cabinetData);
+        });
       }
     };
 
@@ -98,14 +213,33 @@ const PriceUpdates = () => {
       unsubscribeMaterials && unsubscribeMaterials();
       unsubscribeHandrails && unsubscribeHandrails();
       unsubscribeLighting && unsubscribeLighting();
+      unsubscribeKitchenLighting && unsubscribeKitchenLighting();
+      unsubscribeCountertops && unsubscribeCountertops();
+      unsubscribeIncluded && unsubscribeIncluded();
+      unsubscribeCabinets && unsubscribeCabinets();
+      unsubscribeKitchenIsland && unsubscribeKitchenIsland();
+      unsubscribeKitchenPlumbing && unsubscribeKitchenPlumbing();
     };
   }, [selectedTab]);
 
   const handleAddMaterial = async () => {
     try {
       let materialsRef;
-      if (selectedTab === "deckMaterials") {
-        materialsRef = await getMaterialsRef(selectedTab, "deckingMaterials");
+      if (
+        selectedTab === "deckMaterials" ||
+        selectedTab === "kitchenMaterials"
+      ) {
+        const nestedMaterialType =
+          selectedTab === "kitchenMaterials"
+            ? selectedKitchenTab === "countertops"
+              ? "countertopMaterials"
+              : selectedKitchenTab === "kitchenCabinets"
+              ? "kitchenCabinetMaterials"
+              : selectedKitchenTab === "included"
+              ? "included"
+              : null
+            : null;
+        materialsRef = await getMaterialsRef(selectedTab, nestedMaterialType);
       } else {
         materialsRef = await getMaterialsRef(selectedTab);
       }
@@ -149,24 +283,29 @@ const PriceUpdates = () => {
 
       await updateDoc(materialRef, { price });
 
-      if (nestedMaterialType === "handrails") {
-        setHandrails(
-          handrails.map((material) =>
-            material.id === id ? { ...material, price } : material
-          )
+      const updateState = (arr) =>
+        arr.map((material) =>
+          material.id === id ? { ...material, price } : material
         );
-      } else if (nestedMaterialType === "lighting") {
-        setLighting(
-          lighting.map((material) =>
-            material.id === id ? { ...material, price } : material
-          )
-        );
+
+      if (nestedMaterialType === "deckHandrails") {
+        setHandrails(updateState(handrails));
+      } else if (nestedMaterialType === "deckLighting") {
+        setLighting(updateState(lighting));
+      } else if (nestedMaterialType === "kitchenIsland") {
+        setKitchenIsland(updateState(kitchenIsland));
+      } else if (nestedMaterialType === "kitchenLighting") {
+        setKitchenLighting(updateState(kitchenLighting));
+      } else if (nestedMaterialType === "kitchenPlumbing") {
+        setKitchenPlumbing(updateState(kitchenPlumbing));
+      } else if (nestedMaterialType === "countertops") {
+        setCountertops(updateState(countertops));
+      } else if (nestedMaterialType === "included") {
+        setIncluded(updateState(included));
+      } else if (nestedMaterialType === "kitchenCabinets") {
+        setKitchenCabinets(updateState(kitchenCabinets));
       } else {
-        setMaterials(
-          materials.map((material) =>
-            material.id === id ? { ...material, price } : material
-          )
-        );
+        setMaterials(updateState(materials));
       }
     } catch (error) {
       console.error("Error updating material:", error);
@@ -183,6 +322,7 @@ const PriceUpdates = () => {
       { label: "Coatings", value: "coatingsMaterials" },
       { label: "Concrete", value: "concreteMaterials" },
       { label: "Deck/Patio", value: "deckMaterials" },
+      { label: "Kitchen", value: "kitchenMaterials" },
     ];
 
     return (
@@ -196,6 +336,33 @@ const PriceUpdates = () => {
             {label}
           </button>
         ))}
+      </div>
+    );
+  };
+
+  const renderKitchenMaterialTabs = () => {
+    return (
+      <div className="flex justify-center space-x-4 my-4">
+        <button
+          onClick={() => setSelectedKitchenTab("countertops")}
+          className={`p-3 rounded-md ${
+            selectedKitchenTab === "countertops"
+              ? "bg-neutral-600 text-neutral-100"
+              : "bg-neutral-700 text-neutral-300"
+          }`}
+        >
+          Countertops
+        </button>
+        <button
+          onClick={() => setSelectedKitchenTab("cabinets")}
+          className={`p-3 rounded-md ${
+            selectedKitchenTab === "cabinets"
+              ? "bg-neutral-600 text-neutral-100"
+              : "bg-neutral-700 text-neutral-300"
+          }`}
+        >
+          Cabinets
+        </button>
       </div>
     );
   };
@@ -224,6 +391,10 @@ const PriceUpdates = () => {
             ? "Add Coatings Material"
             : selectedTab === "deckMaterials"
             ? "Add Deck/Patio Material"
+            : selectedTab === "kitchenMaterials"
+            ? `Add Kitchen ${
+                selectedKitchenTab === "countertops" ? "Countertop" : "Cabinet"
+              } Material`
             : selectedTab === "concreteMaterials"
             ? "Add Concrete Material"
             : "Add Flooring Material"}
@@ -299,6 +470,33 @@ const PriceUpdates = () => {
           />
         </div>
       )}
+      {selectedTab === "kitchenMaterials" && (
+        <div>
+          {renderKitchenMaterialTabs()}
+          <h3 className="text-2xl font-semibold mt-8 mb-4 text-center">
+            Included Kitchen Add-ons
+          </h3>
+          <KitchenExtrasNew
+            data={kitchenIsland}
+            onUpdatePrice={(id, price) =>
+              handleUpdateMaterial(id, price, "kitchenIsland")
+            }
+          />
+          <KitchenExtrasNew
+            data={kitchenLighting}
+            onUpdatePrice={(id, price) =>
+              handleUpdateMaterial(id, price, "kitchenLighting")
+            }
+          />
+          <KitchenExtrasNew
+            data={kitchenPlumbing}
+            onUpdatePrice={(id, price) =>
+              handleUpdateMaterial(id, price, "kitchenPlumbing")
+            }
+          />
+        </div>
+      )}
+
       {/* Material List */}
       <h3 className="text-2xl font-semibold my-8 text-center">
         {selectedTab === "wholeHomeTiers"
@@ -313,45 +511,54 @@ const PriceUpdates = () => {
           ? "Coatings"
           : selectedTab === "deckMaterials"
           ? "Deck/Patio"
+          : selectedTab === "kitchenMaterials"
+          ? "Kitchen"
           : selectedTab === "concreteMaterials"
           ? "Concrete"
           : "Flooring"}
       </h3>
       <ul className="space-y-4">
-        {materials.map((material) => (
-          <li
-            key={material.id}
-            className="bg-neutral-700 p-4 rounded-md flex justify-between items-center"
-          >
-            <span>
-              {material.name} - ${material.price}
-            </span>
-            <div className="flex">
-              <input
-                type="number"
-                step="any"
-                value={material.price}
-                onChange={(e) =>
-                  handleUpdateMaterial(material.id, e.target.value)
+        {selectedTab === "kitchenMaterials"
+          ? selectedKitchenTab === "countertops"
+            ? countertops.map((material) => (
+                <MaterialListItem
+                  key={material.id}
+                  material={material}
+                  handleUpdateMaterial={(id, value) =>
+                    handleUpdateMaterial(id, value, "countertops")
+                  }
+                  handleDeleteMaterial={(id) =>
+                    handleDeleteMaterial(id, "countertopMaterials")
+                  }
+                />
+              ))
+            : kitchenCabinets.map((material) => (
+                <MaterialListItem
+                  key={material.id}
+                  material={material}
+                  handleUpdateMaterial={(id, value) =>
+                    handleUpdateMaterial(id, value, "kitchenCabinets")
+                  }
+                  handleDeleteMaterial={(id) =>
+                    handleDeleteMaterial(id, "kitchenCabinetMaterials")
+                  }
+                />
+              ))
+          : materials.map((material) => (
+              <MaterialListItem
+                key={material.id}
+                material={material}
+                handleUpdateMaterial={(id, value) =>
+                  handleUpdateMaterial(id, value)
                 }
-                className="w-full p-3 bg-neutral-600 rounded-md text-neutral-100 mr-4"
-              />
-              <button
-                onClick={() =>
+                handleDeleteMaterial={(id) =>
                   handleDeleteMaterial(
-                    material.id,
-                    selectedTab === "deckMaterials"
-                      ? "deckingMaterials"
-                      : null
+                    id,
+                    selectedTab === "deckMaterials" ? "deckingMaterials" : null
                   )
                 }
-                className="ml-4 p-3 bg-red-500 text-neutral-100 rounded-md hover:bg-red-400"
-              >
-                Delete
-              </button>
-            </div>
-          </li>
-        ))}
+              />
+            ))}
       </ul>
     </>
   );

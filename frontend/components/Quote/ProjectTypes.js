@@ -4,14 +4,14 @@ import { motion } from "framer-motion";
 const ProjectTypes = ({ handleChange, formData }) => {
 
   return (
-    <div className="form-control">
-      <label htmlFor="projectType" className="block mb-2">
+    <div className="w-full text-center">
+      <label htmlFor="projectType" className="text-lg font-bold">
         Project Type
       </label>
       <motion.select
         name="projectType"
         id="projectType"
-        className="w-full p-3 bg-neutral-700 rounded-md text-neutral-100"
+        className="w-full p-3 bg-neutral-700 rounded-md text-neutral-100 mt-3"
         onChange={handleChange}
         value={formData.projectType}
         whileFocus={{ scale: 1.05 }}

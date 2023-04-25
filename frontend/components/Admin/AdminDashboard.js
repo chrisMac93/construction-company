@@ -6,7 +6,7 @@ import JobListings from "./JobListings";
 import ImageHandler from "./ImageHandler";
 import ServicesHandler from "./ServicesHandler";
 import EmployeeManagement from "./EmployeeHandler";
-import PriceUpdates from "./PriceUpdatesHandler";
+import PriceUpdates from "./PriceUpdates/PriceUpdatesHandler";
 
 const AdminDashboard = ({ userEmail }) => {
   const [selectedTab, setSelectedTab] = useState("priceUpdates");
