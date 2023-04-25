@@ -145,7 +145,6 @@ const PriceUpdates = () => {
 
         const lightingRef = await getMaterialsRef(
           materialType,
-          "included",
           "lighting"
         );
         const plumbingRef = await getMaterialsRef(
@@ -154,6 +153,7 @@ const PriceUpdates = () => {
         );
         const islandRef = await getMaterialsRef(
           materialType,
+          "included",
           "island"
         );
 
