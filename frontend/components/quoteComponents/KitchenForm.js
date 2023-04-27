@@ -17,7 +17,8 @@ export const calculateKitchenCost = (
   let totalCost = 0;
 
   const countertopMaterialPrice = countertopMaterialCosts[countertopMaterial];
-  const kitchenCabinetMaterialPrice = kitchenCabinetMaterialCosts[kitchenCabinetMaterial];
+  const kitchenCabinetMaterialPrice =
+    kitchenCabinetMaterialCosts[kitchenCabinetMaterial];
 
   if (formData.kitchenFlooringIncluded) {
     totalCost += calculateFlooringCost(
@@ -30,22 +31,15 @@ export const calculateKitchenCost = (
   if (countertopMaterial) {
     totalCost += countertopMaterialPrice * 15;
   }
-  console.log(
-    "value of countertop material",
-    countertopMaterialPrice
-  );
+  console.log("value of countertop material", countertopMaterialPrice);
   console.log("total cost after countertops:", totalCost);
 
   if (kitchenCabinetMaterial) {
-    totalCost +=
-      kitchenCabinetMaterialPrice * 30 || 0;
+    totalCost += kitchenCabinetMaterialPrice * 30;
   }
-  console.log(
-    "value of cabinet material",
-    kitchenCabinetMaterialPrice
-  );
+  console.log("value of cabinet material", kitchenCabinetMaterialPrice);
 
-  if (formData.island) {
+  if (island) {
     totalCost += islandCost;
   }
   // console.log("Cost after island:", totalCost);
@@ -156,13 +150,14 @@ const KitchenForm = ({ handleChange, formData }) => {
   }, []);
 
   const handleSwitchChange = (e) => {
-    const { name, cost } = e.target;
+    const { name, value, cost } = e.target;
+    let updatedCost = value ? parseInt(cost, 10) : 0;
 
     if (name === "island") {
       handleChange({
         target: {
           name: "islandCost",
-          value: cost,
+          value: updatedCost,
         },
       });
     }
@@ -171,7 +166,7 @@ const KitchenForm = ({ handleChange, formData }) => {
       handleChange({
         target: {
           name: "plumbingCost",
-          value: cost,
+          value: updatedCost,
         },
       });
     }
@@ -180,7 +175,7 @@ const KitchenForm = ({ handleChange, formData }) => {
       handleChange({
         target: {
           name: "lightingCost",
-          value: cost,
+          value: updatedCost,
         },
       });
     }

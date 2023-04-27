@@ -10,30 +10,22 @@ import {
   getDocs,
 } from "firebase/firestore";
 import { DeckPatioExtras } from "./DeckPatioExtras";
-import { KitchenExtrasNew } from "./KitchenExtrasNew";
 import MaterialListItem from "./MaterialListItem";
 
 import styles from "../../../styles/Home.module.css";
 
 const PriceUpdates = () => {
   const [materials, setMaterials] = useState([]);
-  const [newMaterial, setNewMaterial] = useState({ name: "", price: "" });
+  const [newMaterial, setNewMaterial] = useState({ name: "", price: null });
   const [selectedTab, setSelectedTab] = useState("floorMaterials");
   const [handrails, setHandrails] = useState([]);
   const [lighting, setLighting] = useState([]);
   const [countertops, setCountertops] = useState([]);
   const [included, setIncluded] = useState([]);
   const [kitchenCabinets, setKitchenCabinets] = useState([]);
-  const [kitchenIsland, setKitchenIsland] = useState([]);
-  const [kitchenLighting, setKitchenLighting] = useState([]);
-  const [kitchenPlumbing, setKitchenPlumbing] = useState([]);
   const [selectedKitchenTab, setSelectedKitchenTab] = useState("countertops");
 
-  const getMaterialsRef = async (
-    materialType,
-    nestedMaterialType,
-    includedType
-  ) => {
+  const getMaterialsRef = async (materialType, nestedMaterialType) => {
     const db = getFirestore();
     const priceUpdatesCollectionRef = collection(db, "priceUpdates");
     const priceUpdatesSnapshot = await getDocs(priceUpdatesCollectionRef);
@@ -66,11 +58,6 @@ const PriceUpdates = () => {
           db,
           `priceUpdates/${priceUpdatesDocId}/${materialType}/${kitchenMaterialsDocId}/${nestedMaterialType}`
         );
-      } else if (includedType) {
-        return doc(
-          db,
-          `priceUpdates/${priceUpdatesDocId}/${materialType}/${kitchenMaterialsDocId}/included/${includedType}`
-        );
       }
     }
 
@@ -83,9 +70,6 @@ const PriceUpdates = () => {
       unsubscribeLighting,
       unsubscribeCountertops,
       unsubscribeIncluded,
-      unsubscribeKitchenIsland,
-      unsubscribeKitchenPlumbing,
-      unsubscribeKitchenLighting,
       unsubscribeCabinets;
 
     const fetchMaterials = async (materialType) => {
@@ -143,45 +127,6 @@ const PriceUpdates = () => {
           "kitchenCabinetMaterials"
         );
 
-        const lightingRef = await getMaterialsRef(
-          materialType,
-          "lighting"
-        );
-        const plumbingRef = await getMaterialsRef(
-          materialType,
-          "plumbing"
-        );
-        const islandRef = await getMaterialsRef(
-          materialType,
-          "included",
-          "island"
-        );
-
-        unsubscribeKitchenIsland = onSnapshot(islandRef, (snapshot) => {
-          console.log("Snapshot:", snapshot);
-          const islandData = snapshot.docs.map((doc) => ({
-            id: doc.id,
-            ...doc.data(),
-          }));
-          setKitchenIsland(islandData);
-        });
-
-        unsubscribeKitchenLighting = onSnapshot(lightingRef, (snapshot) => {
-          const lightingData = snapshot.docs.map((doc) => ({
-            id: doc.id,
-            ...doc.data(),
-          }));
-          setKitchenLighting(lightingData);
-        });
-
-        unsubscribeKitchenPlumbing = onSnapshot(plumbingRef, (snapshot) => {
-          const plumbingData = snapshot.docs.map((doc) => ({
-            id: doc.id,
-            ...doc.data(),
-          }));
-          setKitchenPlumbing(plumbingData);
-        });
-
         unsubscribeCountertops = onSnapshot(countertopsRef, (snapshot) => {
           const countertopData = snapshot.docs.map((doc) => ({
             id: doc.id,
@@ -213,12 +158,9 @@ const PriceUpdates = () => {
       unsubscribeMaterials && unsubscribeMaterials();
       unsubscribeHandrails && unsubscribeHandrails();
       unsubscribeLighting && unsubscribeLighting();
-      unsubscribeKitchenLighting && unsubscribeKitchenLighting();
       unsubscribeCountertops && unsubscribeCountertops();
       unsubscribeIncluded && unsubscribeIncluded();
       unsubscribeCabinets && unsubscribeCabinets();
-      unsubscribeKitchenIsland && unsubscribeKitchenIsland();
-      unsubscribeKitchenPlumbing && unsubscribeKitchenPlumbing();
     };
   }, [selectedTab]);
 
@@ -233,19 +175,20 @@ const PriceUpdates = () => {
           selectedTab === "kitchenMaterials"
             ? selectedKitchenTab === "countertops"
               ? "countertopMaterials"
-              : selectedKitchenTab === "kitchenCabinets"
+              : selectedKitchenTab === "cabinets"
               ? "kitchenCabinetMaterials"
-              : selectedKitchenTab === "included"
-              ? "included"
               : null
             : null;
         materialsRef = await getMaterialsRef(selectedTab, nestedMaterialType);
       } else {
         materialsRef = await getMaterialsRef(selectedTab);
       }
-      const newDoc = await addDoc(materialsRef, newMaterial);
+      const newDoc = await addDoc(materialsRef, {
+        ...newMaterial,
+        price: newMaterial.price,
+      });
       setMaterials([...materials, { id: newDoc.id, ...newMaterial }]);
-      setNewMaterial({ name: "", price: "" });
+      setNewMaterial({ name: "", price: null });
     } catch (error) {
       console.error("Error adding new material:", error);
     }
@@ -271,38 +214,32 @@ const PriceUpdates = () => {
     try {
       let materialRef;
       if (nestedMaterialType) {
-        const materialsRef = await getMaterialsRef(
-          selectedTab,
-          nestedMaterialType
-        );
+        const materialsRef = await getMaterialsRef(selectedTab, nestedMaterialType);
+        materialRef = doc(materialsRef, id);
+      } else if (selectedTab === "deckMaterials") {
+        const materialsRef = await getMaterialsRef(selectedTab, "deckingMaterials");
         materialRef = doc(materialsRef, id);
       } else {
         const materialsRef = await getMaterialsRef(selectedTab);
         materialRef = doc(materialsRef, id);
       }
-
+  
       await updateDoc(materialRef, { price });
-
+  
       const updateState = (arr) =>
         arr.map((material) =>
           material.id === id ? { ...material, price } : material
         );
-
+  
       if (nestedMaterialType === "deckHandrails") {
         setHandrails(updateState(handrails));
       } else if (nestedMaterialType === "deckLighting") {
         setLighting(updateState(lighting));
-      } else if (nestedMaterialType === "kitchenIsland") {
-        setKitchenIsland(updateState(kitchenIsland));
-      } else if (nestedMaterialType === "kitchenLighting") {
-        setKitchenLighting(updateState(kitchenLighting));
-      } else if (nestedMaterialType === "kitchenPlumbing") {
-        setKitchenPlumbing(updateState(kitchenPlumbing));
-      } else if (nestedMaterialType === "countertops") {
+      } else if (nestedMaterialType === "countertopMaterials") {
         setCountertops(updateState(countertops));
       } else if (nestedMaterialType === "included") {
         setIncluded(updateState(included));
-      } else if (nestedMaterialType === "kitchenCabinets") {
+      } else if (nestedMaterialType === "kitchenCabinetMaterials") {
         setKitchenCabinets(updateState(kitchenCabinets));
       } else {
         setMaterials(updateState(materials));
@@ -476,27 +413,35 @@ const PriceUpdates = () => {
           <h3 className="text-2xl font-semibold mt-8 mb-4 text-center">
             Included Kitchen Add-ons
           </h3>
-          <KitchenExtrasNew
-            data={kitchenIsland}
-            onUpdatePrice={(id, price) =>
-              handleUpdateMaterial(id, price, "kitchenIsland")
-            }
-          />
-          <KitchenExtrasNew
-            data={kitchenLighting}
-            onUpdatePrice={(id, price) =>
-              handleUpdateMaterial(id, price, "kitchenLighting")
-            }
-          />
-          <KitchenExtrasNew
-            data={kitchenPlumbing}
-            onUpdatePrice={(id, price) =>
-              handleUpdateMaterial(id, price, "kitchenPlumbing")
-            }
-          />
+          <ul className="space-y-4">
+            {included.map((item) => (
+              <li
+                key={item.id}
+                className="bg-neutral-700 p-4 rounded-md flex justify-between items-center"
+              >
+                <span>
+                  {item.name} - ${item.price}
+                </span>
+                <div className="flex">
+                  <input
+                    type="number"
+                    step="any"
+                    value={item.price}
+                    onChange={(e) =>
+                      handleUpdateMaterial(
+                        item.id,
+                        e.target.value,
+                        "included"
+                      )
+                    }
+                    className="w-full p-3 bg-neutral-600 rounded-md text-neutral-100 mr-4"
+                  />
+                </div>
+              </li>
+            ))}
+          </ul>
         </div>
       )}
-
       {/* Material List */}
       <h3 className="text-2xl font-semibold my-8 text-center">
         {selectedTab === "wholeHomeTiers"
@@ -525,7 +470,7 @@ const PriceUpdates = () => {
                   key={material.id}
                   material={material}
                   handleUpdateMaterial={(id, value) =>
-                    handleUpdateMaterial(id, value, "countertops")
+                    handleUpdateMaterial(id, value, "countertopMaterials")
                   }
                   handleDeleteMaterial={(id) =>
                     handleDeleteMaterial(id, "countertopMaterials")
@@ -537,7 +482,7 @@ const PriceUpdates = () => {
                   key={material.id}
                   material={material}
                   handleUpdateMaterial={(id, value) =>
-                    handleUpdateMaterial(id, value, "kitchenCabinets")
+                    handleUpdateMaterial(id, value, "kitchenCabinetMaterials")
                   }
                   handleDeleteMaterial={(id) =>
                     handleDeleteMaterial(id, "kitchenCabinetMaterials")
