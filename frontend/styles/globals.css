@@ -26,3 +26,15 @@ body {
   background-size: cover;
 }
 
+@layer components {
+  .tab-container {
+    @apply overflow-x-auto whitespace-nowrap;
+  }
+
+  @screen md {
+    .tab-container {
+      @apply overflow-x-visible;
+    }
+  }
+}
+

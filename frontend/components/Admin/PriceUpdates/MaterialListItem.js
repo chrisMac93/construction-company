@@ -18,9 +18,7 @@ const MaterialListItem = ({
           type="number"
           step="any"
           value={material.price}
-          onChange={(e) =>
-            handleUpdateMaterial(material.id, e.target.value)
-          }
+          onChange={(e) => handleUpdateMaterial(material.id, e.target.value)}
           className="w-full p-3 bg-neutral-600 rounded-md text-neutral-100 mr-4"
         />
 

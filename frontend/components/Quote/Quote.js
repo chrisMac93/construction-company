@@ -10,10 +10,6 @@ import ProjectTypes from "./ProjectTypes";
 
 const Quote = () => {
   const [formData, setFormData] = useState({
-    //WholeHomeForm attributes
-    wholeHomeTier: "",
-    wholeHomeSqFootage: "",
-    wholeHomeTierCosts: {},
     // InteriorForm attributes
     interiorTier: "",
     interiorSqFootage: "",
@@ -26,6 +22,10 @@ const Quote = () => {
     flooringMaterial: "",
     flooringSqFootage: "",
     flooringMaterialCosts: {},
+    // DrywallForm attributes
+    includeDrywall: false,
+    drywallSqFootage: "",
+    drywallPricePerSqFoot: "",
     // EpoxyForm attributes
     epoxyMaterial: "",
     epoxySqFootage: "",
@@ -48,9 +48,14 @@ const Quote = () => {
     lightingCost: "",
     // KitchenForm attributes
     kitchenFlooringIncluded: false,
+    kitchenDrywallIncluded: false,
+    kitchenCountertopIncluded: false,
     countertopMaterial: "",
+    countertopSqFootage: "",
     countertopMaterialCosts: "",
+    kitchenCabinetIncluded: false,
     kitchenCabinetMaterial: "",
+    kitchenCabinetSqFootage: "",
     kitchenCabinetMaterialCosts: "",
     island: false,
     islandCost: "",
@@ -58,17 +63,30 @@ const Quote = () => {
     plumbingCost: "",
     kitchenLighting: false,
     lightingCost: "",
-    includedOptionsCosts: {}, 
+    includedOptionsCosts: {},
     // BathroomForm attributes
     bathFlooringNeeded: false,
+    bathDrywallNeeded: false,
     bathSinkNeeded: false,
-    bathSinkType: "",
+    sinkType: "",
     toiletNeeded: false,
     toiletType: "",
     showerTubNeeded: false,
     showerTubType: "",
     bathPlumbing: false,
     bathLighting: false,
+    sinkCost: "",
+    toiletCost: "",
+    showerTubCost: "",
+    bathPlumbingCost: "",
+    bathLightingCost: "",
+    // bathroomTiers: {
+    //   bathLighting: [],
+    //   bathPlumbing: [],
+    //   showerTubType: [],
+    //   sinkType: [],
+    //   toiletType: [],
+    // },
     // ContactForm attributes
     contactInfo: {
       name: "",
@@ -88,8 +106,13 @@ const Quote = () => {
 
   useEffect(() => {
     const relevantAttributes = {
-      wholeHome: ["wholeHomeTier", "wholeHomeSqFootage"],
-      interior: ["interiorTier", "interiorSqFootage"],
+      interior: [
+        "interiorTier",
+        "interiorSqFootage",
+        "includedDrywall",
+        "drywallSqFootage",
+        "drywallPricePerSqFoot",
+      ],
       exterior: ["exteriorTier", "exteriorSqFootage"],
       flooring: ["flooringMaterial", "flooringSqFootage"],
       bath: [
@@ -100,17 +123,23 @@ const Quote = () => {
         "showerTubNeeded",
         "showerTubType",
         "bathFlooringNeeded",
+        "bathDrywallNeeded",
         "bathPlumbing",
         "bathLighting",
       ],
       kitchen: [
+        "kitchenFlooringIncluded",
         "kitchenFlooringMaterial",
         "flooringSqFootage",
+        "kitchenDrywallIncluded",
+        "drywallSqFootage",
         "island",
         "countertops",
         "countertopMaterial",
+        "countertopSqFootage",
         "kitchenCabinets",
         "KitchenCabinetMaterial",
+        "kitchenCabinetSqFootage",
         "kitchenPlumbing",
         "kitchenLighting",
       ],
@@ -136,6 +165,29 @@ const Quote = () => {
     }
   }, [formData]);
 
+  useEffect(() => {
+    // Reset formData when project type changes
+    setEstimate(0);
+    setFormData((prevFormData) => {
+      const resetAttributes = Object.keys(prevFormData).filter(
+        (attribute) => !["projectType", "contactInfo"].includes(attribute)
+      );
+
+      const newFormData = { ...prevFormData };
+      resetAttributes.forEach((attribute) => {
+        if (typeof prevFormData[attribute] === "string") {
+          newFormData[attribute] = "";
+        } else if (typeof prevFormData[attribute] === "boolean") {
+          newFormData[attribute] = false;
+        } else if (typeof prevFormData[attribute] === "object") {
+          newFormData[attribute] = {};
+        }
+      });
+
+      return newFormData;
+    });
+  }, [formData.projectType]);
+
   const handleChange = (event) => {
     const { name, value, type, checked } = event.target;
     const inputValue = type === "checkbox" ? checked : value;
@@ -155,7 +207,6 @@ const Quote = () => {
         [name]: inputValue,
       }));
     }
-    // console.log("Form Data Updated: ", formData);
   };
 
   // Calculate the estimate based on the form data

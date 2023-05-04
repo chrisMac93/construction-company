@@ -4,7 +4,6 @@ import { calculateConcreteCost } from "../quoteComponents/ConcreteForm";
 import { calculateDeckPatioCost } from "../quoteComponents/DeckPatioForm";
 import { calculateKitchenCost } from "../quoteComponents/KitchenForm";
 import { calculateBathroomCost } from "../quoteComponents/BathroomForm";
-import { calculateWholeHomeCost } from "../quoteComponents/WholeHomeForm";
 import { calculateInteriorCost } from "../quoteComponents/InteriorForm";
 import { calculateExteriorCost } from "../quoteComponents/ExteriorForm";
 import { calculateCoatingsCost } from "../quoteComponents/CoatingsForm";
@@ -13,18 +12,14 @@ export function calculateEstimate(formData, callback) {
   let cost = 0;
 
   switch (formData.projectType) {
-    case "wholeHome":
-      cost = calculateWholeHomeCost(
-        formData.wholeHomeTier,
-        formData.wholeHomeSqFootage,
-        formData.wholeHomeTierCosts
-      );
-      break;
     case "interior":
       cost = calculateInteriorCost(
         formData.interiorTier,
         formData.interiorSqFootage,
-        formData.interiorTierCosts
+        formData.interiorTierCosts,
+        formData.includeDrywall,
+        formData.drywallSqFootage,
+        formData.drywallPricePerSqFoot
       );
       break;
     case "exterior":
@@ -79,7 +74,17 @@ export function calculateEstimate(formData, callback) {
       );
       break;
     case "bath":
-      cost = calculateBathroomCost(formData);
+      cost = calculateBathroomCost(
+        formData,
+        formData.showerTubType,
+        formData.showerTubCost,
+        formData.sinkType,
+        formData.sinkCost,
+        formData.toiletType,
+        formData.toiletCost,
+        formData.plumbingCost,
+        formData.lightingCost
+      );
       break;
     case "concrete":
       cost = calculateConcreteCost(
@@ -91,8 +96,7 @@ export function calculateEstimate(formData, callback) {
     default:
       break;
   }
-  console.log("Form Data update for calculateKitchenCost:", formData);
-  console.log("Calculated Cost:", cost); // Log calculated cost
 
+  console.log("Total Cost: ", cost);
   callback(cost);
 }

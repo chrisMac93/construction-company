@@ -3,8 +3,28 @@ import Link from "next/link";
 import Image from "next/legacy/image";
 import { FaFacebook, FaInstagram, FaSnapchatGhost } from "react-icons/fa";
 import styles from "../../styles/Home.module.css";
+import useImages from "../../hooks/useImages";
 
 const Footer = () => {
+  const images = useImages();
+  const logoImage = images["logo"];
+
+  const isMobile = () => {
+    return (
+      typeof window !== "undefined" &&
+      /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
+        window.navigator.userAgent
+      )
+    );
+  };
+
+  const handleSocialLinkClick = (e, link) => {
+    if (isMobile()) {
+      e.preventDefault();
+      window.open(link, "_blank");
+    }
+  };
+
   return (
     <footer className="bg-gradient-to-r from-slate-300 via-neutral-800 to-neutral-900 text-center text-white ">
       <div className="px-6 pt-6 max-w-5xl mx-auto">
@@ -16,7 +36,7 @@ const Footer = () => {
               className="disabled:text-black/30 lg:px-2 [&.active]:text-black/90 dark:[&.active]:text-neutral-400"
             >
               <Image
-                src="/gallery/Logo/MC&C_Logo.png" // Replace with your logo path
+                src={logoImage || "/../../public/Images/site/MC_C_Logo.PNG"}
                 alt="Logo"
                 width={250}
                 height={167}
@@ -24,12 +44,24 @@ const Footer = () => {
             </Link>
             {/* Other Links */}
             <div className="mt-4 font-bold text-lg sm:mt-0 sm:ml-6 flex flex-col">
-              <Link href="/" className="opacity-60 hover:opacity-80">Home</Link>
-              <Link href="/terms" className="opacity-60 hover:opacity-80">Terms & Conditions</Link>
-              <Link href="/privacy" className="opacity-60 hover:opacity-80">Privacy Policy</Link>
-              <Link href="/careers" className="opacity-60 hover:opacity-80">Careers</Link>
-              <Link href="/aboutUs" className="opacity-60 hover:opacity-80">About Us</Link>
-              <Link href="/quote" className={`${styles.mcColor} ${styles.hov}`}>Get a Quote</Link>
+              <Link href="/" className="opacity-60 hover:opacity-80">
+                Home
+              </Link>
+              <Link href="/terms" className="opacity-60 hover:opacity-80">
+                Terms & Conditions
+              </Link>
+              <Link href="/privacy" className="opacity-60 hover:opacity-80">
+                Privacy Policy
+              </Link>
+              <Link href="/careers" className="opacity-60 hover:opacity-80">
+                Careers
+              </Link>
+              <Link href="/aboutUs" className="opacity-60 hover:opacity-80">
+                About Us
+              </Link>
+              <Link href="/quote" className={`${styles.mcColor} ${styles.hov}`}>
+                Get a Quote
+              </Link>
             </div>
           </div>
           {/* Social Links and Contact Info */}
@@ -41,24 +73,36 @@ const Footer = () => {
                 href="https://www.facebook.com/MCandC0911"
                 target="_blank"
                 rel="noreferrer"
+                // onClick={(e) =>
+                //   handleSocialLinkClick(e, "fb://page?id=130056639799064")
+                // }
               >
                 <FaFacebook className="mx-auto h-full w-4" />
               </Link>
 
               <Link
                 className="m-1 h-9 w-9 rounded-full border-2 opacity-60 hover:opacity-80"
-                href="https://www.instagram.com/"
+                href="https://www.instagram.com/martinconstruction_coatings?igshid=YmMyMTA2M2Y="
                 target="_blank"
                 rel="noreferrer"
+                onClick={(e) =>
+                  handleSocialLinkClick(
+                    e,
+                    "instagram://user?username=martinconstruction_coatings"
+                  )
+                }
               >
                 <FaInstagram className="mx-auto h-full w-4" />
               </Link>
 
               <Link
                 className="m-1 h-9 w-9 rounded-full border-2 opacity-60 hover:opacity-80"
-                href="https://www.snapchat.com/"
+                href="https://www.snapchat.com/add/mcandc2020"
                 target="_blank"
                 rel="noreferrer"
+                onClick={(e) =>
+                  handleSocialLinkClick(e, "snapchat://add/mcandc2020")
+                }
               >
                 <FaSnapchatGhost className="mx-auto h-full w-4" />
               </Link>

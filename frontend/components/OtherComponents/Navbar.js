@@ -2,8 +2,9 @@ import Link from "next/link";
 import Image from "next/image";
 import MobileMenu from "./MobileMenu";
 import { useState } from "react";
-import { useRouter } from 'next/router';
+import { useRouter } from "next/router";
 import { useAnimation } from "framer-motion";
+import useImages from "../../hooks/useImages";
 
 import styles from "../../styles/Home.module.css";
 
@@ -20,33 +21,20 @@ const Navbar = ({
 
   const router = useRouter();
 
+  const images = useImages();
+  const logoImage = images["logo"];
+
   const handleNavigateAndScroll = async (ref) => {
-    if (router.pathname !== '/') {
-      await router.push('/');
+    if (router.pathname !== "/") {
+      await router.push("/");
     }
     navigateAndScroll(ref);
   };
 
-
-  const toggleMobileMenu = async () => {
-    if (isMobileMenuOpen) {
-      await controls.start({
-        opacity: 0,
-        y: -20,
-        transition: { duration: 0.3, ease: "easeIn" },
-      }).finished;
-      setIsMobileMenuOpen(false);
-    } else {
-      await controls.start({
-        opacity: 1,
-        y: 0,
-        transition: { duration: 0.3, ease: "easeOut" },
-      }).finished;
-      setIsMobileMenuOpen(true);
-    }
+  const toggleMobileMenu = () => {
+    setIsMobileMenuOpen(!isMobileMenuOpen);
   };
 
-  
   return (
     <nav className="fixed z-20 top-0 flex w-full flex-wrap items-center justify-between bg-gradient-to-r from-slate-300 via-neutral-800 to-neutral-900 py-3 text-neutral-200 shadow-lg lg:flex-wrap lg:justify-start">
       <MobileMenu
@@ -67,7 +55,7 @@ const Navbar = ({
             className="disabled:text-black/30 lg:px-2 [&.active]:text-black/90 dark:[&.active]:text-neutral-400"
           >
             <Image
-              src="/gallery/Logo/MC&C_Logo.png"
+              src={logoImage || "/../../public/Images/site/MC_C_Logo.PNG"}
               width="100"
               height="100"
               alt="Martin Construction & Coatings Logo"
@@ -107,6 +95,14 @@ const Navbar = ({
                 className="p-0 text-white font-bold opacity-60 hover:opacity-80 focus:opacity-80 disabled:text-black/30 lg:px-2 [&.active]:text-black/90 dark:[&.active]:text-neutral-400"
               >
                 Home
+              </Link>
+            </li>
+            <li className="p-2">
+              <Link
+                href="/aboutUs"
+                className="p-0 white font-bold opacity-60 hover:opacity-80 focus:opacity-80 disabled:text-black/30 lg:px-2 [&.active]:text-black/90 dark:[&.active]:text-neutral-400"
+              >
+                About Us
               </Link>
             </li>
             <li className="p-2">
@@ -159,14 +155,7 @@ const Navbar = ({
                 Gallery
               </button>
             </li>
-            <li className="p-2">
-              <Link
-                href="/aboutUs"
-                className="p-0 white font-bold opacity-60 hover:opacity-80 focus:opacity-80 disabled:text-black/30 lg:px-2 [&.active]:text-black/90 dark:[&.active]:text-neutral-400"
-              >
-                About Us
-              </Link>
-            </li>
+
             <li className="p-2">
               <Link
                 href="/quote"

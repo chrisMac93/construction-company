@@ -17,7 +17,6 @@ const ProjectTypes = ({ handleChange, formData }) => {
         whileFocus={{ scale: 1.05 }}
       >
         <option value="">Select a project type</option>
-        <option value="wholeHome">Whole Home Remodel</option>
         <option value="interior">Interior Remodel</option>
         <option value="exterior">Exterior Remodel</option>
         <option value="flooring">Flooring</option>

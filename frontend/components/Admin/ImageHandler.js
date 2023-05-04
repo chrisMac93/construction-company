@@ -26,8 +26,11 @@ const ImageHandler = () => {
   const [selectedImages, setSelectedImages] = useState([]);
   const [isTitleModalVisible, setIsTitleModalVisible] = useState(false);
   const [filesWithTitle, setFilesWithTitle] = useState([]);
+  const [isSpecialType, setIsSpecialType] = useState([]);
+  const [imageType, setImageType] = useState("Gallery");
+  const [selectedTab, setSelectedTab] = useState("Gallery");
 
-  const handleImageUpload = async (file, title) => {
+  const handleImageUpload = async (file, title, imageTypes) => {
     if (!file) {
       alert("Please select a file.");
       return;
@@ -41,7 +44,10 @@ const ImageHandler = () => {
       const imageURL = await getDownloadURL(storageRef);
       console.log("Download URL retrieved:", imageURL);
 
-      await saveImageURLToFirestore(imageURL, title);
+      for (const imageType of imageTypes) {
+        await saveImageURLToFirestore(imageURL, title, imageType, file.name);
+      }
+
       console.log("URL saved to Firestore.");
     } catch (error) {
       console.error("Error uploading image:", error);
@@ -52,51 +58,81 @@ const ImageHandler = () => {
     setIsTitleModalVisible(true);
   };
 
+  const handleCheckboxChange = (index, imageType, checked) => {
+    const updatedIsSpecialType = { ...isSpecialType };
+    if (checked) {
+      if (updatedIsSpecialType[index]) {
+        updatedIsSpecialType[index].push(imageType);
+      } else {
+        updatedIsSpecialType[index] = [imageType];
+      }
+    } else {
+      updatedIsSpecialType[index] = updatedIsSpecialType[index].filter(
+        (type) => type !== imageType
+      );
+    }
+    setIsSpecialType(updatedIsSpecialType);
+  };
+
   const handleTitleChange = (index, e) => {
     const updatedFilesWithTitle = [...filesWithTitle];
     updatedFilesWithTitle[index].title = e.target.value;
     setFilesWithTitle(updatedFilesWithTitle);
   };
 
+  const handleTypeChange = (e) => {
+    setImageType(e.target.value);
+  };
+
   const handleTitleSubmit = () => {
-    filesWithTitle.forEach(({ file, title }) => {
-      handleImageUpload(file, title);
+    filesWithTitle.forEach(({ file, title }, index) => {
+      const imageTypes = isSpecialType[index] || [];
+      handleImageUpload(file, title, imageTypes);
     });
     setFilesWithTitle([]);
+    setIsSpecialType({});
     setIsTitleModalVisible(false);
   };
 
   const handleFileChange = (e) => {
+    if (e.target.files.length === 0) {
+      console.log("No files selected");
+      return;
+    }
     console.log("Files selected:", e.target.files);
     const files = Array.from(e.target.files); // Convert FileList to an array
     const filesWithTitle = files.map((file) => ({ file, title: "" }));
     setFilesWithTitle(filesWithTitle);
-    openTitleModal();
+    setIsTitleModalVisible(true); // Open the title modal
   };
 
-  const saveImageURLToFirestore = async (imageURL, title) => {
+  const saveImageURLToFirestore = async (
+    imageURL,
+    title,
+    imageType,
+    fileName
+  ) => {
     const imagesRef = collection(firestore, "images");
-    await addDoc(imagesRef, { url: imageURL, title });
+    await addDoc(imagesRef, { url: imageURL, title, imageType, fileName });
   };
 
   const deleteImage = async (url) => {
     try {
-      const urlObject = new URL(url);
-      const pathSegments = urlObject.pathname.split("/");
-      const fileName = decodeURIComponent(
-        pathSegments[pathSegments.length - 1]
-      );
-
       const imagesRef = collection(firestore, "images");
       const q = query(imagesRef, where("url", "==", url));
       const querySnapshot = await getDocs(q);
 
       if (!querySnapshot.empty) {
+        const docData = querySnapshot.docs[0].data();
+        const fileName = docData.fileName;
+
+        // Delete the image from Firestore
         const docRef = doc(firestore, "images", querySnapshot.docs[0].id);
         await deleteDoc(docRef);
         console.log("Deleted image from Firestore:", url);
 
-        const storageRef = ref(storage, `${fileName}`);
+        // Delete the image from Storage
+        const storageRef = ref(storage, `images/${fileName}`);
         await deleteObject(storageRef);
         console.log("Deleted image from Storage:", fileName);
       } else {
@@ -124,26 +160,25 @@ const ImageHandler = () => {
 
   const deleteSelectedImages = async () => {
     for (const url of selectedImages) {
-      await deleteImage(url);
+      await deleteImage(url, selectedTab);
     }
     setSelectedImages([]);
     setRemoveImagesMode(false);
   };
 
+  const fetchImageURLs = async (imageType) => {
+    const imagesRef = collection(firestore, "images");
+    const q = query(imagesRef, where("imageType", "==", imageType));
+    const unsubscribe = onSnapshot(q, (snapshot) => {
+      const urls = snapshot.docs.map((doc) => doc.data().url);
+      setImageURLs(urls);
+    });
+    return () => unsubscribe();
+  };
+
   useEffect(() => {
-    const fetchImageURLs = async () => {
-      const imagesRef = collection(firestore, "images");
-      const q = query(imagesRef);
-      const unsubscribe = onSnapshot(q, (snapshot) => {
-        const urls = snapshot.docs.map((doc) => doc.data().url);
-        setImageURLs(urls);
-      });
-
-      return () => unsubscribe();
-    };
-
-    fetchImageURLs();
-  }, []);
+    fetchImageURLs(selectedTab);
+  }, [selectedTab]);
 
   return (
     <div>
@@ -155,19 +190,55 @@ const ImageHandler = () => {
               <h2 className="text-lg font-semibold mb-4">Enter image titles</h2>
               {filesWithTitle.map((fileWithTitle, index) => (
                 <div key={index} className="mb-2">
-                  <label className="block mb-1">Image {index + 1}:</label>
-                  <input
-                    type="text"
-                    className="w-full p-2 border border-gray-300 text-neutral-800 rounded"
-                    placeholder="Image title"
-                    value={fileWithTitle.title}
-                    onChange={(e) => handleTitleChange(index, e)}
-                  />
+                  <div className="flex items-center">
+                    <img
+                      src={URL.createObjectURL(fileWithTitle.file)}
+                      alt="Preview"
+                      className="w-16 h-16 object-cover rounded"
+                    />
+                    <input
+                      type="text"
+                      placeholder="Enter title"
+                      className="ml-2 px-2 py-1 border border-gray-300 rounded text-gray-700"
+                      value={fileWithTitle.title}
+                      onChange={(e) => handleTitleChange(index, e)}
+                    />
+                  </div>
+                  <div className="flex flex-wrap items-center mt-2">
+                    {["Gallery", "Services", "Testimonials", "Site"].map(
+                      (collectionType) => (
+                        <div key={collectionType} className="mr-2">
+                          <input
+                            type="checkbox"
+                            id={`${collectionType}-${index}`}
+                            name={`${collectionType}-${index}`}
+                            checked={
+                              isSpecialType[index]?.includes(collectionType) ||
+                              false
+                            }
+                            onChange={(e) =>
+                              handleCheckboxChange(
+                                index,
+                                collectionType,
+                                e.target.checked
+                              )
+                            }
+                          />
+                          <label
+                            htmlFor={`${collectionType}-${index}`}
+                            className="ml-2"
+                          >
+                            {collectionType}
+                          </label>
+                        </div>
+                      )
+                    )}
+                  </div>
                 </div>
               ))}
               <button
                 onClick={handleTitleSubmit}
-                className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded"
+                className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded mt-4"
               >
                 Submit
               </button>
@@ -204,7 +275,21 @@ const ImageHandler = () => {
           </button>
         </div>
       </div>
-
+      <div className="flex items-center justify-center mb-4">
+        {["Gallery", "Services", "Testimonials", "Site"].map((tab) => (
+          <button
+            key={tab}
+            className={`mx-2 py-2 px-4 ${
+              selectedTab === tab
+                ? " bg-neutral-700 text-neutral-100"
+                : " bg-neutral-500 text-neutral-100"
+            } rounded`}
+            onClick={() => setSelectedTab(tab)}
+          >
+            {tab}
+          </button>
+        ))}
+      </div>
       {removeImagesMode && (
         <div className="flex items-center flex-row justify-center">
           <button
@@ -228,12 +313,12 @@ const ImageHandler = () => {
                   : ""
               }`}
             >
-              <div className="w-24 h-48 object-cover">
+              <div className="w-24 h-48">
                 <Image
                   src={url}
                   alt=""
-                  layout="fill"
-                  objectFit="cover"
+                  fill
+                  style={{ objectFit: "cover" }}
                   className="rounded-lg"
                 />
               </div>

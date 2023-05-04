@@ -1,6 +1,6 @@
-export const DeckPatioExtras = ({ data, onUpdatePrice }) => {
+export const DeckPatioExtras = ({ data, onUpdatePrice, className }) => {
     return (
-      <ul className="space-y-4">
+      <ul className={`space-y-4 ${className}`}>
         {data.map((item) => (
           <li
             key={item.id}

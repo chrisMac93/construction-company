@@ -5,8 +5,8 @@ import useAuth from "../../hooks/useAuth";
 import JobListings from "./JobListings";
 import ImageHandler from "./ImageHandler";
 import ServicesHandler from "./ServicesHandler";
-import EmployeeManagement from "./EmployeeHandler";
 import PriceUpdates from "./PriceUpdates/PriceUpdatesHandler";
+import TestimonialHandler from "./TestimonialsHandler";
 
 const AdminDashboard = ({ userEmail }) => {
   const [selectedTab, setSelectedTab] = useState("priceUpdates");
@@ -22,38 +22,43 @@ const AdminDashboard = ({ userEmail }) => {
   const renderTabs = () => {
     return (
       <div className="flex mb-8 justify-center">
-        <button
-          className={`p-2 ${selectedTab === "jobListings" && "font-bold"}`}
-          onClick={() => setSelectedTab("jobListings")}
+        <div
+          className="flex overflow-x-auto py-2 px-4 space-x-4"
+          style={{ maxWidth: "100%" }}
         >
-          Job Listings
-        </button>
-        <button
-          className={`p-2 ${selectedTab === "team" && "font-bold"}`}
-          onClick={() => setSelectedTab("team")}
-        >
-          Team
-        </button>
-        <button
-          className={`p-2 ${selectedTab === "priceUpdates" && "font-bold"}`}
-          onClick={() => setSelectedTab("priceUpdates")}
-        >
-          Price Updates
-        </button>
-        {userEmail === "christopher.j.mcelwain@gmail.com" && (
           <button
-            className={`p-2 ${selectedTab === "services" && "font-bold"}`}
-            onClick={() => setSelectedTab("services")}
+            className={`p-2 ${selectedTab === "jobListings" && "font-bold"}`}
+            onClick={() => setSelectedTab("jobListings")}
           >
-            Services
+            Job Listings
           </button>
-        )}
-        <button
-          className={`p-2 ${selectedTab === "images" && "font-bold"}`}
-          onClick={() => setSelectedTab("images")}
-        >
-          Images
-        </button>
+          <button
+            className={`p-2 ${selectedTab === "testimonials" && "font-bold"}`}
+            onClick={() => setSelectedTab("testimonials")}
+          >
+            Testimonials
+          </button>
+          <button
+            className={`p-2 ${selectedTab === "priceUpdates" && "font-bold"}`}
+            onClick={() => setSelectedTab("priceUpdates")}
+          >
+            Price Updates
+          </button>
+          {userEmail === "christopher.j.mcelwain@gmail.com" && (
+            <button
+              className={`p-2 ${selectedTab === "services" && "font-bold"}`}
+              onClick={() => setSelectedTab("services")}
+            >
+              Services
+            </button>
+          )}
+          <button
+            className={`p-2 ${selectedTab === "images" && "font-bold"}`}
+            onClick={() => setSelectedTab("images")}
+          >
+            Images
+          </button>
+        </div>
       </div>
     );
   };
@@ -65,7 +70,7 @@ const AdminDashboard = ({ userEmail }) => {
           Admin Dashboard
         </h2>
         {renderTabs()}
-        {selectedTab === "team" && <EmployeeManagement />}
+        {selectedTab === "testimonials" && <TestimonialHandler />}
         {selectedTab === "jobListings" && <JobListings />}
         {selectedTab === "priceUpdates" && <PriceUpdates />}
         {selectedTab === "images" && <ImageHandler />}

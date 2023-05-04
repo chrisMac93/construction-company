@@ -13,7 +13,7 @@ import styles from "../../styles/Home.module.css";
 
 const WhyChooseUs = () => {
   const images = useImages(); // Call the custom hook
-  const bgImageUrl = images["Patio Build"]
+  const bgImageUrl = images["whyChoose"]
 
   const reasons = [
     {

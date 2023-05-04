@@ -44,7 +44,7 @@ const AdminPage = () => {
   
 
   return (
-    <div className="bg-neutral-800 text-neutral-100 py-20 px-4 sm:px-8 md:px-16 lg:px-24">
+    <div className="bg-neutral-800 text-neutral-100 py-20 px-4 sm:px-8 md:px-16 lg:px-24 overflow-x-hidden">
       <div className="max-w-4xl mx-auto">
         {isLoggedIn ? (
           <>
@@ -76,7 +76,7 @@ const AdminPage = () => {
                 type="submit"
                 className={`w-full p-3 rounded-md text-neutral-800 font-bold ${styles.mcBackColor} ${styles.backHov}`}
               >
-                LOGIN WITH GOOGLE
+                LOGIN
               </button>
             </form>
           </div>

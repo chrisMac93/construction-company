@@ -1,13 +1,24 @@
 import { useState, useEffect } from "react";
 import { getFirestore, collection, getDocs } from "firebase/firestore";
 
+import { calculateDrywallCost } from "./drywallOption";
+import DrywallOption from "./drywallOption";
+import { renderSwitch } from "./RenderSwitch";
+
 export const calculateInteriorCost = (
   interiorTier,
   interiorSqFootage,
-  interiorTierCosts
+  interiorTierCosts,
+  includeDrywall,
+  drywallPricePerSqFoot,
+  drywallSqFootage
 ) => {
   const costPerSqFoot = interiorTierCosts[interiorTier];
   const totalCost = costPerSqFoot * interiorSqFootage;
+
+  if (includeDrywall) {
+    return totalCost + calculateDrywallCost(drywallPricePerSqFoot, drywallSqFootage);
+  }
 
   return totalCost;
 };
@@ -20,7 +31,7 @@ const InteriorForm = ({ handleChange, formData }) => {
       const db = getFirestore();
       const priceUpdatesCollectionRef = collection(db, "priceUpdates");
       const priceUpdatesSnapshot = await getDocs(priceUpdatesCollectionRef);
-      const priceUpdatesDocId = priceUpdatesSnapshot.docs[0].id; // Assuming there is at least one document in priceUpdates collection
+      const priceUpdatesDocId = priceUpdatesSnapshot.docs[0].id;
 
       const interiorCollectionRef = collection(
         db,
@@ -42,6 +53,7 @@ const InteriorForm = ({ handleChange, formData }) => {
 
     fetchInteriorTiers();
   }, []);
+  
 
   return (
     <>
@@ -77,6 +89,24 @@ const InteriorForm = ({ handleChange, formData }) => {
           onChange={handleChange}
         />
       </div>
+      <div className="form-group mt-4">
+        <label
+          htmlFor="includeDrywall"
+          className="flex items-center cursor-pointer"
+        >
+          {renderSwitch(
+            "includeDrywall",
+            "includeDrywall",
+            formData.includeDrywall,
+            handleChange,
+            formData.drywallPricePerSqFoot
+          )}
+          <span className="ml-3 mb-1 text-neutral-100 font-semibold">Do You Need Drywall?</span>
+        </label>
+      </div>
+      {formData.includeDrywall && (
+        <DrywallOption handleChange={handleChange} formData={formData} />
+      )}
     </>
   );
 };

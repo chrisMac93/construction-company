@@ -6,7 +6,7 @@ import useImages from "../../hooks/useImages";
 const Jumbotron = () => {
 
   const images = useImages();
-  const bgImageUrl = images["One"]
+  const bgImageUrl = images["home"]
   const headerVariants = {
     hidden: { opacity: 0, y: -50 },
     visible: { opacity: 1, y: 0 },
@@ -20,7 +20,7 @@ const Jumbotron = () => {
   return (
     <div
       className="relative mt-16 w-full minus-navbar parallax"
-      style={{ backgroundImage: `url(${bgImageUrl || "../gallery/Gallery/Services/flooring.jpg"})` }}
+      style={{ backgroundImage: `url(${bgImageUrl || "../../public/Images/site/home.jpg"})` }}
     >
       <div className="absolute inset-0 bg-black opacity-50"></div>
       <div className="absolute inset-0 flex flex-col items-center text-center justify-center space-y-4 px-6 text-white">

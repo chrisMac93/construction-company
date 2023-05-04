@@ -6,21 +6,30 @@ import styles from "../../styles/Home.module.css";
 const MobileMenu = ({
   isMobileMenuOpen,
   toggleMobileMenu,
-  scrollToRef,
-  aboutUsRef,
+  handleNavigateAndScroll,
+  whoWeAreRef,
   servicesRef,
   whyChooseUsRef,
   galleryRef,
   testimonialsRef,
   mobileMenuControls,
 }) => {
-
   useEffect(() => {
     if (isMobileMenuOpen) {
       mobileMenuControls.start({
         opacity: 1,
         y: 0,
         transition: { duration: 0.3, ease: "easeOut" },
+        display: "block",
+      });
+    } else {
+      mobileMenuControls.start({
+        opacity: 0,
+        y: -20,
+        transition: { duration: 0.3, ease: "easeIn" },
+        transitionEnd: {
+          display: "none",
+        },
       });
     }
   }, [isMobileMenuOpen, mobileMenuControls]);
@@ -31,9 +40,14 @@ const MobileMenu = ({
         isMobileMenuOpen ? "block" : "hidden"
       } absolute w-full bg-gradient-to-r from-slate-300 via-neutral-800 to-neutral-900 lg:hidden ${
         styles.dropdownMenu
-      }`}
-      initial={{ opacity: 0, y: -20 }}
+      } top-20`}
+      initial={{ opacity: 0, y: -20, display: "none" }}
       animate={mobileMenuControls}
+      exit={{
+        opacity: 0,
+        y: -20,
+        transition: { duration: 0.3, ease: "easeIn" },
+      }}
     >
       {/* Place your mobile menu links/buttons here */}
       <ul className="list-style-none mr-auto flex flex-col pl-0 text-center lg:text-left lg:flex lg:flex-row lg:space-x-2 lg:items-center lg:mr-auto">
@@ -47,20 +61,29 @@ const MobileMenu = ({
           </Link>
         </li>
         <li className="p-2">
+        <Link
+            href="/aboutUs"
+            onClick={() => toggleMobileMenu()}
+            className="p-0 text-white font-bold opacity-60 hover:opacity-80 focus:opacity-80 disabled:text-black/30 lg:px-2 [&.active]:text-black/90 dark:[&.active]:text-neutral-400"
+          >
+            About Us
+          </Link>
+        </li>
+        <li className="p-2">
           <button
             onClick={() => {
-              scrollToRef(aboutUsRef);
+              handleNavigateAndScroll(whoWeAreRef);
               toggleMobileMenu();
             }}
             className="p-0 text-white font-bold opacity-60 hover:opacity-80 focus:opacity-80 disabled:text-black/30 lg:px-2 [&.active]:text-black/90 dark:[&.active]:text-neutral-400"
           >
-            About Us
+            Who We Are
           </button>
         </li>
         <li className="p-2">
           <button
             onClick={() => {
-              scrollToRef(servicesRef);
+              handleNavigateAndScroll(servicesRef);
               toggleMobileMenu();
             }}
             className="p-0 text-white font-bold opacity-60 hover:opacity-80 focus:opacity-80 disabled:text-black/30 lg:px-2 [&.active]:text-black/90 dark:[&.active]:text-neutral-400"
@@ -71,7 +94,7 @@ const MobileMenu = ({
         <li className="p-2">
           <button
             onClick={() => {
-              scrollToRef(whyChooseUsRef);
+              handleNavigateAndScroll(whyChooseUsRef);
               toggleMobileMenu();
             }}
             className="p-0 text-white font-bold opacity-60 hover:opacity-80 focus:opacity-80 disabled:text-black/30 lg:px-2 [&.active]:text-black/90 dark:[&.active]:text-neutral-400"
@@ -82,7 +105,7 @@ const MobileMenu = ({
         <li className="p-2">
           <button
             onClick={() => {
-              scrollToRef(testimonialsRef);
+              handleNavigateAndScroll(testimonialsRef);
               toggleMobileMenu();
             }}
             className="p-0 text-white font-bold opacity-60 hover:opacity-80 focus:opacity-80 disabled:text-black/30 lg:px-2 [&.active]:text-black/90 dark:[&.active]:text-neutral-400"
@@ -93,7 +116,7 @@ const MobileMenu = ({
         <li className="p-2">
           <button
             onClick={() => {
-              scrollToRef(galleryRef);
+              handleNavigateAndScroll(galleryRef);
               toggleMobileMenu();
             }}
             className="p-0 white font-bold opacity-60 hover:opacity-80 focus:opacity-80 disabled:text-black/30 lg:px-2 [&.active]:text-black/90 dark:[&.active]:text-neutral-400"
