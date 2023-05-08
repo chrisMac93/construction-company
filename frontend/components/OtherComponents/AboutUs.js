@@ -22,7 +22,7 @@ const AboutUs = () => {
         className="relative bg-cover bg-center py-60 px-4 sm:px-8 md:px-16 lg:px-24 parallax"
         style={{
           backgroundImage: `url(${
-            bgImageUrl || "../gallery/Gallery/park.jpg"
+            bgImageUrl || "/../../public/Images/site/epoxy2.jpg"
           })`,
         }}
       >
@@ -64,7 +64,7 @@ const AboutUs = () => {
             </div>
             <div>
               <Image
-                src={rightImageUrl || "../../public/Images/site/quote.jpg"}
+                src={rightImageUrl || "/../../public/Images/site/quote.jpg"}
                 width={500}
                 height={500}
                 alt="A picture"
@@ -138,7 +138,7 @@ const AboutUs = () => {
         className="relative bg-cover bg-center py-20 px-4 sm:px-8 md:px-16 lg:px-24 parallax"
         style={{
           backgroundImage: `url(${
-            bgImageUrl2 || "../gallery/Gallery/park.jpg"
+            bgImageUrl2 || "/../../public/Images/site/aboutBottom.jpg"
           })`,
         }}
       >

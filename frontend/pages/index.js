@@ -15,7 +15,7 @@ export default function Home({
   scrollToRef
 }) {
   return (
-    <div>
+    <div className="overflow-x-hidden">
       <main>
         <section>
           <Jumbotron />

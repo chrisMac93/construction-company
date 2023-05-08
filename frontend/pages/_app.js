@@ -35,7 +35,6 @@ function MyApp({ Component, pageProps }) {
           whyChooseUsRef={whyChooseUsRef}
           galleryRef={galleryRef}
           testimonialsRef={testimonialsRef}
-          quoteRef={quoteRef}
         />
         <main className="flex-grow bg-neutral-900 text-neutral-100">
           {Component === Home ? (
@@ -45,7 +44,6 @@ function MyApp({ Component, pageProps }) {
               whyChooseUsRef={whyChooseUsRef}
               galleryRef={galleryRef}
               testimonialsRef={testimonialsRef}
-              quoteRef={quoteRef}
               scrollToRef={scrollToRef}
             />
           ) : (

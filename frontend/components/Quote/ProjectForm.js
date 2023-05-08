@@ -15,6 +15,12 @@ const ProjectForm = ({ formData, handleChange }) => {
       return <InteriorForm handleChange={handleChange} formData={formData} />;
     case "exterior":
       return <ExteriorForm handleChange={handleChange} formData={formData} />;
+    case "kitchen":
+      return <KitchenForm handleChange={handleChange} formData={formData} />;
+    case "bath":
+      return <BathroomForm handleChange={handleChange} formData={formData} />;
+    case "deckPatio":
+      return <DeckPatioForm handleChange={handleChange} formData={formData} />;
     case "flooring":
       return <FlooringForm handleChange={handleChange} formData={formData} />;
     case "epoxy":
@@ -23,17 +29,6 @@ const ProjectForm = ({ formData, handleChange }) => {
       return <CoatingsForm handleChange={handleChange} formData={formData} />;
     case "concrete":
       return <ConcreteForm handleChange={handleChange} formData={formData} />;
-    case "deckPatio":
-      return <DeckPatioForm handleChange={handleChange} formData={formData} />;
-    case "kitchen":
-      return <KitchenForm handleChange={handleChange} formData={formData} />;
-    case "bath":
-      return (
-        <BathroomForm
-          handleChange={handleChange}
-          formData={formData}
-        />
-      );
     default:
       return null;
   }

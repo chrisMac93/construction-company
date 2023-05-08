@@ -18,9 +18,16 @@ const Quote = () => {
     interiorDrywallIncluded: false,
     interiorFlooringIncluded: false,
     //ExteriorForm attributes
-    exteriorTier: "",
-    exteriorSqFootage: "",
-    exteriorTierCosts: {},
+    roofingIncluded: false,
+    sidingIncluded: false,
+    landscapingIncluded: false,
+    roofingMaterial: "",
+    roofingSqFootage: "",
+    roofingMaterialCosts: {},
+    sidingMaterial: "",
+    sidingSqFootage: "",
+    sidingMaterialCosts: {},
+    landscapingCost: "",
     // FlooringForm attributes
     flooringMaterial: "",
     flooringSqFootage: "",
@@ -99,25 +106,30 @@ const Quote = () => {
     },
   });
 
+  const [showEstimateForm, setShowEstimateForm] = useState(false);
   const [showContactForm, setShowContactForm] = useState(false);
   const [estimate, setEstimate] = useState(null);
 
+  useEffect(() => {
+    setShowEstimateForm(!!formData.projectType);
+    setShowContactForm(!!formData.projectType);
+  }, [formData.projectType]);
+
   const handleEstimate = (calculatedCost) => {
     setEstimate(calculatedCost);
-    setShowContactForm(true);
   };
 
   useEffect(() => {
     const relevantAttributes = {
       interior: [
         "includeLighting",
-        "includePlumbing",        
+        "includePlumbing",
         "interiorFlooringIncluded",
         "flooringSqFootage",
         "interiorDrywallIncluded",
         "drywallSqFootage",
       ],
-      exterior: ["exteriorTier", "exteriorSqFootage"],
+      exterior: ["roofingIncluded", "sidingIncluded", "landscapingIncluded"],
       flooring: ["flooringMaterial", "flooringSqFootage"],
       bath: [
         "bathSinkNeeded",
@@ -220,7 +232,10 @@ const Quote = () => {
   };
 
   return (
-    <div className="quote bg-gradient-to-b from-neutral-900 via-neutral-800 to-slate-300 text-neutral-100 mt-24 py-15 px-4 sm:px-8 md:px-16 lg:px-24">
+    <div
+      className="quote bg-gradient-to-l from-neutral-900 via-neutral-800 to-slate-300 text-neutral-100 mt-20 pt-12 px-4 sm:px-8 md:px-16 lg:px-24"
+      style={{ minHeight: "calc(100vh - 4rem)" }} // Adjust the "4rem" value if you have a different height for your header
+    >
       <div className="max-w-4xl mx-auto">
         <motion.h1
           className="text-3xl md:text-4xl font-semibold mb-8 text-center"
@@ -238,35 +253,39 @@ const Quote = () => {
           onSubmit={(e) => e.preventDefault()}
         >
           <ProjectTypes formData={formData} handleChange={handleChange} />
-          <ProjectForm formData={formData} handleChange={handleChange} />
-          {showContactForm && (
-            <motion.div
-              className="text-xl text-neutral-100  font-semibold mt-8 text-center"
-              initial={{ opacity: 0, y: -10 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: 0.5 }}
-            >
-              <p className="font-bold">YOUR ESTIMATE IS</p>{" "}
-              <h1 className="font-bold text-2xl text-green-700">
-                ${estimate}!
-              </h1>
-              <p className="text-neutral-500 font-bold italic">
-                **This is a quote only and does not include taxes or fees**
-              </p>
-              <h1
-                className="font-bold text-2xl pt-14"
-                style={{ color: "#B6B024" }}
-              >
-                Fill Out The Form Below To Get Started!
-              </h1>
-              <div className="py-12">
-                <ContactForm
-                  handleChange={handleChange}
-                  formData={formData}
-                  submitQuote={submitQuote}
-                />
-              </div>
-            </motion.div>
+          {showEstimateForm && (
+            <>
+              <ProjectForm formData={formData} handleChange={handleChange} />
+              {showContactForm && (
+                <motion.div
+                  className="text-xl text-neutral-100  font-semibold mt-8 text-center"
+                  initial={{ opacity: 0, y: -10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.5, delay: 0.5 }}
+                >
+                  <p className="font-bold">YOUR ESTIMATE IS</p>{" "}
+                  <h1 className="font-bold text-2xl text-green-700">
+                    ${estimate}!
+                  </h1>
+                  <p className="text-neutral-500 font-bold italic">
+                    **This is a quote only and does not include taxes or fees**
+                  </p>
+                  <h1
+                    className="font-bold text-2xl pt-14"
+                    style={{ color: "#B6B024" }}
+                  >
+                    Fill Out The Form Below To Get Started!
+                  </h1>
+                  <div className="py-12">
+                    <ContactForm
+                      handleChange={handleChange}
+                      formData={formData}
+                      submitQuote={submitQuote}
+                    />
+                  </div>
+                </motion.div>
+              )}
+            </>
           )}
         </motion.form>
       </div>
