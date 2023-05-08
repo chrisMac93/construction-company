@@ -14,12 +14,9 @@ export function calculateEstimate(formData, callback) {
   switch (formData.projectType) {
     case "interior":
       cost = calculateInteriorCost(
-        formData.interiorTier,
-        formData.interiorSqFootage,
-        formData.interiorTierCosts,
-        formData.includeDrywall,
-        formData.drywallSqFootage,
-        formData.drywallPricePerSqFoot
+        formData,
+        formData.lightingCost,
+        formData.plumbingCost,
       );
       break;
     case "exterior":

@@ -36,7 +36,7 @@ const Footer = () => {
               className="disabled:text-black/30 lg:px-2 [&.active]:text-black/90 dark:[&.active]:text-neutral-400"
             >
               <Image
-                src={logoImage || "/../../public/Images/site/MC_C_Logo.PNG"}
+                src={logoImage || "/../../public/Images/site/MC&C_Logo.PNG"}
                 alt="Logo"
                 width={250}
                 height={167}

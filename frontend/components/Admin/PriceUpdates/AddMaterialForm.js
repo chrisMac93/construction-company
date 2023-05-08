@@ -6,10 +6,10 @@ import styles from "../../../styles/Home.module.css";
 
 const AddMaterialForm = ({
   selectedTab,
+  selectedExteriorTab,
   selectedKitchenTab,
   materials,
   setMaterials,
-  getMaterialsRef,
 }) => {
   const [newMaterial, setNewMaterial] = useState({ name: "", price: null });
 
@@ -27,6 +27,9 @@ const AddMaterialForm = ({
             : selectedKitchenTab === "cabinets"
             ? "kitchenCabinetMaterials"
             : null;
+      } else if (selectedTab === "exterior") {
+        nestedMaterialType =
+          selectedExteriorTab === "roofing" ? "roofing" : "siding" ? "siding" : null;
       }
 
       materialsRef = await GetMaterialsRef(selectedTab, nestedMaterialType);
@@ -51,14 +54,16 @@ const AddMaterialForm = ({
       className="bg-neutral-700 p-6 rounded-md space-y-6"
     >
       <h3 className="text-2xl font-semibold mb-4 text-center">
-        {selectedTab === "interiorTiers"
-          ? "Add Interior Tier"
-          : selectedTab === "exteriorTiers"
-          ? "Add Exterior Tier"
+        {selectedTab === "exterior"
+          ? `Add Exterior ${
+              selectedExteriorTab === "roofing" ? "Roofing" : "Siding"
+            } Material`
           : selectedTab === "epoxyMaterials"
           ? "Add Epoxy Material"
           : selectedTab === "coatingsMaterials"
           ? "Add Coatings Material"
+          : selectedTab === "flooringMaterials"
+          ? "Add Flooring Material"
           : selectedTab === "deckMaterials"
           ? "Add Deck/Patio Material"
           : selectedTab === "kitchenMaterials"
@@ -67,13 +72,11 @@ const AddMaterialForm = ({
             } Material`
           : selectedTab === "concreteMaterials"
           ? "Add Concrete Material"
-          : "Add Flooring Material"}
+          : "Add Material"}
       </h3>
       <div>
         <label htmlFor="name" className="block mb-2">
-          {selectedTab === "interiorTiers" || selectedTab === "exteriorTiers"
-            ? "Tier Name:"
-            : "Material Name:"}
+          Material Name:
         </label>
         <input
           type="text"
@@ -89,9 +92,7 @@ const AddMaterialForm = ({
       </div>
       <div>
         <label htmlFor="price" className="block mb-2">
-          {selectedTab === "interiorTiers" || selectedTab === "exteriorTiers"
-            ? "Tier Price:"
-            : "Material Price:"}
+          Material Price:
         </label>
         <input
           type="number"
@@ -110,13 +111,11 @@ const AddMaterialForm = ({
         />
       </div>
       <button
-          type="submit"
-          className={`w-full p-3 rounded-md text-neutral-800 ${styles.mcBackColor} ${styles.backHov}`}
-        >
-          {selectedTab === "interiorTiers" || selectedTab === "exteriorTiers"
-            ? "Add Tier"
-            : "Add Material"}
-        </button>
+        type="submit"
+        className={`w-full p-3 rounded-md text-neutral-800 ${styles.mcBackColor} ${styles.backHov}`}
+      >
+        Add Material
+      </button>
     </form>
   );
 };

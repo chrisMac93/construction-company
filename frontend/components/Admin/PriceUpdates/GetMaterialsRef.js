@@ -36,6 +36,22 @@ const GetMaterialsRef = async (materialType, nestedMaterialType) => {
     }
   }
 
+  if (materialType === "exterior") {
+    const exteriorRef = collection(
+      db,
+      `priceUpdates/${priceUpdatesDocId}/${materialType}`
+    );
+    const exteriorSnapshot = await getDocs(exteriorRef);
+    const exteriorDocId = exteriorSnapshot.docs[0].id;
+
+    if (nestedMaterialType) {
+      return collection(
+        db,
+        `priceUpdates/${priceUpdatesDocId}/${materialType}/${exteriorDocId}/${nestedMaterialType}`
+      );
+    }
+  }
+
   return collection(db, `priceUpdates/${priceUpdatesDocId}/${materialType}`);
 };
 

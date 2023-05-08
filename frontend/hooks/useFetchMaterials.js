@@ -7,7 +7,10 @@ const useFetchMaterials = (
   setLighting,
   setCountertops,
   setIncluded,
-  setKitchenCabinets
+  setKitchenCabinets,
+  setRoofing,
+  setSiding,
+  setLandscaping
 ) => {
   async function fetchMaterials(materialType) {
     let unsubscribeMaterials,
@@ -15,7 +18,10 @@ const useFetchMaterials = (
       unsubscribeLighting,
       unsubscribeCountertops,
       unsubscribeIncluded,
-      unsubscribeCabinets;
+      unsubscribeCabinets,
+      unsubscribeRoofing,
+      unsubscribeSiding,
+      unsubscribeLandscaping;
 
     const materialsRef = await GetMaterialsRef(materialType);
     unsubscribeMaterials = onSnapshot(materialsRef, (snapshot) => {
@@ -91,6 +97,32 @@ const useFetchMaterials = (
         }));
         setKitchenCabinets(cabinetData);
       });
+    } else if (materialType == "exterior") {
+      const roofingRef = await GetMaterialsRef(materialType, "roofing");
+      const sidingRef = await GetMaterialsRef(materialType, "siding");
+      const landscapingRef = await GetMaterialsRef(materialType, "landscaping");
+
+      unsubscribeRoofing = onSnapshot(roofingRef, (snapshot) => {
+        const roofingData = snapshot.docs.map((doc) => ({
+          id: doc.id,
+          ...doc.data(),
+        }));
+        setRoofing(roofingData);
+      });
+      unsubscribeSiding = onSnapshot(sidingRef, (snapshot) => {
+        const sidingData = snapshot.docs.map((doc) => ({
+          id: doc.id,
+          ...doc.data(),
+        }));
+        setSiding(sidingData);
+      });
+      unsubscribeLandscaping = onSnapshot(landscapingRef, (snapshot) => {
+        const landscapingData = snapshot.docs.map((doc) => ({
+          id: doc.id,
+          ...doc.data(),
+        }));
+        setLandscaping(landscapingData);
+      });
     }
 
     // Return a cleanup function
@@ -101,8 +133,11 @@ const useFetchMaterials = (
       unsubscribeCountertops && unsubscribeCountertops();
       unsubscribeIncluded && unsubscribeIncluded();
       unsubscribeCabinets && unsubscribeCabinets();
+      unsubscribeRoofing && unsubscribeRoofing();
+      unsubscribeSiding && unsubscribeSiding();
+      unsubscribeLandscaping && unsubscribeLandscaping();
     };
-  };
+  }
 
   return fetchMaterials;
 };

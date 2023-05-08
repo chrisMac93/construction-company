@@ -1,17 +1,17 @@
 import { useState, useEffect } from "react";
 import Image from "next/legacy/image";
+import { InView } from "react-intersection-observer";
 import Link from "next/link";
-import SwiperCore, { Navigation, Autoplay } from "swiper";
+import SwiperCore, { Pagination, Autoplay } from "swiper";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { firestore } from "../../lib/firebase";
 import { collection, getDocs } from "firebase/firestore";
 
 import "swiper/css";
-import "swiper/css/navigation";
 import "swiper/css/pagination";
 import "react-responsive-carousel/lib/styles/carousel.min.css";
 
-SwiperCore.use([Navigation, Autoplay]);
+SwiperCore.use([Pagination, Autoplay]);
 
 const Gallery = () => {
   const [images, setImages] = useState([]);
@@ -21,7 +21,7 @@ const Gallery = () => {
       const imageCollection = collection(firestore, "images");
       const imageSnapshot = await getDocs(imageCollection);
       const filteredImageUrls = imageSnapshot.docs
-        .filter((doc) => !doc.data().title.endsWith("#"))
+        .filter((doc) => doc.data().imageType.includes("Gallery"))
         .map((doc) => doc.data().url);
 
       setImages(filteredImageUrls);
@@ -43,8 +43,21 @@ const Gallery = () => {
       <Swiper
         spaceBetween={10}
         slidesPerView={1}
-        navigation={false}
         autoplay={{ delay: 3000, disableOnInteraction: false }}
+        pagination={{
+          type: "bullets",
+          clickable: true,
+          el: ".swiperPagination",
+          bulletClass: "swiperPaginationBullet",
+          bulletActiveClass: "swiperPaginationBulletActive",
+          renderBullet: (index, className) => {
+            return `<span class="${className}" style="background-color: ${
+              className.includes("swiperPaginationBulletActive")
+                ? "#B6B024"
+                : "rgba(255, 255, 255, 0.5)"
+            }; width: 10px; height: 10px; margin: 5px;"></span>`;
+          },
+        }}
         breakpoints={{
           640: {
             slidesPerView: 3,
@@ -62,18 +75,21 @@ const Gallery = () => {
       >
         {images.map((image, index) => (
           <SwiperSlide key={index} className="w-full">
-            <div className="relative w-full h-64 md:h-80 overflow-hidden rounded-lg transition-transform duration-300 ease-in-out transform hover:scale-110">
-              <Image
-                src={image}
-                alt="Gallery Image"
-                layout="fill"
-                objectFit="cover"
-                className="rounded-lg"
-              />
+            <div className="relative w-full h-64 md:h-80 overflow-hidden rounded-lg transition-transform duration-300 ease-in-out transform hover:scale-110 ">
+              <InView as="div" triggerOnce>
+                <Image
+                  src={image}
+                  alt="Gallery Image"
+                  layout="fill"
+                  objectFit="cover"
+                  className="rounded-lg"
+                />
+              </InView>
             </div>
           </SwiperSlide>
         ))}
       </Swiper>
+      <div className="swiperPagination"></div>
       <div className="flex justify-center">
         <div className="flex flex-col items-center justify-center mt-24">
           <Link

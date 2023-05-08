@@ -3,8 +3,8 @@ import styles from "../../../styles/Home.module.css";
 
 const Tabs = ({ selectedTab, onTabChange }) => {
   const tabs = [
-    { label: "Interior", value: "interiorTiers" },
-    { label: "Exterior", value: "exteriorTiers" },
+    { label: "Interior", value: "interior" },
+    { label: "Exterior", value: "exterior" },
     { label: "Flooring", value: "flooringMaterials" },
     { label: "Epoxy", value: "epoxyMaterials" },
     { label: "Coatings", value: "coatingsMaterials" },

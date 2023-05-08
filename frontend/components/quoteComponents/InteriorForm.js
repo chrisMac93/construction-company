@@ -3,31 +3,51 @@ import { getFirestore, collection, getDocs } from "firebase/firestore";
 
 import { calculateDrywallCost } from "./drywallOption";
 import DrywallOption from "./drywallOption";
+import FlooringForm from "./FlooringForm";
+import { calculateFlooringCost } from "./FlooringForm";
 import { renderSwitch } from "./RenderSwitch";
 
-export const calculateInteriorCost = (
-  interiorTier,
-  interiorSqFootage,
-  interiorTierCosts,
-  includeDrywall,
-  drywallPricePerSqFoot,
-  drywallSqFootage
-) => {
-  const costPerSqFoot = interiorTierCosts[interiorTier];
-  const totalCost = costPerSqFoot * interiorSqFootage;
+import styles from "../../styles/Home.module.css";
 
-  if (includeDrywall) {
-    return totalCost + calculateDrywallCost(drywallPricePerSqFoot, drywallSqFootage);
+export const calculateInteriorCost = (formData, lightingCost, plumbingCost) => {
+  let totalCost = 0;
+
+  if (formData.interiorFlooringIncluded) {
+    totalCost += calculateFlooringCost(
+      formData.flooringMaterial,
+      formData.flooringSqFootage,
+      formData.flooringMaterialCosts
+    );
   }
+
+  if (formData.interiorDrywallIncluded) {
+    totalCost += calculateDrywallCost(
+      formData.drywallPricePerSqFoot,
+      formData.drywallSqFootage
+    );
+  }
+
+  if (formData.includeLighting) {
+    totalCost += lightingCost;
+  }
+
+  console.log("lightingCost: ", lightingCost);
+
+  if (formData.includePlumbing) {
+    totalCost += plumbingCost;
+  }
+
+  console.log("plumbingCost: ", plumbingCost);
 
   return totalCost;
 };
 
 const InteriorForm = ({ handleChange, formData }) => {
-  const [interiorTiers, setInteriorTiers] = useState([]);
+  const [lightingCost, setLightingCost] = useState(0);
+  const [plumbingCost, setPlumbingCost] = useState(0);
 
   useEffect(() => {
-    const fetchInteriorTiers = async () => {
+    const fetchInteriorServices = async () => {
       const db = getFirestore();
       const priceUpdatesCollectionRef = collection(db, "priceUpdates");
       const priceUpdatesSnapshot = await getDocs(priceUpdatesCollectionRef);
@@ -35,78 +55,126 @@ const InteriorForm = ({ handleChange, formData }) => {
 
       const interiorCollectionRef = collection(
         db,
-        `priceUpdates/${priceUpdatesDocId}/interiorTiers`
+        `priceUpdates/${priceUpdatesDocId}/interior`
       );
       const interiorSnapshot = await getDocs(interiorCollectionRef);
-      const tiers = [];
+      const services = [];
       const costs = {};
 
       interiorSnapshot.forEach((doc) => {
-        const tierData = doc.data();
-        tiers.push(tierData.name);
-        costs[tierData.name] = tierData.price;
+        const serviceTypeData = doc.data();
+        services.push(serviceTypeData.name);
+        costs[serviceTypeData.name] = serviceTypeData.price;
       });
 
-      setInteriorTiers(tiers);
-      handleChange({ target: { name: "interiorTierCosts", value: costs } });
+      setLightingCost(costs.lighting);
+      setPlumbingCost(costs.plumbing);
+
+      console.log("lightingCost: ", lightingCost);
+      console.log("plumbingCost: ", plumbingCost);
     };
 
-    fetchInteriorTiers();
+    fetchInteriorServices();
   }, []);
-  
+
+  const handleSwitchChange = (e) => {
+    const { name, value, cost } = e.target;
+    let updatedCost = value ? parseInt(cost) : 0;
+
+    if (name === "includeLighting") {
+      handleChange({
+        target: {
+          name: "lightingCost",
+          value: updatedCost,
+        },
+      });
+    }
+
+    if (name === "includePlumbing") {
+      handleChange({
+        target: {
+          name: "plumbingCost",
+          value: updatedCost,
+        },
+      });
+    }
+
+    handleChange(e);
+  };
 
   return (
     <>
-      <div>
-        <label htmlFor="interiorTier" className="block mb-2">
-          Tier
-        </label>
-        <select
-          name="interiorTier"
-          id="interiorTier"
-          className="w-full p-3 bg-neutral-700 rounded-md text-neutral-100"
-          value={formData.interiorTier}
-          onChange={handleChange}
-        >
-          <option value="">Select a Tier</option>
-          {interiorTiers.map((type) => (
-            <option key={type} value={type}>
-              {type}
-            </option>
-          ))}
-        </select>
-      </div>
-      <div className="form-group">
-        <label htmlFor="interiorSqFootage" className="block mb-2">
-          Square Footage
-        </label>
-        <input
-          type="number"
-          className="w-full p-3 bg-neutral-700 rounded-md text-neutral-100"
-          id="interiorSqFootage"
-          name="interiorSqFootage"
-          value={formData.interiorSqFootage}
-          onChange={handleChange}
-        />
+      <div className="flex justify-center">
+        <h1 className={`text-lg font-bold ${styles.mcColor}`}>
+          Please check any options you would like to be included in your quote
+        </h1>
       </div>
       <div className="form-group mt-4">
         <label
-          htmlFor="includeDrywall"
+          htmlFor="interiorFlooringIncluded"
           className="flex items-center cursor-pointer"
         >
           {renderSwitch(
-            "includeDrywall",
-            "includeDrywall",
-            formData.includeDrywall,
-            handleChange,
-            formData.drywallPricePerSqFoot
+            "interiorFlooringIncluded",
+            "interiorFlooringIncluded",
+            formData.interiorFlooringIncluded,
+            handleChange
           )}
-          <span className="ml-3 mb-1 text-neutral-100 font-semibold">Do You Need Drywall?</span>
+          <span className="ml-3 mb-1 text-neutral-100 font-semibold">
+            Do You Need Flooring?
+          </span>
         </label>
       </div>
-      {formData.includeDrywall && (
+      {formData.interiorFlooringIncluded && (
+        <FlooringForm handleChange={handleChange} formData={formData} />
+      )}
+      <div className="form-group mt-4">
+        <label
+          htmlFor="interiorDrywallIncluded"
+          className="flex items-center cursor-pointer"
+        >
+          {renderSwitch(
+            "interiorDrywallIncluded",
+            "interiorDrywallIncluded",
+            Boolean(formData.interiorDrywallIncluded),
+            handleChange
+          )}
+          <span className="ml-3 mb-1 text-neutral-100 font-semibold">
+            Do You Need Drywall?
+          </span>
+        </label>
+      </div>
+      {formData.interiorDrywallIncluded && (
         <DrywallOption handleChange={handleChange} formData={formData} />
       )}
+
+      <div>
+        {renderSwitch(
+          "includeLighting",
+          "includeLighting",
+          formData.includeLighting,
+          handleSwitchChange,
+          lightingCost
+        )}
+        <span className="ml-3 mb-1 text-neutral-100 font-semibold">
+          Do You Need Lighting?
+        </span>
+      </div>
+      <div>
+        {renderSwitch(
+          "includePlumbing",
+          "includePlumbing",
+          formData.includePlumbing,
+          handleSwitchChange,
+          plumbingCost
+        )}
+        <span className="ml-3 mb-1 text-neutral-100 font-semibold">
+          Do You Need Plumbing?{" "}
+          <span className={`font-bold italic ${styles.mcColor}`}>
+            (this service will be subcontracted)
+          </span>
+        </span>
+      </div>
     </>
   );
 };

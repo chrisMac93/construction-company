@@ -50,7 +50,7 @@ const Testimonials = () => {
       </h1>
       <Swiper
         spaceBetween={30}
-        loop={true}
+        loop={false}
         autoplay={{ delay: 5000, disableOnInteraction: false }}
         className="text-neutral-100"
         slidesPerView={1}

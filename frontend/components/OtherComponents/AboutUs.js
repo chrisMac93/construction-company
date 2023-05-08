@@ -64,7 +64,7 @@ const AboutUs = () => {
             </div>
             <div>
               <Image
-                src={rightImageUrl || "/gallery/Gallery/estimate.jpg"}
+                src={rightImageUrl || "../../public/Images/site/quote.jpg"}
                 width={500}
                 height={500}
                 alt="A picture"

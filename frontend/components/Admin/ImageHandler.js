@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import Image from "next/image";
+import { InView } from "react-intersection-observer";
 import {
   ref,
   uploadBytes,
@@ -38,8 +39,15 @@ const ImageHandler = () => {
 
     try {
       const storageRef = ref(storage, `images/${file.name}`);
-      await uploadBytes(storageRef, file);
-      console.log("Upload to storage successful.");
+      const metadata = {
+        contentType: file.type,
+        cacheControl: "public, max-age=86400",
+      };
+      await uploadBytes(storageRef, file, metadata);
+      console.log(
+        "Upload to storage successful with cache control:",
+        metadata.cacheControl
+      );
 
       const imageURL = await getDownloadURL(storageRef);
       console.log("Download URL retrieved:", imageURL);
@@ -313,14 +321,16 @@ const ImageHandler = () => {
                   : ""
               }`}
             >
-              <div className="w-24 h-48">
-                <Image
-                  src={url}
-                  alt=""
-                  fill
-                  style={{ objectFit: "cover" }}
-                  className="rounded-lg"
-                />
+              <div className="w-24 h-48 ">
+                <InView as="div" triggerOnce>
+                  <Image
+                    src={url}
+                    alt=""
+                    fill
+                    style={{ objectFit: "cover" }}
+                    className="rounded-lg overflow-hidden"
+                  />
+                </InView>
               </div>
               {removeImagesMode && selectedImages.includes(url) && (
                 <div className="absolute top-0 left-0 w-full h-full bg-red-300 opacity-50"></div>

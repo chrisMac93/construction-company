@@ -7,6 +7,8 @@ import FlooringForm from "./FlooringForm";
 import { calculateFlooringCost } from "./FlooringForm";
 import { renderSwitch } from "./RenderSwitch";
 
+import styles from "../../styles/Home.module.css";
+
 export const calculateKitchenCost = (
   formData,
   countertopMaterial,
@@ -242,7 +244,7 @@ const KitchenForm = ({ handleChange, formData }) => {
   return (
     <>
       <div className="flex justify-center">
-        <h1 className="text-lg font-bold">
+      <h1 className={`text-lg font-bold ${styles.mcColor}`}>
           Please check any options you would like to be included in your quote
         </h1>
       </div>
@@ -395,7 +397,10 @@ const KitchenForm = ({ handleChange, formData }) => {
           plumbingCost
         )}
         <label htmlFor="kitchenPlumbing" className="ml-1 text-lg">
-          Plumbing (this service will be subcontracted)
+          Plumbing{" "}
+          <span className={`font-bold italic ${styles.mcColor}`}>
+            (this service will be subcontracted)
+          </span>
         </label>
       </div>
       <div className="form-control">

@@ -1,4 +1,6 @@
 import { useState, useEffect } from "react";
+import Image from "next/image";
+import { InView } from "react-intersection-observer";
 import { Swiper, SwiperSlide } from "swiper/react";
 import SwiperCore, { Autoplay } from "swiper";
 import "swiper/css";
@@ -51,7 +53,7 @@ const Services = () => {
         </h2>
         <Swiper
           spaceBetween={30}
-          loop={true}
+          loop={false}
           autoplay={{ delay: 5000, disableOnInteraction: false }}
           className="text-neutral-100"
           slidesPerView={1}
@@ -73,11 +75,15 @@ const Services = () => {
             <SwiperSlide key={index}>
               <div className="flex flex-col items-center justify-center max-w-md mx-auto">
                 <div className="relative w-full h-48 overflow-hidden rounded-md mb-4 transition-transform duration-300 ease-in-out transform hover:scale-110">
-                  <img
-                    src={service.image}
-                    alt={service.title}
-                    className="absolute inset-0 w-full h-full object-cover rounded-md"
-                  />
+                  <InView as="div" triggerOnce>
+                    <Image
+                      src={service.image}
+                      alt={service.title}
+                      fill
+                      style={{ objectFit: "cover" }}
+                      className="absolute inset-0 w-full h-full object-cover rounded-md"
+                    />
+                  </InView>
                 </div>
                 <div className="text-center">
                   <h3 className="text-xl font-semibold mb-2">

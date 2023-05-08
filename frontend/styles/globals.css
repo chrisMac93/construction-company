@@ -26,6 +26,28 @@ body {
   background-size: cover;
 }
 
+.swiperPagination {
+  position: relative !important;
+  bottom: auto !important;
+  left: 0 !important;
+  width: 100%;
+  text-align: center;
+  margin-top: 16px;
+}
+
+.swiperPaginationBullet {
+  background-color: rgba(255, 255, 255, 0.5) !important;
+  width: 10px;
+  height: 10px;
+  opacity: 1 !important;
+  margin: 5px;
+}
+
+.swiperPaginationBulletActive {
+  background-color: #B6B024 !important;
+}
+
+
 @layer components {
   .tab-container {
     @apply overflow-x-auto whitespace-nowrap;

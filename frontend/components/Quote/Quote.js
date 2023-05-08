@@ -11,9 +11,12 @@ import ProjectTypes from "./ProjectTypes";
 const Quote = () => {
   const [formData, setFormData] = useState({
     // InteriorForm attributes
-    interiorTier: "",
-    interiorSqFootage: "",
-    interiorTierCosts: {},
+    lightingCost: 0,
+    plumbingCost: 0,
+    includeLighting: false,
+    includePlumbing: false,
+    interiorDrywallIncluded: false,
+    interiorFlooringIncluded: false,
     //ExteriorForm attributes
     exteriorTier: "",
     exteriorSqFootage: "",
@@ -107,11 +110,12 @@ const Quote = () => {
   useEffect(() => {
     const relevantAttributes = {
       interior: [
-        "interiorTier",
-        "interiorSqFootage",
-        "includedDrywall",
+        "includeLighting",
+        "includePlumbing",        
+        "interiorFlooringIncluded",
+        "flooringSqFootage",
+        "interiorDrywallIncluded",
         "drywallSqFootage",
-        "drywallPricePerSqFoot",
       ],
       exterior: ["exteriorTier", "exteriorSqFootage"],
       flooring: ["flooringMaterial", "flooringSqFootage"],
