@@ -10,7 +10,12 @@ const useFetchMaterials = (
   setKitchenCabinets,
   setRoofing,
   setSiding,
-  setLandscaping
+  setLandscaping,
+  setSinkTiers,
+  setToiletTiers,
+  setShowerTubTiers,
+  setBathLighting,
+  setBathPlumbing
 ) => {
   async function fetchMaterials(materialType) {
     let unsubscribeMaterials,
@@ -21,7 +26,12 @@ const useFetchMaterials = (
       unsubscribeCabinets,
       unsubscribeRoofing,
       unsubscribeSiding,
-      unsubscribeLandscaping;
+      unsubscribeLandscaping,
+      unsubscribeSinkTiers,
+      unsubscribeToiletTiers,
+      unsubscribeShowerTubTiers,
+      unsubscribeBathLighting,
+      unsubscribeBathPlumbing;
 
     const materialsRef = await GetMaterialsRef(materialType);
     unsubscribeMaterials = onSnapshot(materialsRef, (snapshot) => {
@@ -123,6 +133,65 @@ const useFetchMaterials = (
         }));
         setLandscaping(landscapingData);
       });
+    } else if (materialType == "bathroomTiers") {
+      const sinkTiersRef = await GetMaterialsRef(materialType, "sinkType");
+
+      const toiletTiersRef = await GetMaterialsRef(materialType, "toiletType");
+
+      const showerTubTiersRef = await GetMaterialsRef(
+        materialType,
+        "showerTubType"
+      );
+
+      const bathLightingRef = await GetMaterialsRef(
+        materialType,
+        "bathLighting"
+      );
+
+      const bathPlumbingRef = await GetMaterialsRef(
+        materialType,
+        "bathPlumbing"
+      );
+
+      unsubscribeSinkTiers = onSnapshot(sinkTiersRef, (snapshot) => {
+        const sinkTiersData = snapshot.docs.map((doc) => ({
+          id: doc.id,
+          ...doc.data(),
+        }));
+        setSinkTiers(sinkTiersData);
+      });
+
+      unsubscribeToiletTiers = onSnapshot(toiletTiersRef, (snapshot) => {
+        const toiletTiersData = snapshot.docs.map((doc) => ({
+          id: doc.id,
+          ...doc.data(),
+        }));
+        setToiletTiers(toiletTiersData);
+      });
+
+      unsubscribeShowerTubTiers = onSnapshot(showerTubTiersRef, (snapshot) => {
+        const showerTubTiersData = snapshot.docs.map((doc) => ({
+          id: doc.id,
+          ...doc.data(),
+        }));
+        setShowerTubTiers(showerTubTiersData);
+      });
+
+      unsubscribeBathLighting = onSnapshot(bathLightingRef, (snapshot) => {
+        const bathLightingData = snapshot.docs.map((doc) => ({
+          id: doc.id,
+          ...doc.data(),
+        }));
+        setBathLighting(bathLightingData);
+      });
+
+      unsubscribeBathPlumbing = onSnapshot(bathPlumbingRef, (snapshot) => {
+        const bathPlumbingData = snapshot.docs.map((doc) => ({
+          id: doc.id,
+          ...doc.data(),
+        }));
+        setBathPlumbing(bathPlumbingData);
+      });
     }
 
     // Return a cleanup function
@@ -136,6 +205,11 @@ const useFetchMaterials = (
       unsubscribeRoofing && unsubscribeRoofing();
       unsubscribeSiding && unsubscribeSiding();
       unsubscribeLandscaping && unsubscribeLandscaping();
+      unsubscribeSinkTiers && unsubscribeSinkTiers();
+      unsubscribeToiletTiers && unsubscribeToiletTiers();
+      unsubscribeShowerTubTiers && unsubscribeShowerTubTiers();
+      unsubscribeBathLighting && unsubscribeBathLighting();
+      unsubscribeBathPlumbing && unsubscribeBathPlumbing();
     };
   }
 

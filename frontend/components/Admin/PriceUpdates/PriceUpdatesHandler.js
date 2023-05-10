@@ -4,9 +4,10 @@ import GetMaterialsRef from "./GetMaterialsRef";
 import useFetchMaterials from "../../../hooks/useFetchMaterials";
 import { DeckPatioExtras } from "./DeckPatioExtras";
 import MaterialListItem from "./MaterialListItem";
-import Tabs from "./Tabs";
-import ExteriorMaterialTabs from "./ExteriorMaterialTabs";
-import KitchenMaterialTabs from "./KitchenMaterialTabs";
+import Tabs from "./Tabs/Tabs";
+import ExteriorMaterialTabs from "./Tabs/ExteriorMaterialTabs";
+import KitchenMaterialTabs from "./Tabs/KitchenMaterialTabs";
+import BathroomTiersTabs from "./Tabs/BathroomTiersTabs";
 import AddMaterialForm from "./AddMaterialForm";
 
 const PriceUpdates = () => {
@@ -18,11 +19,17 @@ const PriceUpdates = () => {
   const [siding, setSiding] = useState([]);
   const [landscaping, setLandscaping] = useState([]);
   const [selectedExteriorTab, setSelectedExteriorTab] = useState("roofing");
+  const [sinkTiers, setSinkTiers] = useState([]);
+  const [toiletTiers, setToiletTiers] = useState([]);
+  const [showerTubTiers, setShowerTubTiers] = useState([]);
+  const [bathLighting, setBathLighting] = useState([]);
+  const [bathPlumbing, setBathPlumbing] = useState([]);
+  const [selectedBathroomTab, setSelectedBathroomTab] =
+    useState("showerTubTiers");
   const [countertops, setCountertops] = useState([]);
   const [included, setIncluded] = useState([]);
   const [kitchenCabinets, setKitchenCabinets] = useState([]);
   const [selectedKitchenTab, setSelectedKitchenTab] = useState("countertops");
-
 
   const fetchMaterials = useFetchMaterials(
     setMaterials,
@@ -33,7 +40,12 @@ const PriceUpdates = () => {
     setKitchenCabinets,
     setRoofing,
     setSiding,
-    setLandscaping
+    setLandscaping,
+    setSinkTiers,
+    setToiletTiers,
+    setShowerTubTiers,
+    setBathLighting,
+    setBathPlumbing
   );
 
   useEffect(() => {
@@ -103,6 +115,16 @@ const PriceUpdates = () => {
         setSiding(updateState(siding));
       } else if (nestedMaterialType === "landscaping") {
         setLandscaping(updateState(landscaping));
+      } else if (nestedMaterialType === "sinkType") {
+        setSinkTiers(updateState(sinkTiers));
+      } else if (nestedMaterialType === "toiletType") {
+        setToiletTiers(updateState(toiletTiers));
+      } else if (nestedMaterialType === "showerTubType") {
+        setShowerTubTiers(updateState(showerTubTiers));
+      } else if (nestedMaterialType === "bathLighting") {
+        setBathLighting(updateState(bathLighting));
+      } else if (nestedMaterialType === "bathPlumbing") {
+        setBathPlumbing(updateState(bathPlumbing));
       } else if (nestedMaterialType === "countertopMaterials") {
         setCountertops(updateState(countertops));
       } else if (nestedMaterialType === "included") {
@@ -126,7 +148,7 @@ const PriceUpdates = () => {
       {/* {renderTabs()} */}
       <Tabs selectedTab={selectedTab} onTabChange={handleTabChange} />
       {/* Add Material Form */}
-      {selectedTab !== "interior" && (
+      {selectedTab !== "interior" && selectedTab !== "bathroomTiers" && selectedTab !== "drywallOption" && (
         <AddMaterialForm
           selectedTab={selectedTab}
           selectedKitchenTab={selectedKitchenTab}
@@ -158,10 +180,6 @@ const PriceUpdates = () => {
       )}
       {selectedTab === "kitchenMaterials" && (
         <div>
-          <KitchenMaterialTabs
-            selectedKitchenTab={selectedKitchenTab}
-            onKitchenTabChange={setSelectedKitchenTab}
-          />
           <h3 className="text-2xl font-semibold mt-8 mb-4 text-center">
             Included Kitchen Add-ons
           </h3>
@@ -192,10 +210,6 @@ const PriceUpdates = () => {
       )}
       {selectedTab === "exterior" && (
         <div>
-          <ExteriorMaterialTabs
-            selectedExteriorTab={selectedExteriorTab}
-            onExteriorTabChange={setSelectedExteriorTab}
-          />
           <h3 className="text-2xl font-semibold mt-8 mb-4 text-center">
             landscaping
           </h3>
@@ -228,12 +242,79 @@ const PriceUpdates = () => {
           </ul>
         </div>
       )}
+
+      {selectedTab === "bathroomTiers" && (
+        <div>
+          <h3 className="text-2xl font-semibold mt-8 mb-4 text-center">
+            Lighting
+          </h3>
+          <ul className="space-y-4">
+            {bathLighting.map((item) => (
+              <li
+                key={item.id}
+                className="bg-neutral-700 p-4 rounded-md flex justify-between items-center"
+              >
+                <span>
+                  {item.name} - ${item.price}
+                </span>
+                <div className="flex">
+                  <input
+                    type="number"
+                    step="any"
+                    value={item.price}
+                    onChange={(e) =>
+                      handleUpdateMaterial(
+                        item.id,
+                        e.target.value,
+                        "bathLighting"
+                      )
+                    }
+                    className="w-full p-3 bg-neutral-600 rounded-md text-neutral-100 mr-4"
+                  />
+                </div>
+              </li>
+            ))}
+          </ul>
+          <h3 className="text-2xl font-semibold mt-8 mb-4 text-center">
+            Plumbing
+          </h3>
+          <ul className="space-y-4">
+            {bathPlumbing.map((item) => (
+              <li
+                key={item.id}
+                className="bg-neutral-700 p-4 rounded-md flex justify-between items-center"
+              >
+                <span>
+                  {item.name} - ${item.price}
+                </span>
+                <div className="flex">
+                  <input
+                    type="number"
+                    step="any"
+                    value={item.price}
+                    onChange={(e) =>
+                      handleUpdateMaterial(
+                        item.id,
+                        e.target.value,
+                        "bathPlumbing"
+                      )
+                    }
+                    className="w-full p-3 bg-neutral-600 rounded-md text-neutral-100 mr-4"
+                  />
+                </div>
+              </li>
+            ))}
+          </ul>
+        </div>
+      )}
       {/* Material List */}
       <h3 className="text-2xl font-semibold my-8 text-center">
         {selectedTab === "interior"
           ? "Interior"
           : selectedTab === "exterior"
           ? "Exterior"
+          : selectedTab === "drywallOption"
+          ? "Drywall"
           : selectedTab === "epoxyMaterials"
           ? "Epoxy"
           : selectedTab === "coatingsMaterials"
@@ -242,85 +323,158 @@ const PriceUpdates = () => {
           ? "Deck/Patio"
           : selectedTab === "kitchenMaterials"
           ? "Kitchen"
+          : selectedTab === "bathroomTiers"
+          ? "Bathroom"
           : selectedTab === "concreteMaterials"
           ? "Concrete"
           : "Flooring"}
       </h3>
+      {selectedTab === "kitchenMaterials" && (
+        <KitchenMaterialTabs
+          selectedKitchenTab={selectedKitchenTab}
+          onKitchenTabChange={setSelectedKitchenTab}
+        />
+      )}
+      {selectedTab === "exterior" && (
+        <ExteriorMaterialTabs
+          selectedExteriorTab={selectedExteriorTab}
+          onExteriorTabChange={setSelectedExteriorTab}
+        />
+      )}
+      {selectedTab === "bathroomTiers" && (
+        <BathroomTiersTabs
+          selectedBathroomTab={selectedBathroomTab}
+          onBathroomTabChange={setSelectedBathroomTab}
+        />
+      )}
       <ul className="space-y-4">
         {selectedTab === "kitchenMaterials" ? (
           selectedKitchenTab === "countertops" ? (
-            countertops.map((material) => (
-              <MaterialListItem
-                key={material.id}
-                material={material}
-                handleUpdateMaterial={(id, value) =>
-                  handleUpdateMaterial(id, value, "countertopMaterials")
-                }
-                handleDeleteMaterial={(id) =>
-                  handleDeleteMaterial(id, "countertopMaterials")
-                }
-              />
-            ))
+            countertops
+              .sort((a, b) => a.price - b.price)
+              .map((material) => (
+                <MaterialListItem
+                  key={material.id}
+                  material={material}
+                  handleUpdateMaterial={(id, value) =>
+                    handleUpdateMaterial(id, value, "countertopMaterials")
+                  }
+                  handleDeleteMaterial={(id) =>
+                    handleDeleteMaterial(id, "countertopMaterials")
+                  }
+                  showDeleteButton
+                />
+              ))
           ) : (
-            kitchenCabinets.map((material) => (
-              <MaterialListItem
-                key={material.id}
-                material={material}
-                handleUpdateMaterial={(id, value) =>
-                  handleUpdateMaterial(id, value, "kitchenCabinetMaterials")
-                }
-                handleDeleteMaterial={(id) =>
-                  handleDeleteMaterial(id, "kitchenCabinetMaterials")
-                }
-              />
-            ))
+            kitchenCabinets
+              .sort((a, b) => a.price - b.price)
+              .map((material) => (
+                <MaterialListItem
+                  key={material.id}
+                  material={material}
+                  handleUpdateMaterial={(id, value) =>
+                    handleUpdateMaterial(id, value, "kitchenCabinetMaterials")
+                  }
+                  handleDeleteMaterial={(id) =>
+                    handleDeleteMaterial(id, "kitchenCabinetMaterials")
+                  }
+                  showDeleteButton
+                />
+              ))
+          )
+        ) : selectedTab === "bathroomTiers" ? (
+          selectedBathroomTab === "sinkType" ? (
+            sinkTiers
+              .sort((a, b) => a.price - b.price)
+              .map((material) => (
+                <MaterialListItem
+                  key={material.id}
+                  material={material}
+                  handleUpdateMaterial={(id, value) =>
+                    handleUpdateMaterial(id, value, "sinkType")
+                  }
+                />
+              ))
+          ) : selectedBathroomTab === "showerTubType" ? (
+            showerTubTiers
+              .sort((a, b) => a.price - b.price)
+              .map((material) => (
+                <MaterialListItem
+                  key={material.id}
+                  material={material}
+                  handleUpdateMaterial={(id, value) =>
+                    handleUpdateMaterial(id, value, "showerTubType")
+                  }
+                />
+              ))
+          ) : (
+            toiletTiers
+              .sort((a, b) => a.price - b.price)
+              .map((material) => (
+                <MaterialListItem
+                  key={material.id}
+                  material={material}
+                  handleUpdateMaterial={(id, value) =>
+                    handleUpdateMaterial(id, value, "toiletType")
+                  }
+                />
+              ))
           )
         ) : selectedTab === "exterior" ? (
           selectedExteriorTab === "roofing" ? (
-            roofing.map((material) => (
-              <MaterialListItem
-                key={material.id}
-                material={material}
-                handleUpdateMaterial={(id, value) =>
-                  handleUpdateMaterial(id, value, "roofing")
-                }
-                handleDeleteMaterial={(id) =>
-                  handleDeleteMaterial(id, "roofing")
-                }
-              />
-            ))
+            roofing
+              .sort((a, b) => a.price - b.price)
+              .map((material) => (
+                <MaterialListItem
+                  key={material.id}
+                  material={material}
+                  handleUpdateMaterial={(id, value) =>
+                    handleUpdateMaterial(id, value, "roofing")
+                  }
+                  handleDeleteMaterial={(id) =>
+                    handleDeleteMaterial(id, "roofing")
+                  }
+                  showDeleteButton={selectedTab !== "bathroomTiers"}
+                />
+              ))
           ) : selectedExteriorTab === "siding" ? (
-            siding.map((material) => (
-              <MaterialListItem
-                key={material.id}
-                material={material}
-                handleUpdateMaterial={(id, value) =>
-                  handleUpdateMaterial(id, value, "siding")
-                }
-                handleDeleteMaterial={(id) =>
-                  handleDeleteMaterial(id, "siding")
-                }
-              />
-            ))
+            siding
+              .sort((a, b) => a.price - b.price)
+              .map((material) => (
+                <MaterialListItem
+                  key={material.id}
+                  material={material}
+                  handleUpdateMaterial={(id, value) =>
+                    handleUpdateMaterial(id, value, "siding")
+                  }
+                  handleDeleteMaterial={(id) =>
+                    handleDeleteMaterial(id, "siding")
+                  }
+                  showDeleteButton={selectedTab !== "bathroomTiers"}
+                />
+              ))
           ) : (
             <> </>
           )
         ) : (
-          materials.map((material) => (
-            <MaterialListItem
-              key={material.id}
-              material={material}
-              handleUpdateMaterial={(id, value) =>
-                handleUpdateMaterial(id, value)
-              }
-              handleDeleteMaterial={(id) =>
-                handleDeleteMaterial(
-                  id,
-                  selectedTab === "deckMaterials" ? "deckingMaterials" : null
-                )
-              }
-            />
-          ))
+          materials
+            .sort((a, b) => a.price - b.price)
+            .map((material) => (
+              <MaterialListItem
+                key={material.id}
+                material={material}
+                handleUpdateMaterial={(id, value) =>
+                  handleUpdateMaterial(id, value)
+                }
+                handleDeleteMaterial={(id) =>
+                  handleDeleteMaterial(
+                    id,
+                    selectedTab === "deckMaterials" ? "deckingMaterials" : null
+                  )
+                }
+                showDeleteButton={selectedTab !== "interior" && selectedTab !== "drywallOption"}
+              />
+            ))
         )}
       </ul>
     </>

@@ -52,6 +52,22 @@ const GetMaterialsRef = async (materialType, nestedMaterialType) => {
     }
   }
 
+  if (materialType === "bathroomTiers") {
+    const bathroomTiersRef = collection(
+      db,
+      `priceUpdates/${priceUpdatesDocId}/${materialType}`
+    );
+    const bathroomTiersSnapshot = await getDocs(bathroomTiersRef);
+    const bathroomTiersDocId = bathroomTiersSnapshot.docs[0].id;
+
+    if (nestedMaterialType) {
+      return collection(
+        db,
+        `priceUpdates/${priceUpdatesDocId}/${materialType}/${bathroomTiersDocId}/${nestedMaterialType}`
+      );
+    }
+  }
+
   return collection(db, `priceUpdates/${priceUpdatesDocId}/${materialType}`);
 };
 

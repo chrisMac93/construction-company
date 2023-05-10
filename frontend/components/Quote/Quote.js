@@ -245,6 +245,15 @@ const Quote = () => {
         >
           Get A Quote
         </motion.h1>
+        <motion.p
+          className="text-xl text-neutral-400  font-semibold italic mt-8 mb-3 text-center"
+          initial={{ opacity: 0, y: -10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5, delay: 0.25 }}
+        >
+          Welcome to our quote generator. Select a project type below to get
+          started.
+        </motion.p>
         <motion.form
           className="space-y-6"
           initial={{ opacity: 0, y: -10 }}
@@ -267,12 +276,11 @@ const Quote = () => {
                   <h1 className="font-bold text-2xl text-green-700">
                     ${estimate}!
                   </h1>
-                  <p className="text-neutral-500 font-bold italic">
+                  <p className="text-neutral-400 font-bold italic">
                     **This is a quote only and does not include taxes or fees**
                   </p>
                   <h1
-                    className="font-bold text-2xl pt-14"
-                    style={{ color: "#B6B024" }}
+                    className="font-bold text-2xl pt-14 text-neutral-100"
                   >
                     Fill Out The Form Below To Get Started!
                   </h1>
