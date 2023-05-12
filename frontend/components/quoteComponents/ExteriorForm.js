@@ -6,6 +6,7 @@ import { renderSwitch } from "./RenderSwitch";
 import styles from "../../styles/Home.module.css";
 
 export const calculateExteriorCost = (
+  formData,
   roofingMaterial,
   sidingMaterial,
   roofingSqFootage,
@@ -16,23 +17,19 @@ export const calculateExteriorCost = (
 ) => {
   let totalCost = 0;
 
-  if (roofingMaterial) {
-    totalCost += calculateRoofingCost(
-      roofingMaterial,
-      roofingSqFootage,
-      roofingMaterialCosts
-    );
+  const roofingCost = roofingSqFootage * roofingMaterialCosts[roofingMaterial];
+  console.log("Roofing Data: ", roofingMaterialCosts[roofingMaterial]);
+  const sidingCost = sidingSqFootage * sidingMaterialCosts[sidingMaterial];
+
+  if (formData.roofingIncluded && roofingMaterial) {
+    totalCost += roofingCost;
   }
 
-  if (sidingMaterial) {
-    totalCost += calculateSidingCost(
-      sidingMaterial,
-      sidingSqFootage,
-      sidingMaterialCosts
-    );
+  if (formData.sidingIncluded && sidingMaterial) {
+    totalCost += sidingCost;
   }
 
-  if (landscapingCost) {
+  if (formData.landscapingIncluded) {
     totalCost += landscapingCost;
   }
 
@@ -50,29 +47,86 @@ const ExteriorForm = ({ handleChange, formData }) => {
       const priceUpdatesCollectionRef = collection(db, "priceUpdates");
       const priceUpdatesSnapshot = await getDocs(priceUpdatesCollectionRef);
       const priceUpdatesDocId = priceUpdatesSnapshot.docs[0].id;
-  
-      const exteriorRef = collection(db, "priceUpdates", priceUpdatesDocId, "exterior");
-  
-      const fetchData = async (collectionName) => {
-        const collectionRef = collection(exteriorRef, collectionName);
-        const snapshot = await getDocs(collectionRef);
-        const data = snapshot.docs.map((doc) => doc.data());
-        return data;
-      };
-  
-      const [roofingData, sidingData, landscapingData] = await Promise.all([
-        fetchData("roofing"),
-        fetchData("siding"),
-        fetchData("landscaping"),
-      ]);
-  
-      setRoofingMaterials(roofingData);
-      setSidingMaterials(sidingData);
-      setLandscapingCost(landscapingData[0].price); // Assuming there's only one landscaping document
+
+      const exteriorRef = collection(
+        db,
+        "priceUpdates",
+        priceUpdatesDocId,
+        "exterior"
+      );
+
+      const exteriorSnapshot = await getDocs(exteriorRef);
+
+      const exteriorDocId = exteriorSnapshot.docs[0].id;
+
+      const roofingMaterialsRef = collection(
+        db,
+        `priceUpdates/${priceUpdatesDocId}/exterior/${exteriorDocId}/roofing`
+      );
+
+      const sidingMaterialsRef = collection(
+        db,
+        `priceUpdates/${priceUpdatesDocId}/exterior/${exteriorDocId}/siding`
+      );
+
+      const landscapingRef = collection(
+        db,
+        `priceUpdates/${priceUpdatesDocId}/exterior/${exteriorDocId}/landscaping`
+      );
+
+      const roofingSnapshot = await getDocs(roofingMaterialsRef);
+      const sidingSnapshot = await getDocs(sidingMaterialsRef);
+      const landscapingSnapshot = await getDocs(landscapingRef);
+
+      const roofingMaterials = [];
+      const roofingCosts = {};
+      const sidingMaterials = [];
+      const sidingCosts = {};
+      const landscapingCost = {};
+
+      roofingSnapshot.forEach((doc) => {
+        const materialData = doc.data();
+        roofingMaterials.push(materialData.name);
+        roofingCosts[materialData.name] = materialData.price;
+      });
+
+      sidingSnapshot.forEach((doc) => {
+        const materialData = doc.data();
+        sidingMaterials.push(materialData.name);
+        sidingCosts[materialData.name] = materialData.price;
+      });
+
+      landscapingSnapshot.forEach((doc) => {
+        const landscapingData = doc.data();
+        landscapingCost[landscapingData.name] = landscapingData.price;
+      });
+
+      setRoofingMaterials(roofingMaterials);
+      setSidingMaterials(sidingMaterials);
+      setLandscapingCost(landscapingCost);
+      console.log("Roofing Cost:", roofingCosts);
+      console.log("Siding Cost:", sidingCosts);
+      console.log("Landscaping Cost:", landscapingCost);
     };
-  
+
     fetchExterior();
   }, []);
+
+  const handleSwitchChange = (e) => {
+    const { name, value, cost } = e.target;
+    let updatedCost = value ? parseInt(cost) : 0;
+
+    if (name === "landscapingIncluded") {
+      handleChange({
+        target: {
+          name: "landscapingCost",
+          value: updatedCost,
+        },
+      });
+    }
+    console.log("Updated Cost", updatedCost);
+    handleChange(e);
+  };
 
   return (
     <>
@@ -181,9 +235,9 @@ const ExteriorForm = ({ handleChange, formData }) => {
         {renderSwitch(
           "landscapingIncluded",
           "landscapingIncluded",
-          formData.landscapingIncluded,
-          handleChange,
-          landscapingCost
+          formData.landscapingIncluded || false,
+          handleSwitchChange,
+          landscapingCost["Landscaping"]
         )}
         <span className="ml-3 mb-1 text-neutral-100 font-semibold">
           Do You Need Landscaping?

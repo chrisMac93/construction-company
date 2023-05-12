@@ -21,6 +21,7 @@ export function calculateEstimate(formData, callback) {
       break;
     case "exterior":
       cost = calculateExteriorCost(
+        formData,
         formData.roofingMaterial,
         formData.roofingSqFootage,
         formData.roofingMaterialCosts,
@@ -83,8 +84,8 @@ export function calculateEstimate(formData, callback) {
         formData.sinkCost,
         formData.toiletType,
         formData.toiletCost,
-        formData.plumbingCost,
-        formData.lightingCost
+        formData.bathPlumbingCost,
+        formData.bathLightingCost
       );
       break;
     case "concrete":

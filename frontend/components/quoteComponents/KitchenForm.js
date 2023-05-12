@@ -40,11 +40,11 @@ export const calculateKitchenCost = (
     );
   }
 
-  if (countertopMaterial) {
+  if (formData.kitchenCountertopIncluded && countertopMaterial) {
     totalCost += countertopMaterialPrice * formData.countertopSqFootage;
   }
 
-  if (kitchenCabinetMaterial) {
+  if (formData.kitchenCabinetIncluded &&  kitchenCabinetMaterial) {
     totalCost += kitchenCabinetMaterialPrice * formData.kitchenCabinetSqFootage;
   }
 

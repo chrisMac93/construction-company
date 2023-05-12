@@ -85,9 +85,9 @@ const Quote = () => {
     showerTubType: "",
     bathPlumbing: false,
     bathLighting: false,
-    sinkCost: "",
-    toiletCost: "",
-    showerTubCost: "",
+    sinkCost: {},
+    toiletCost: {},
+    showerTubCost: {},
     bathPlumbingCost: "",
     bathLightingCost: "",
     // bathroomTiers: {
