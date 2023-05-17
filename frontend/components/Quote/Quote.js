@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useReducer } from "react";
 import { motion } from "framer-motion";
 import { sendQuoteEmail } from "../../utils/emailService";
 
@@ -8,103 +8,112 @@ import { calculateEstimate } from "./EstimateCalculator";
 import ContactForm from "../quoteComponents/ContactForm";
 import ProjectTypes from "./ProjectTypes";
 
+const initialState = {
+  // InteriorForm attributes
+  lightingCost: 0,
+  plumbingCost: 0,
+  includeLighting: false,
+  includePlumbing: false,
+  interiorDrywallIncluded: false,
+  interiorFlooringIncluded: false,
+  //ExteriorForm attributes
+  roofingIncluded: false,
+  sidingIncluded: false,
+  landscapingIncluded: false,
+  roofingMaterial: "",
+  roofingSqFootage: "",
+  roofingMaterialCosts: {},
+  sidingMaterial: "",
+  sidingSqFootage: "",
+  sidingMaterialCosts: {},
+  landscapingCost: "",
+  // FlooringForm attributes
+  flooringMaterial: "",
+  flooringSqFootage: "",
+  flooringMaterialCosts: {},
+  // DrywallForm attributes
+  includeDrywall: false,
+  drywallSqFootage: "",
+  drywallPricePerSqFoot: "",
+  // EpoxyForm attributes
+  epoxyMaterial: "",
+  epoxySqFootage: "",
+  epoxyMaterialCosts: {},
+  // CoatingsForm attributes
+  coatingsMaterial: "",
+  coatingsSqFootage: "",
+  coatingsMaterialCosts: {},
+  // ConcreteForm attributes
+  concreteMaterial: "",
+  concreteSqFootage: "",
+  concreteMaterialCosts: {},
+  // DeckPatioForm attributes
+  deckPatioMaterial: "",
+  deckPatioSqFootage: "",
+  deckPatioLighting: false,
+  deckPatioHandrails: false,
+  deckPatioMaterialCosts: {},
+  handrailCost: "",
+  lightingCost: "",
+  // KitchenForm attributes
+  kitchenFlooringIncluded: false,
+  kitchenDrywallIncluded: false,
+  kitchenCountertopIncluded: false,
+  countertopMaterial: "",
+  countertopSqFootage: "",
+  countertopMaterialCosts: "",
+  kitchenCabinetIncluded: false,
+  kitchenCabinetMaterial: "",
+  kitchenCabinetSqFootage: "",
+  kitchenCabinetMaterialCosts: "",
+  island: false,
+  islandCost: "",
+  kitchenPlumbing: false,
+  plumbingCost: "",
+  kitchenLighting: false,
+  lightingCost: "",
+  includedOptionsCosts: {},
+  // BathroomForm attributes
+  bathFlooringNeeded: false,
+  bathDrywallNeeded: false,
+  bathSinkNeeded: false,
+  sinkType: "",
+  toiletNeeded: false,
+  toiletType: "",
+  showerTubNeeded: false,
+  showerTubType: "",
+  bathPlumbing: false,
+  bathLighting: false,
+  sinkCost: {},
+  toiletCost: {},
+  showerTubCost: {},
+  bathPlumbingCost: "",
+  bathLightingCost: "",
+  // ContactForm attributes
+  contactInfo: {
+    name: "",
+    email: "",
+    phone: "",
+    message: "",
+  },
+};
+
+const formReducer = (state, action) => {
+  switch (action.type) {
+    case 'setField':
+      return { ...state, [action.field]: action.value };
+    case 'toggleField':
+      return { ...state, [action.field]: !state[action.field] };
+    case 'reset':
+      return initialState;
+    default:
+      throw new Error();
+  }
+};
+
+
 const Quote = () => {
-  const [formData, setFormData] = useState({
-    // InteriorForm attributes
-    lightingCost: 0,
-    plumbingCost: 0,
-    includeLighting: false,
-    includePlumbing: false,
-    interiorDrywallIncluded: false,
-    interiorFlooringIncluded: false,
-    //ExteriorForm attributes
-    roofingIncluded: false,
-    sidingIncluded: false,
-    landscapingIncluded: false,
-    roofingMaterial: "",
-    roofingSqFootage: "",
-    roofingMaterialCosts: {},
-    sidingMaterial: "",
-    sidingSqFootage: "",
-    sidingMaterialCosts: {},
-    landscapingCost: "",
-    // FlooringForm attributes
-    flooringMaterial: "",
-    flooringSqFootage: "",
-    flooringMaterialCosts: {},
-    // DrywallForm attributes
-    includeDrywall: false,
-    drywallSqFootage: "",
-    drywallPricePerSqFoot: "",
-    // EpoxyForm attributes
-    epoxyMaterial: "",
-    epoxySqFootage: "",
-    epoxyMaterialCosts: {},
-    // CoatingsForm attributes
-    coatingsMaterial: "",
-    coatingsSqFootage: "",
-    coatingsMaterialCosts: {},
-    // ConcreteForm attributes
-    concreteMaterial: "",
-    concreteSqFootage: "",
-    concreteMaterialCosts: {},
-    // DeckPatioForm attributes
-    deckPatioMaterial: "",
-    deckPatioSqFootage: "",
-    deckPatioLighting: false,
-    deckPatioHandrails: false,
-    deckPatioMaterialCosts: {},
-    handrailCost: "",
-    lightingCost: "",
-    // KitchenForm attributes
-    kitchenFlooringIncluded: false,
-    kitchenDrywallIncluded: false,
-    kitchenCountertopIncluded: false,
-    countertopMaterial: "",
-    countertopSqFootage: "",
-    countertopMaterialCosts: "",
-    kitchenCabinetIncluded: false,
-    kitchenCabinetMaterial: "",
-    kitchenCabinetSqFootage: "",
-    kitchenCabinetMaterialCosts: "",
-    island: false,
-    islandCost: "",
-    kitchenPlumbing: false,
-    plumbingCost: "",
-    kitchenLighting: false,
-    lightingCost: "",
-    includedOptionsCosts: {},
-    // BathroomForm attributes
-    bathFlooringNeeded: false,
-    bathDrywallNeeded: false,
-    bathSinkNeeded: false,
-    sinkType: "",
-    toiletNeeded: false,
-    toiletType: "",
-    showerTubNeeded: false,
-    showerTubType: "",
-    bathPlumbing: false,
-    bathLighting: false,
-    sinkCost: {},
-    toiletCost: {},
-    showerTubCost: {},
-    bathPlumbingCost: "",
-    bathLightingCost: "",
-    // bathroomTiers: {
-    //   bathLighting: [],
-    //   bathPlumbing: [],
-    //   showerTubType: [],
-    //   sinkType: [],
-    //   toiletType: [],
-    // },
-    // ContactForm attributes
-    contactInfo: {
-      name: "",
-      email: "",
-      phone: "",
-      message: "",
-    },
-  });
+  const [formData, dispatch] = useReducer(formReducer, initialState);
 
   const [showEstimateForm, setShowEstimateForm] = useState(false);
   const [showContactForm, setShowContactForm] = useState(false);
@@ -184,44 +193,21 @@ const Quote = () => {
   useEffect(() => {
     // Reset formData when project type changes
     setEstimate(0);
-    setFormData((prevFormData) => {
-      const resetAttributes = Object.keys(prevFormData).filter(
-        (attribute) => !["projectType", "contactInfo"].includes(attribute)
-      );
-
-      const newFormData = { ...prevFormData };
-      resetAttributes.forEach((attribute) => {
-        if (typeof prevFormData[attribute] === "string") {
-          newFormData[attribute] = "";
-        } else if (typeof prevFormData[attribute] === "boolean") {
-          newFormData[attribute] = false;
-        } else if (typeof prevFormData[attribute] === "object") {
-          newFormData[attribute] = {};
-        }
-      });
-
-      return newFormData;
-    });
   }, [formData.projectType]);
 
   const handleChange = (event) => {
     const { name, value, type, checked } = event.target;
-    const inputValue = type === "checkbox" ? checked : value;
+    const inputValue = type === 'checkbox' ? checked : value;
 
-    if (name.includes("contactInfo")) {
-      const contactInfoKey = name.split(".")[1];
-      setFormData((prevFormData) => ({
-        ...prevFormData,
-        contactInfo: {
-          ...prevFormData.contactInfo,
-          [contactInfoKey]: inputValue,
-        },
-      }));
+    if (name.includes('contactInfo')) {
+      const contactInfoKey = name.split('.')[1];
+      dispatch({
+        type: 'setField',
+        field: `contactInfo.${contactInfoKey}`,
+        value: inputValue,
+      });
     } else {
-      setFormData((prevFormData) => ({
-        ...prevFormData,
-        [name]: inputValue,
-      }));
+      dispatch({ type: 'setField', field: name, value: inputValue });
     }
   };
 
@@ -279,9 +265,7 @@ const Quote = () => {
                   <p className="text-neutral-400 font-bold italic">
                     **This is a quote only and does not include taxes or fees**
                   </p>
-                  <h1
-                    className="font-bold text-2xl pt-14 text-neutral-100"
-                  >
+                  <h1 className="font-bold text-2xl pt-14 text-neutral-100">
                     Fill Out The Form Below To Get Started!
                   </h1>
                   <div className="py-12">

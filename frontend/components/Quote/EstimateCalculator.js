@@ -16,20 +16,11 @@ export function calculateEstimate(formData, callback) {
       cost = calculateInteriorCost(
         formData,
         formData.lightingCost,
-        formData.plumbingCost,
+        formData.plumbingCost
       );
       break;
     case "exterior":
-      cost = calculateExteriorCost(
-        formData,
-        formData.roofingMaterial,
-        formData.roofingSqFootage,
-        formData.roofingMaterialCosts,
-        formData.sidingMaterial,
-        formData.sidingSqFootage,
-        formData.sidingMaterialCosts,
-        formData.landscapingCost
-      );
+      cost = calculateExteriorCost(formData, formData.landscapingCost);
       break;
     case "flooring":
       cost = calculateFlooringCost(
@@ -66,10 +57,6 @@ export function calculateEstimate(formData, callback) {
     case "kitchen":
       cost = calculateKitchenCost(
         formData,
-        formData.countertopMaterial,
-        formData.countertopMaterialCosts,
-        formData.kitchenCabinetMaterial,
-        formData.kitchenCabinetMaterialCosts,
         formData.islandCost,
         formData.plumbingCost,
         formData.lightingCost
@@ -78,12 +65,6 @@ export function calculateEstimate(formData, callback) {
     case "bath":
       cost = calculateBathroomCost(
         formData,
-        formData.showerTubType,
-        formData.showerTubCost,
-        formData.sinkType,
-        formData.sinkCost,
-        formData.toiletType,
-        formData.toiletCost,
         formData.bathPlumbingCost,
         formData.bathLightingCost
       );

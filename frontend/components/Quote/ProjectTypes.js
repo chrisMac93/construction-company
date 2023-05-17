@@ -15,15 +15,15 @@ const ProjectTypes = ({ handleChange, formData }) => {
         whileFocus={{ scale: 1.05 }}
       >
         <option value="">Project Type</option>
-        <option value="interior">Interior Remodel</option>
-        <option value="exterior">Exterior Remodel</option>
-        <option value="kitchen">Kitchen</option>
-        <option value="bath">Bathroom</option>
-        <option value="deckPatio">Deck/Patio</option>
-        <option value="flooring">Flooring</option>
-        <option value="epoxy">Epoxy</option>
-        <option value="coatings">Coatings</option>
-        <option value="concrete">Concrete</option>
+        <option value="interior" className="font-semibold">Interior Remodel</option>
+        <option value="exterior" className="font-semibold">Exterior Remodel</option>
+        <option value="kitchen" className="font-semibold">Kitchen</option>
+        <option value="bath" className="font-semibold">Bathroom</option>
+        <option value="deckPatio" className="font-semibold">Deck/Patio</option>
+        <option value="flooring" className="font-semibold">Flooring</option>
+        <option value="epoxy" className="font-semibold">Epoxy</option>
+        <option value="coatings" className="font-semibold">Coatings</option>
+        <option value="concrete" className="font-semibold">Concrete</option>
       </motion.select>
     </div>
   );

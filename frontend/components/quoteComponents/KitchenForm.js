@@ -2,28 +2,25 @@ import React, { useState, useEffect } from "react";
 import { getFirestore, collection, getDocs } from "firebase/firestore";
 
 import DrywallOption from "./drywallOption";
-import { calculateDrywallCost } from "./drywallOption";
 import FlooringForm from "./FlooringForm";
+import CountertopsForm from "./KitchenMaterialsForms/CountertopsForm";
+import CabinetsForm from "./KitchenMaterialsForms/CabinetsForm";
+import { calculateDrywallCost } from "./drywallOption";
 import { calculateFlooringCost } from "./FlooringForm";
+import { calculateCounterTopCost } from "./KitchenMaterialsForms/CountertopsForm";
+import { calculateKitchenCabinetCost } from "./KitchenMaterialsForms/CabinetsForm";
+
 import { renderSwitch } from "./RenderSwitch";
 
 import styles from "../../styles/Home.module.css";
 
 export const calculateKitchenCost = (
   formData,
-  countertopMaterial,
-  countertopMaterialCosts,
-  kitchenCabinetMaterial,
-  kitchenCabinetMaterialCosts,
   islandCost,
   plumbingCost,
   lightingCost
 ) => {
   let totalCost = 0;
-
-  const countertopMaterialPrice = countertopMaterialCosts[countertopMaterial];
-  const kitchenCabinetMaterialPrice =
-    kitchenCabinetMaterialCosts[kitchenCabinetMaterial];
 
   if (formData.kitchenFlooringIncluded) {
     totalCost += calculateFlooringCost(
@@ -40,12 +37,20 @@ export const calculateKitchenCost = (
     );
   }
 
-  if (formData.kitchenCountertopIncluded && countertopMaterial) {
-    totalCost += countertopMaterialPrice * formData.countertopSqFootage;
+  if (formData.kitchenCountertopIncluded) {
+    totalCost += calculateCounterTopCost(
+      formData.countertopMaterial,
+      formData.countertopSqFootage,
+      formData.countertopMaterialCosts
+    );
   }
 
-  if (formData.kitchenCabinetIncluded &&  kitchenCabinetMaterial) {
-    totalCost += kitchenCabinetMaterialPrice * formData.kitchenCabinetSqFootage;
+  if (formData.kitchenCabinetIncluded) {
+    totalCost += calculateKitchenCabinetCost(
+      formData.kitchenCabinetMaterial,
+      formData.kitchenCabinetSqFootage,
+      formData.kitchenCabinetMaterialCosts
+    );
   }
 
   if (formData.island) {
@@ -64,8 +69,6 @@ export const calculateKitchenCost = (
 };
 
 const KitchenForm = ({ handleChange, formData }) => {
-  const [kitchenCabinetMaterials, setKitchenCabinetMaterials] = useState([]);
-  const [countertopMaterials, setCountertopMaterials] = useState([]);
   const [islandCost, setIslandCost] = useState(0);
   const [plumbingCost, setPlumbingCost] = useState(0);
   const [lightingCost, setLightingCost] = useState(0);
@@ -87,47 +90,14 @@ const KitchenForm = ({ handleChange, formData }) => {
       );
       const kitchenMaterialsDocId = kitchenMaterialsSnapShot.docs[0].id;
 
-      const countertopCollectionRef = collection(
-        db,
-        `priceUpdates/${priceUpdatesDocId}/kitchenMaterials/${kitchenMaterialsDocId}/countertopMaterials`
-      );
-      const kitchenCabinetCollectionRef = collection(
-        db,
-        `priceUpdates/${priceUpdatesDocId}/kitchenMaterials/${kitchenMaterialsDocId}/kitchenCabinetMaterials`
-      );
       const includedCollectionRef = collection(
         db,
         `priceUpdates/${priceUpdatesDocId}/kitchenMaterials/${kitchenMaterialsDocId}/included`
       );
 
-      const countertopMaterialsSnapshot = await getDocs(
-        countertopCollectionRef
-      );
-
-      const kitchenCabinetMaterialsSnapshot = await getDocs(
-        kitchenCabinetCollectionRef
-      );
-
       const includedSnapshot = await getDocs(includedCollectionRef);
 
-      const countertopMaterials = [];
-      const kitchenCabinetMaterials = [];
-
-      const countertopMaterialCosts = {};
-      const kitchenCabinetMaterialCosts = {};
       const newIncludedOptionsCosts = {};
-
-      countertopMaterialsSnapshot.docs.forEach((doc) => {
-        const materialsData = doc.data();
-        countertopMaterials.push(materialsData.name);
-        countertopMaterialCosts[materialsData.name] = materialsData.price;
-      });
-
-      kitchenCabinetMaterialsSnapshot.docs.forEach((doc) => {
-        const materialsData = doc.data();
-        kitchenCabinetMaterials.push(materialsData.name);
-        kitchenCabinetMaterialCosts[materialsData.name] = materialsData.price;
-      });
 
       includedSnapshot.docs.forEach((doc) => {
         const { name, price } = doc.data();
@@ -136,80 +106,14 @@ const KitchenForm = ({ handleChange, formData }) => {
       setIslandCost(newIncludedOptionsCosts.island);
       setPlumbingCost(newIncludedOptionsCosts.plumbing);
       setLightingCost(newIncludedOptionsCosts.lighting);
-      setCountertopMaterials(countertopMaterials);
-      setKitchenCabinetMaterials(kitchenCabinetMaterials);
-      console.log("Countertop Material Costs:", countertopMaterialCosts);
-      console.log(
-        "Kitchen Cabinet Material Costs:",
-        kitchenCabinetMaterialCosts
-      );
     };
 
     fetchMaterialsData();
   }, []);
 
-  const handleMaterialsSwitchChange = (e) => {
-    const { name } = e.target;
-    console.log("Switch name:", name);
-
-    if (name === "kitchenCountertopIncluded") {
-      console.log("Selected Countertop Material:", formData.countertopMaterial);
-      console.log(
-        "Material Cost:",
-        formData.countertopMaterialCosts[formData.countertopMaterial]
-      );
-      handleChange({
-        target: {
-          name: "countertopMaterialCosts",
-          value: formData.countertopMaterialCosts[formData.countertopMaterial],
-        },
-      });
-    }
-
-    if (name === "kitchenCabinetsIncluded") {
-      console.log(
-        "Selected Cabinet Material:",
-        formData.kitchenCabinetMaterial
-      );
-      console.log(
-        "Material Cost:",
-        formData.kitchenCabinetMaterialCosts[formData.kitchenCabinetMaterial]
-      );
-      handleChange({
-        target: {
-          name: "kitchenCabinetMaterialCosts",
-          value:
-            formData.kitchenCabinetMaterialCosts[
-              formData.kitchenCabinetMaterial
-            ],
-        },
-      });
-    }
-
-    handleChange(e);
-  };
-
   const handleSwitchChange = (e) => {
     const { name, value, cost } = e.target;
     let updatedCost = value ? parseInt(cost, 10) : 0;
-
-    if (name === "kitchenCountertopIncluded") {
-      handleChange({
-        target: {
-          name: "countertopMaterialCosts",
-          value: updatedCost,
-        },
-      });
-    }
-
-    if (name === "kitchenCabinetsIncluded") {
-      handleChange({
-        target: {
-          name: "kitchenCabinetMaterialCosts",
-          value: updatedCost,
-        },
-      });
-    }
 
     if (name === "island") {
       handleChange({
@@ -244,7 +148,7 @@ const KitchenForm = ({ handleChange, formData }) => {
   return (
     <>
       <div className="flex justify-center">
-      <h1 className={`text-lg font-bold ${styles.mcColor}`}>
+        <h1 className={`text-lg font-bold ${styles.mcColor}`}>
           Please check any options you would like to be included in your quote
         </h1>
       </div>
@@ -253,100 +157,29 @@ const KitchenForm = ({ handleChange, formData }) => {
           "kitchenCountertopIncluded",
           "kitchenCountertopIncluded",
           formData.kitchenCountertopIncluded,
-          handleMaterialsSwitchChange
+          handleChange
         )}
-        <label htmlFor="kitchenCountertopIncluded" className="ml-1 text-lg">
-          Updated Countertops
+        <label htmlFor="kitchenCountertopIncluded" className="ml-1 font-semibold">
+          Updated Countertops?
         </label>
       </div>
       {formData.kitchenCountertopIncluded && (
-        <>
-          <div className="form-control">
-            <label htmlFor="countertopMaterial" className="block mb-2">
-              Countertop Material
-            </label>
-            <select
-              name="countertopMaterial"
-              id="countertopMaterial"
-              className="w-full p-3 bg-neutral-700 rounded-md text-neutral-100"
-              onChange={handleChange}
-              value={formData.countertopMaterial}
-            >
-              <option value="">Select a material</option>
-              {countertopMaterials.map((countertopMaterial) => (
-                <option key={countertopMaterial} value={countertopMaterial}>
-                  {countertopMaterial}
-                </option>
-              ))}
-            </select>
-          </div>
-          <div className="form-control">
-            <label htmlFor="countertopSqFootage" className="block mb-2">
-              Countertop Square Footage
-            </label>
-            <input
-              type="number"
-              name="countertopSqFootage"
-              id="countertopSqFootage"
-              className="w-full p-3 bg-neutral-700 rounded-md text-neutral-100"
-              value={formData.countertopSqFootage}
-              onChange={handleChange}
-              step="0.01"
-            />
-          </div>
-        </>
+        <CountertopsForm handleChange={handleChange} formData={formData} />
       )}
       <div className="form-control">
         {renderSwitch(
           "kitchenCabinetIncluded",
           "kitchenCabinetIncluded",
           formData.kitchenCabinetIncluded,
-          handleMaterialsSwitchChange
+          handleChange
         )}
-        <label htmlFor="kitchenCabinetIncluded" className="ml-1 text-lg">
-          Updated Cabinets
+        <label htmlFor="kitchenCabinetIncluded" className="ml-1 font-semibold">
+          Updated Cabinets?
         </label>
       </div>
 
       {formData.kitchenCabinetIncluded && (
-        <>
-          <div className="form-control">
-            <label htmlFor="kitchenCabinetMaterial" className="block mb-2">
-              Cabinet Material
-            </label>
-            <select
-              name="kitchenCabinetMaterial"
-              id="kitchenCabinetMaterial"
-              className="w-full p-3 bg-neutral-700 rounded-md text-neutral-100"
-              value={formData.kitchenCabinetMaterial}
-              onChange={handleChange}
-            >
-              <option value="">Select a material</option>
-              {kitchenCabinetMaterials.map((kitchenCabinetMaterial) => (
-                <option
-                  key={kitchenCabinetMaterial}
-                  value={kitchenCabinetMaterial}
-                >
-                  {kitchenCabinetMaterial}
-                </option>
-              ))}
-            </select>
-          </div>
-          <div className="form-control">
-            <label htmlFor="kitchenCabinetSqFootage" className="block mb-2">
-              Cabinet Square Footage
-            </label>
-            <input
-              type="number"
-              name="kitchenCabinetSqFootage"
-              id="kitchenCabinetSqFootage"
-              className="w-full p-3 bg-neutral-700 rounded-md text-neutral-100"
-              value={formData.kitchenCabinetSqFootage}
-              onChange={handleChange}
-              step="0.01"
-            />
-          </div>
-        </>
+        <CabinetsForm handleChange={handleChange} formData={formData} />
       )}
       <div className="form-control">
         {renderSwitch(
@@ -355,8 +188,8 @@ const KitchenForm = ({ handleChange, formData }) => {
           Boolean(formData.kitchenFlooringIncluded),
           handleChange
         )}
-        <label htmlFor="kitchenFlooringIncluded" className="ml-1 text-lg">
-          Flooring Included
+        <label htmlFor="kitchenFlooringIncluded" className="ml-1 font-semibold">
+          Flooring Included?
         </label>
       </div>
       {formData.kitchenFlooringIncluded && (
@@ -369,8 +202,8 @@ const KitchenForm = ({ handleChange, formData }) => {
           Boolean(formData.kitchenDrywallIncluded),
           handleChange
         )}
-        <label htmlFor="kitchenDrywallIncluded" className="ml-1 text-lg">
-          Drywall Included
+        <label htmlFor="kitchenDrywallIncluded" className="ml-1 font-semibold">
+          Drywall Included?
         </label>
       </div>
       {formData.kitchenDrywallIncluded && (
@@ -384,8 +217,8 @@ const KitchenForm = ({ handleChange, formData }) => {
           handleSwitchChange,
           islandCost
         )}
-        <label htmlFor="island" className="ml-1 text-lg">
-          Island Included
+        <label htmlFor="island" className="ml-1 font-semibold">
+          Island Included?
         </label>
       </div>
       <div className="form-control">
@@ -396,9 +229,9 @@ const KitchenForm = ({ handleChange, formData }) => {
           handleSwitchChange,
           plumbingCost
         )}
-        <label htmlFor="kitchenPlumbing" className="ml-1 text-lg">
-          Plumbing{" "}
-          <span className={`font-bold italic ${styles.mcColor}`}>
+        <label htmlFor="kitchenPlumbing" className="ml-1 font-semibold">
+          Do You Need Plumbing?{" "}
+          <span className="font-bold italic text-neutral-400">
             (this service will be subcontracted)
           </span>
         </label>
@@ -411,8 +244,8 @@ const KitchenForm = ({ handleChange, formData }) => {
           handleSwitchChange,
           lightingCost
         )}
-        <label htmlFor="kitchenLighting" className="ml-1 text-lg">
-          Lighting
+        <label htmlFor="kitchenLighting" className="ml-1 font-semibold">
+          Do You Need Lighting?
         </label>
       </div>
     </>

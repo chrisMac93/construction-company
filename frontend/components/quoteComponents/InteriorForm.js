@@ -10,6 +10,7 @@ import { renderSwitch } from "./RenderSwitch";
 import styles from "../../styles/Home.module.css";
 
 export const calculateInteriorCost = (formData, lightingCost, plumbingCost) => {
+
   let totalCost = 0;
 
   if (formData.interiorFlooringIncluded) {
@@ -170,7 +171,7 @@ const InteriorForm = ({ handleChange, formData }) => {
         )}
         <span className="ml-3 mb-1 text-neutral-100 font-semibold">
           Do You Need Plumbing?{" "}
-          <span className={`font-bold italic ${styles.mcColor}`}>
+          <span className="font-bold italic text-neutral-400">
             (this service will be subcontracted)
           </span>
         </span>

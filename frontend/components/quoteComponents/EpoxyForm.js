@@ -39,8 +39,8 @@ const EpoxyForm = ({ handleChange, formData }) => {
   return (
     <>
       <div className="form-control mb-4">
-        <label htmlFor="epoxyMaterial" className="block mb-2">
-          Material
+        <label htmlFor="epoxyMaterial" className="block mb-2 font-semibold">
+          Epoxy Material
         </label>
         <select
           name="epoxyMaterial"
@@ -58,7 +58,7 @@ const EpoxyForm = ({ handleChange, formData }) => {
         </select>
       </div>
       <div className="form-control">
-        <label htmlFor="epoxySqFootage" className="block mb-2">
+        <label htmlFor="epoxySqFootage" className="block mb-2 font-semibold">
           Square Footage
         </label>
         <input

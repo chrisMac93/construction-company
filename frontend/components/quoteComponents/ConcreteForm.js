@@ -40,7 +40,7 @@ const ConcreteForm = ({ handleChange, formData }) => {
   return (
     <>
       <div className="form-control">
-        <label htmlFor="concreteMaterial" className="block mb-2">Concrete Type</label>
+        <label htmlFor="concreteMaterial" className="block mb-2 font-semibold">Concrete Material</label>
         <select
           name="concreteMaterial"
           id="concreteMaterial"
@@ -57,7 +57,7 @@ const ConcreteForm = ({ handleChange, formData }) => {
         </select>
       </div>
       <div className="form-control">
-        <label htmlFor="concreteSqFootage" className="block mb-2">Square Footage</label>
+        <label htmlFor="concreteSqFootage" className="block mb-2 font-semibold">Square Footage</label>
         <input
           type="number"
           name="concreteSqFootage"

@@ -2,6 +2,9 @@ import { useEffect } from "react";
 import { getFirestore, collection, getDocs } from "firebase/firestore";
 
 export const calculateDrywallCost = (drywallPrice, drywallSqFootage) => {
+  if (!drywallPrice || !drywallSqFootage) {
+    return 0;
+  }
   const totalCost = drywallPrice * drywallSqFootage;
   return totalCost;
 };

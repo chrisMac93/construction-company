@@ -39,8 +39,8 @@ const coatingsForm = ({ handleChange, formData }) => {
   return (
     <>
       <div className="form-control mb-4">
-        <label htmlFor="coatingsMaterial" className="block mb-2">
-          Material
+        <label htmlFor="coatingsMaterial" className="block mb-2 font-semibold">
+          Coatings Material
         </label>
         <select
           name="coatingsMaterial"
@@ -58,7 +58,7 @@ const coatingsForm = ({ handleChange, formData }) => {
         </select>
       </div>
       <div className="form-control">
-        <label htmlFor="coatingsSqFootage" className="block mb-2">
+        <label htmlFor="coatingsSqFootage" className="block mb-2 font-semibold">
           Square Footage
         </label>
         <input

@@ -11,18 +11,28 @@ export const calculateDeckPatioCost = (
   handrailsCost,
   lightingCost
 ) => {
-  const deckPatioLightingCostPerSqFoot = lightingCost;
-  const deckPatioHandrailsCostPerSqFoot = handrailsCost;
+  let totalCost = 0;
 
-  const costPerSqFoot = deckPatioMaterialCosts[deckPatioMaterial];
-  let totalCost = costPerSqFoot * deckPatioSqFootage;
+  if (deckPatioMaterial && deckPatioSqFootage) {
+    const costPerSqFoot = parseFloat(deckPatioMaterialCosts[deckPatioMaterial]);
+    const sqFootage = parseFloat(deckPatioSqFootage);
+    if (!isNaN(costPerSqFoot) && !isNaN(sqFootage)) {
+      totalCost += costPerSqFoot * sqFootage;
+    }
+  }
 
   if (deckPatioLighting) {
-    totalCost += deckPatioLightingCostPerSqFoot * deckPatioSqFootage;
+    const lightingCostNumber = parseFloat(lightingCost);
+    if (!isNaN(lightingCostNumber)) {
+      totalCost += lightingCostNumber;
+    }
   }
 
   if (deckPatioHandrails) {
-    totalCost += deckPatioHandrailsCostPerSqFoot * deckPatioSqFootage;
+    const handrailsCostNumber = parseFloat(handrailsCost);
+    if (!isNaN(handrailsCostNumber)) {
+      totalCost += handrailsCostNumber;
+    }
   }
 
   console.log("Deck/Patio Cost: ", totalCost);
@@ -46,7 +56,9 @@ const DeckPatioForm = ({ handleChange, formData }) => {
         `priceUpdates/${priceUpdatesDocId}/deckMaterials`
       );
 
-      const deckPatioMaterialsSnapShot = await getDocs(deckPatioMaterialsCollectionRef);
+      const deckPatioMaterialsSnapShot = await getDocs(
+        deckPatioMaterialsCollectionRef
+      );
       const deckPatioMaterialsDocId = deckPatioMaterialsSnapShot.docs[0].id; // Assuming there is at least one document in deckPatioMaterials collection
 
       const deckingMaterialsCollectionRef = collection(
@@ -65,8 +77,12 @@ const DeckPatioForm = ({ handleChange, formData }) => {
       const deckingMaterialsSnapshot = await getDocs(
         deckingMaterialsCollectionRef
       );
-      const deckPatioHandrailsSnapshot = await getDocs(deckPatioHandrailsCollectionRef);
-      const deckPatioLightingSnapshot = await getDocs(deckPatioLightingCollectionRef);
+      const deckPatioHandrailsSnapshot = await getDocs(
+        deckPatioHandrailsCollectionRef
+      );
+      const deckPatioLightingSnapshot = await getDocs(
+        deckPatioLightingCollectionRef
+      );
 
       const materials = [];
 
@@ -89,7 +105,9 @@ const DeckPatioForm = ({ handleChange, formData }) => {
       });
 
       setDeckPatioMaterials(materials);
-      handleChange({ target: { name: "deckPatioMaterialCosts", value: costs } });
+      handleChange({
+        target: { name: "deckPatioMaterialCosts", value: costs },
+      });
     };
 
     fetchDeckPatioMaterials();
@@ -110,7 +128,7 @@ const DeckPatioForm = ({ handleChange, formData }) => {
   return (
     <>
       <div className="form-control">
-        <label htmlFor="deckPatioMaterial" className="block mb-2">
+        <label htmlFor="deckPatioMaterial" className="block mb-2 font-semibold">
           Deck/Patio Material
         </label>
         <select
@@ -129,7 +147,7 @@ const DeckPatioForm = ({ handleChange, formData }) => {
         </select>
       </div>
       <div className="form-control">
-        <label htmlFor="deckPatioSqFootage" className="block mb-2">
+        <label htmlFor="deckPatioSqFootage" className="block mb-2 font-semibold">
           Square Footage
         </label>
         <input
@@ -149,7 +167,7 @@ const DeckPatioForm = ({ handleChange, formData }) => {
           handleSwitchChange,
           handrailsCost
         )}
-        <label className="ml-1 text-lg">Do you want handrails?</label>
+        <label className="ml-1 font-semibold">Do You Need handrails?</label>
       </div>
       <div className="form-control">
         {renderSwitch(
@@ -159,7 +177,7 @@ const DeckPatioForm = ({ handleChange, formData }) => {
           handleSwitchChange,
           lightingCost
         )}
-        <label className="ml-1 text-lg">Do you want lighting?</label>
+        <label className="ml-1 font-semibold">Do You Need lighting?</label>
       </div>
     </>
   );

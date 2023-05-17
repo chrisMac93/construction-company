@@ -2,33 +2,26 @@ import React, { useState, useEffect } from "react";
 import { getFirestore, collection, getDocs } from "firebase/firestore";
 
 import DrywallOption from "./drywallOption";
-import { calculateDrywallCost } from "./drywallOption";
 import FlooringForm from "./FlooringForm";
+import SinkForm from "./BathroomMaterialsForms/SinkForm";
+import ToiletForm from "./BathroomMaterialsForms/ToiletForm";
+import ShowerTubForm from "./BathroomMaterialsForms/ShowerTubForm";
+import { calculateShowerTubCost } from "./BathroomMaterialsForms/ShowerTubForm";
+import { calculateToiletCost } from "./BathroomMaterialsForms/ToiletForm";
 import { calculateFlooringCost } from "./FlooringForm";
+import { calculateDrywallCost } from "./drywallOption";
+import { calculateSinkCost } from "./BathroomMaterialsForms/SinkForm";
+
 import { renderSwitch } from "./RenderSwitch";
 
 import styles from "../../styles/Home.module.css";
 
 export const calculateBathroomCost = (
   formData,
-  showerTubType,
-  showerTubCost,
-  sinkType,
-  sinkCost,
-  toiletType,
-  toiletCost,
   bathPlumbingCost,
   bathLightingCost
 ) => {
   let totalCost = 0;
-
-  const showerTubPrice =
-    showerTubType && showerTubCost.hasOwnProperty(showerTubType)
-      ? showerTubCost[showerTubType]
-      : 0;
-  const sinkPrice = sinkType && sinkCost[sinkType] ? sinkCost[sinkType] : 0;
-  const toiletPrice =
-    toiletType && toiletCost[toiletType] ? toiletCost[toiletType] : 0;
 
   if (formData.bathFlooringNeeded) {
     totalCost += calculateFlooringCost(
@@ -45,23 +38,20 @@ export const calculateBathroomCost = (
     );
   }
 
-  if (formData.showerTubNeeded) {
-    totalCost += showerTubPrice;
+  if (formData.bathSinkNeeded) {
+    totalCost += calculateSinkCost(formData.sinkType, formData.sinkCost);
   }
-
-  console.log("Shower tub cost:", showerTubPrice);
-
-  if (formData.sinkNeeded) {
-    totalCost += sinkPrice;
-  }
-
-  console.log("Sink cost:", sinkPrice);
 
   if (formData.toiletNeeded) {
-    totalCost += toiletPrice;
+    totalCost += calculateToiletCost(formData.toiletType, formData.toiletCost);
   }
 
-  console.log("Toilet cost:", toiletPrice);
+  if (formData.showerTubNeeded) {
+    totalCost += calculateShowerTubCost(
+      formData.showerTubType,
+      formData.showerTubCost
+    );
+  }
 
   if (formData.bathPlumbing) {
     totalCost += bathPlumbingCost;
@@ -76,12 +66,6 @@ export const calculateBathroomCost = (
 };
 
 const BathroomForm = ({ handleChange, formData }) => {
-  const [showerTubType, setShowerTubType] = useState([]);
-  const [sinkType, setSinkType] = useState([]);
-  const [toiletType, setToiletType] = useState([]);
-  const [showerTubCost, setShowerTubCost] = useState({});
-  const [sinkCost, setSinkCost] = useState({});
-  const [toiletCost, setToiletCost] = useState({});
   const [bathLightingCost, setBathLightingCost] = useState(0);
   const [bathPlumbingCost, setBathbathPlumbingCost] = useState(0);
 
@@ -109,51 +93,11 @@ const BathroomForm = ({ handleChange, formData }) => {
         `priceUpdates/${priceUpdatesDocId}/bathroomTiers/${bathroomTiersDocId}/bathPlumbing`
       );
 
-      const showerTubTypeCollectionRef = collection(
-        db,
-        `priceUpdates/${priceUpdatesDocId}/bathroomTiers/${bathroomTiersDocId}/showerTubType`
-      );
-
-      const sinkTypeCollectionRef = collection(
-        db,
-        `priceUpdates/${priceUpdatesDocId}/bathroomTiers/${bathroomTiersDocId}/sinkType`
-      );
-
-      const toiletTypeCollectionRef = collection(
-        db,
-        `priceUpdates/${priceUpdatesDocId}/bathroomTiers/${bathroomTiersDocId}/toiletType`
-      );
-
       const bathLightingSnapshot = await getDocs(bathLightingCollectionRef);
       const bathPlumbingSnapshot = await getDocs(bathPlumbingCollectionRef);
-      const showerTubTypeSnapshot = await getDocs(showerTubTypeCollectionRef);
-      const sinkTypeSnapshot = await getDocs(sinkTypeCollectionRef);
-      const toiletTypeSnapshot = await getDocs(toiletTypeCollectionRef);
 
-      const showerTubTypeTiers = [];
-      const sinkTypeTiers = [];
-      const toiletTypeTiers = [];
-
-      const showerTubCosts = {};
-      const sinkCosts = {};
-      const toiletCosts = {};
       const bathLightingCosts = {};
       const bathPlumbingCosts = {};
-
-      showerTubTypeSnapshot.forEach((doc) => {
-        showerTubTypeTiers.push(doc.data());
-        showerTubCosts[doc.data().name] = doc.data().price;
-      });
-
-      sinkTypeSnapshot.forEach((doc) => {
-        sinkTypeTiers.push(doc.data());
-        sinkCosts[doc.data().name] = doc.data().price;
-      });
-
-      toiletTypeSnapshot.forEach((doc) => {
-        toiletTypeTiers.push(doc.data());
-        toiletCosts[doc.data().name] = doc.data().price;
-      });
 
       bathLightingSnapshot.forEach((doc) => {
         bathLightingCosts[doc.data().name] = doc.data().price;
@@ -163,24 +107,9 @@ const BathroomForm = ({ handleChange, formData }) => {
         bathPlumbingCosts[doc.data().name] = doc.data().price;
       });
 
-      setShowerTubType(showerTubTypeTiers);
-      setSinkType(sinkTypeTiers);
-      setToiletType(toiletTypeTiers);
-      setShowerTubCost(showerTubCosts);
-      setSinkCost(sinkCosts);
-      setToiletCost(toiletCosts);
       setBathLightingCost(bathLightingCosts);
       setBathbathPlumbingCost(bathPlumbingCosts);
 
-      // handleChange({
-      //   target: { name: "showerTubCosts", value: showerTubCosts },
-      // });
-      // handleChange({ target: { name: "sinkCosts", value: sinkCosts } });
-      // handleChange({ target: { name: "toiletCosts", value: toiletCosts } });
-
-      console.log("ShowerTub Costs:", showerTubCosts);
-      console.log("Sink Costs:", sinkCosts);
-      console.log("Toilet Costs:", toiletCosts);
       console.log("Bath Lighting Costs:", bathLightingCosts);
       console.log("Bath Plumbing Costs:", bathPlumbingCosts);
     };
@@ -188,43 +117,6 @@ const BathroomForm = ({ handleChange, formData }) => {
     fetchBathroomTiers();
   }, []);
 
-  const handleTierSwitchChange = (e) => {
-    const { name, checked } = e.target;
-
-    if (name === "showerTubNeeded" && formData.showerTubType) {
-      handleChange({
-        target: {
-          name: "showerTubCost",
-          value: showerTubCost[showerTubType],
-        },
-      });
-      console.log("ShowerTub price:", showerTubCost[showerTubType]);
-    }
-
-    if (name === "bathSinkNeeded") {
-      handleChange({
-        target: {
-          name: "sinkCost",
-          value: checked ? sinkCost[sinkType] : 0,
-        },
-      });
-
-      console.log("Sink price:", sinkCost[sinkType]);
-    }
-
-    if (name === "toiletNeeded") {
-      handleChange({
-        target: {
-          name: "toiletCost",
-          value: checked ? toiletCost[toiletType] : 0,
-        },
-      });
-
-      console.log("Toilet price:", toiletCost[toiletType]);
-    }
-
-    handleChange(e);
-  };
 
   const handleSwitchChange = (e) => {
     const { name, value, cost } = e.target;
@@ -267,7 +159,7 @@ const BathroomForm = ({ handleChange, formData }) => {
           formData.bathFlooringNeeded,
           handleChange
         )}
-        <label className="ml-1 text-lg">Flooring Included</label>
+        <label className="ml-1 font-semibold">Flooring Included?</label>
       </div>
 
       {formData.bathFlooringNeeded && (
@@ -280,7 +172,7 @@ const BathroomForm = ({ handleChange, formData }) => {
           Boolean(formData.bathDrywallNeeded),
           handleChange
         )}
-        <label className="ml-1 text-lg">Drywall Included</label>
+        <label className="ml-1 font-semibold">Drywall Included?</label>
       </div>
 
       {formData.bathDrywallNeeded && (
@@ -292,30 +184,13 @@ const BathroomForm = ({ handleChange, formData }) => {
           "bathSinkNeeded",
           "bathSinkNeeded",
           formData.bathSinkNeeded || false,
-          handleTierSwitchChange
+          handleChange
         )}
-        <label className="ml-1 text-lg">Sink Included</label>
+        <label className="ml-1 font-semibold">Sink Included?</label>
       </div>
 
       {formData.bathSinkNeeded && (
-        <div className="form-control">
-          <label className="text-lg">
-            Sink Type
-            <select
-              name="sinkType"
-              value={formData.sinkType}
-              onChange={handleChange}
-              className="w-full p-3 bg-neutral-700 rounded-md text-neutral-100"
-            >
-              <option value="">Select a Sink Tier</option>
-              {sinkType.map((sinkTier) => (
-                <option key={sinkTier.name} value={sinkTier.name}>
-                  {sinkTier.name}
-                </option>
-              ))}
-            </select>
-          </label>
-        </div>
+        <SinkForm handleChange={handleChange} formData={formData} />
       )}
 
       <div className="form-control">
@@ -323,30 +198,13 @@ const BathroomForm = ({ handleChange, formData }) => {
           "toiletNeeded",
           "toiletNeeded",
           formData.toiletNeeded || false,
-          handleTierSwitchChange
+          handleChange
         )}
-        <label className="ml-1 text-lg">Toilet Included</label>
+        <label className="ml-1 font-semibold">Toilet Included?</label>
       </div>
 
       {formData.toiletNeeded && (
-        <div className="form-control">
-          <label className="text-lg">
-            Toilet Type
-            <select
-              name="toiletType"
-              value={formData.toiletType}
-              onChange={handleChange}
-              className="w-full p-3 bg-neutral-700 rounded-md text-neutral-100"
-            >
-              <option value="">Select a Toilet Tier</option>
-              {toiletType.map((toiletTier) => (
-                <option key={toiletTier.name} value={toiletTier.name}>
-                  {toiletTier.name}
-                </option>
-              ))}
-            </select>
-          </label>
-        </div>
+        <ToiletForm handleChange={handleChange} formData={formData} />
       )}
 
       <div className="form-control">
@@ -354,29 +212,12 @@ const BathroomForm = ({ handleChange, formData }) => {
           "showerTubNeeded",
           "showerTubNeeded",
           formData.showerTubNeeded || false,
-          handleTierSwitchChange
+          handleChange
         )}
-        <label className="ml-1 text-lg">Shower/Tub Included</label>
+        <label className="ml-1 font-semibold">Shower/Tub Included?</label>
       </div>
       {formData.showerTubNeeded && (
-        <div className="form-control">
-          <label className="text-lg">
-            Shower/Tub Type
-            <select
-              name="showerTubType"
-              value={formData.showerTubType}
-              onChange={handleChange}
-              className="w-full p-3 bg-neutral-700 rounded-md text-neutral-100"
-            >
-              <option value="">Select a Shower/Tub Tier</option>
-              {showerTubType.map((showerTubTier) => (
-                <option key={showerTubTier.name} value={showerTubTier.name}>
-                  {showerTubTier.name}
-                </option>
-              ))}
-            </select>
-          </label>
-        </div>
+        <ShowerTubForm handleChange={handleChange} formData={formData} />
       )}
       <div className="form-control">
         {renderSwitch(
@@ -386,9 +227,9 @@ const BathroomForm = ({ handleChange, formData }) => {
           handleSwitchChange,
           bathPlumbingCost["plumbing"]
         )}
-        <label htmlFor="bathPlumbing" className="ml-1 text-lg">
-          Plumbing{" "}
-          <span className={`font-bold italic ${styles.mcColor}`}>
+        <label htmlFor="bathPlumbing" className="ml-1 font-semibold">
+          Do You Need Plumbing?{" "}
+          <span className="font-bold italic text-neutral-400">
             (this service will be subcontracted)
           </span>
         </label>
@@ -401,8 +242,8 @@ const BathroomForm = ({ handleChange, formData }) => {
           handleSwitchChange,
           bathLightingCost["lighting"]
         )}
-        <label htmlFor="bathLighting" className="ml-1 text-lg">
-          Lighting
+        <label htmlFor="bathLighting" className="ml-1 font-semibold">
+          Do You Need Lighting?
         </label>
       </div>
     </>

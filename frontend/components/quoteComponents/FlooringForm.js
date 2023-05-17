@@ -6,6 +6,10 @@ export const calculateFlooringCost = (
   flooringSqFootage,
   flooringMaterialCosts
 ) => {
+  if (!flooringMaterial || !flooringSqFootage || !flooringMaterialCosts) {
+    return 0;
+  }
+
   const costPerSqFoot = flooringMaterialCosts[flooringMaterial];
   const totalCost = costPerSqFoot * flooringSqFootage;
 
@@ -46,7 +50,7 @@ const FlooringForm = ({ handleChange, formData }) => {
   return (
     <>
       <div className="form-control">
-        <label htmlFor="flooringMaterial" className="block mb-2">
+        <label htmlFor="flooringMaterial" className="block mb-2 font-semibold">
           Flooring Material
         </label>
         <select
@@ -65,7 +69,7 @@ const FlooringForm = ({ handleChange, formData }) => {
         </select>
       </div>
       <div className="form-control">
-        <label htmlFor="flooringSqFootage" className="block mb-2">
+        <label htmlFor="flooringSqFootage" className="block mb-2 font-semibold">
           Square Footage
         </label>
         <input
