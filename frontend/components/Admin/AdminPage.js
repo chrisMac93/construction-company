@@ -1,38 +1,33 @@
 import useAuth from "../../hooks/useAuth";
 import AdminDashboard from "./AdminDashboard";
-import { useState, useEffect, useCallback } from "react";
+import { useEffect, useCallback } from "react";
 
 import styles from "../../styles/Home.module.css";
 
 const AdminPage = () => {
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [userEmail, setUserEmail] = useState('');
-  const { login, logout, error, user } = useAuth();
+  const { login, logout, error, loading, userEmail, isLoggedIn } = useAuth();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    try {
-      const userObj = await login();
-      if (userObj) {
-        setIsLoggedIn(true);
-        setUserEmail(userObj.email);
-      }
-    } catch (err) {
-      console.error(err);
-    }
+    login();
   };
 
   const autoLogoutTimeout = 30 * 60 * 1000; // 30 minutes
 
-  useEffect(() => {
-    const token = localStorage.getItem("token");
-    setIsLoggedIn(!!token);
-  }, []);
-
   const handleLogout = useCallback(() => {
     logout();
-    setIsLoggedIn(false);
   }, [logout]);
+
+  useEffect(() => {
+    if (isLoggedIn) {
+      const loginTimestamp = localStorage.getItem("loginTimestamp");
+      const currentTimestamp = Date.now();
+
+      if (currentTimestamp - loginTimestamp > autoLogoutTimeout) {
+        handleLogout();
+      }
+    }
+  }, [isLoggedIn, handleLogout]);
 
   useEffect(() => {
     if (isLoggedIn) {
@@ -41,18 +36,18 @@ const AdminPage = () => {
     }
   }, [isLoggedIn, handleLogout]);
 
-  
-
   return (
     <div className="bg-neutral-800 text-neutral-100 py-20 px-4 sm:px-8 md:px-16 lg:px-24 overflow-x-hidden">
       <div className="max-w-4xl mx-auto">
-        {isLoggedIn ? (
+        {loading ? (
+          <div>Loading...</div>
+        ) : isLoggedIn ? (
           <>
-            <AdminDashboard userEmail={userEmail}/>
+            <AdminDashboard userEmail={userEmail} />
             <div className="flex justify-center">
               <button
                 onClick={handleLogout}
-                className=" px-12 py-2 bg-neutral-700 hover:bg-neutral-600 text-neutral-100 rounded-md"
+                className="px-12 py-2 bg-neutral-700 hover:bg-neutral-600 text-neutral-100 rounded-md"
               >
                 Logout
               </button>
@@ -60,7 +55,7 @@ const AdminPage = () => {
           </>
         ) : (
           <div>
-            <h1 className="text-3xl md:text-4xl font-semibold mb-8 text-center">
+            <h1 className="text-3xl md:text-4xl font-semibold mb-8 mt-16 text-center">
               Admin Login
             </h1>
             <form

@@ -5,6 +5,7 @@ import Jumbotron from "../components/OtherComponents/Jumbotron";
 import Services from "../components/OtherComponents/Services";
 import Testimonials from "../components/OtherComponents/Testimonials";
 import WhyChooseUs from "../components/OtherComponents/WhyChooseUs";
+import { NextSeo } from "next-seo"; // Add this import
 
 export default function Home({
   whoWeAreRef,
@@ -12,10 +13,27 @@ export default function Home({
   whyChooseUsRef,
   galleryRef,
   testimonialsRef,
-  scrollToRef
+  scrollToRef,
 }) {
   return (
     <div className="overflow-x-hidden">
+      <NextSeo
+        title="Martin Construction &amp; Coatings"
+        description="Martin Construction &amp; Coatings offers a wide range of residential renovation services including interior/exterior remodel, kitchen and bathroom remodel/additions, deck/patio build or renovations, flooring, epoxy, coatings, concrete and more. We are located in Evansville, IN."
+        openGraph={{
+          title: "Martin Construction & Coatings",
+          description:
+            "Martin Construction & Coatings offers a wide range of residential renovation services including interior/exterior remodel, kitchen and bathroom remodel/additions, deck/patio build or renovations, flooring, epoxy, coatings, concrete and more. We are located in Evansville, IN.",
+          images: [
+            {
+              url: "https://firebasestorage.googleapis.com/v0/b/martinconstructioncoatings.appspot.com/o/images%2Fhome.jpg?alt=media&token=233fc243-1c41-471e-8d65-75199e6cd037", // Replace with your OpenGraph image
+              width: 800,
+              height: 600,
+              alt: "Og Image Alt",
+            },
+          ],
+        }}
+      />
       <main>
         <section>
           <Jumbotron />
@@ -24,7 +42,7 @@ export default function Home({
           <WhoWeAre />
         </section>
         <section ref={servicesRef}>
-          <Services scrollToRef={scrollToRef} servicesRef={servicesRef}/>
+          <Services scrollToRef={scrollToRef} servicesRef={servicesRef} />
         </section>
         <section ref={whyChooseUsRef}>
           <WhyChooseUs />

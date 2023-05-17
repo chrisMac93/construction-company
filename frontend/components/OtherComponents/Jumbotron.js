@@ -20,7 +20,7 @@ const Jumbotron = () => {
   return (
     <div
       className="relative mt-16 w-full minus-navbar parallax"
-      style={{ backgroundImage: `url(${bgImageUrl || "../../public/Images/site/home.jpg"})` }}
+      style={{ backgroundImage: `url(${bgImageUrl || "/Images/site/home.jpg"})` }}
     >
       <div className="absolute inset-0 bg-black opacity-50"></div>
       <div className="absolute inset-0 flex flex-col items-center text-center justify-center space-y-4 px-6 text-white">

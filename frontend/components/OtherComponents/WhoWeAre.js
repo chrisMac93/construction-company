@@ -45,7 +45,7 @@ const WhoWeAre = () => {
           <div>
             <div className="mt-3">
               <img
-                src={googleIcon || "../../public/Images/site/google-logo.png"}
+                src={googleIcon || "/Images/site/google-logo.png"}
                 alt="Google Logo"
                 className="h-8 w-auto mx-auto mb-2"
               />
@@ -74,7 +74,7 @@ const WhoWeAre = () => {
           </div>
           <div>
             <img
-              src={nextdoorIcon || "../../public/Images/site/nextdoor-logo.png"}
+              src={nextdoorIcon || "/Images/site/nextdoor-logo.png"}
               alt="NextDoor Logo"
               className="h-10 w-auto mx-auto mb-2"
             />
@@ -102,7 +102,7 @@ const WhoWeAre = () => {
           </div>
           <div>
             <img
-              src={facebookIcon || "../../public/Images/site/facebook-logo.png"}
+              src={facebookIcon || "/Images/site/facebook-logo.png"}
               alt="Facebook Logo"
               className="h-8 w-auto mx-auto mb-2"
             />
@@ -131,7 +131,7 @@ const WhoWeAre = () => {
           {/* Add more platforms as needed */}
           <div>
             <img
-              src={houzzIcon || "../../public/Images/site/houzz3-logo.png"}
+              src={houzzIcon || "/Images/site/houzz3-logo.png"}
               alt="Houzz Logo"
               className="h-8 w-auto mx-auto mb-2"
             />
