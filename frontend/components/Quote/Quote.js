@@ -100,17 +100,16 @@ const initialState = {
 
 const formReducer = (state, action) => {
   switch (action.type) {
-    case 'setField':
+    case "setField":
       return { ...state, [action.field]: action.value };
-    case 'toggleField':
+    case "toggleField":
       return { ...state, [action.field]: !state[action.field] };
-    case 'reset':
+    case "reset":
       return initialState;
     default:
       throw new Error();
   }
 };
-
 
 const Quote = () => {
   const [formData, dispatch] = useReducer(formReducer, initialState);
@@ -195,19 +194,32 @@ const Quote = () => {
     setEstimate(0);
   }, [formData.projectType]);
 
+  const resetFormData = (projectType) => {
+    dispatch({ type: "reset" });
+
+    // Set project type after resetting
+    dispatch({ type: "setField", field: "projectType", value: projectType });
+  };
+
   const handleChange = (event) => {
     const { name, value, type, checked } = event.target;
-    const inputValue = type === 'checkbox' ? checked : value;
+    const inputValue = type === "checkbox" ? checked : value;
 
-    if (name.includes('contactInfo')) {
-      const contactInfoKey = name.split('.')[1];
+    // Reset form data when project type changes
+    if (name === "projectType") {
+      resetFormData(inputValue);
+      return;
+    }
+
+    if (name.includes("contactInfo")) {
+      const contactInfoKey = name.split(".")[1];
       dispatch({
-        type: 'setField',
-        field: `contactInfo.${contactInfoKey}`,
-        value: inputValue,
+        type: "setField",
+        field: "contactInfo",
+        value: { ...formData.contactInfo, [contactInfoKey]: inputValue },
       });
     } else {
-      dispatch({ type: 'setField', field: name, value: inputValue });
+      dispatch({ type: "setField", field: name, value: inputValue });
     }
   };
 

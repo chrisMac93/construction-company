@@ -17,6 +17,9 @@ const useAuth = () => {
   const allowedEmails = [
     "christopher.j.mcelwain@gmail.com",
     "martinconstruction0911@gmail.com",
+    "mccoatingshr@gmail.com",
+    "martinmatt1192@gmail.com",
+    "steenthirty3@gmail.com"
   ];
 
   const login = () => {

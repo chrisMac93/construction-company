@@ -4,8 +4,13 @@ import { InView } from "react-intersection-observer";
 import Link from "next/link";
 import SwiperCore, { Pagination, Autoplay } from "swiper";
 import { Swiper, SwiperSlide } from "swiper/react";
+
+
 import { firestore } from "../../lib/firebase";
 import { collection, getDocs } from "firebase/firestore";
+import { logEvent } from "firebase/analytics";
+import { analytics } from "../../lib/firebase";
+
 
 import "swiper/css";
 import "swiper/css/pagination";
@@ -97,7 +102,9 @@ const Gallery = () => {
             className="px-8 py-3 text-lg sm:text-xl font-bold text-neutral-900 rounded hover:bg-neutral-200 transition duration-300"
             style={{ backgroundColor: "#B6B024" }}
           >
-            Get a Quote
+            <span onClick={() => logEvent(analytics, "quote_button_click")}>
+              Get a Quote
+            </span>
           </Link>
         </div>
       </div>

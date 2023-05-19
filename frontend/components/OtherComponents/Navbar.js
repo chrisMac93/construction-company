@@ -6,6 +6,10 @@ import { useRouter } from "next/router";
 import { useAnimation } from "framer-motion";
 import useImages from "../../hooks/useImages";
 
+import { logEvent } from "firebase/analytics";
+import { analytics } from "../../lib/firebase";
+
+
 import styles from "../../styles/Home.module.css";
 
 const Navbar = ({
@@ -98,14 +102,6 @@ const Navbar = ({
               </Link>
             </li>
             <li className="p-2">
-              <Link
-                href="/aboutUs"
-                className="p-0 white font-bold opacity-60 hover:opacity-80 focus:opacity-80 disabled:text-black/30 lg:px-2 [&.active]:text-black/90 dark:[&.active]:text-neutral-400"
-              >
-                About Us
-              </Link>
-            </li>
-            <li className="p-2">
               <button
                 onClick={() => {
                   handleNavigateAndScroll(whoWeAreRef);
@@ -155,13 +151,22 @@ const Navbar = ({
                 Gallery
               </button>
             </li>
-
+            <li className="p-2">
+              <Link
+                href="/aboutUs"
+                className="p-0 white font-bold opacity-60 hover:opacity-80 focus:opacity-80 disabled:text-black/30 lg:px-2 [&.active]:text-black/90 dark:[&.active]:text-neutral-400"
+              >
+                About Us
+              </Link>
+            </li>
             <li className="p-2">
               <Link
                 href="/quote"
                 className={`font-bold disabled:text-black/30 lg:px-2 [&.active]:text-black/90 dark:[&.active]:text-neutral-400 ${styles.mcColor} ${styles.hov}`}
               >
-                Get a Quote
+                <span onClick={() => logEvent(analytics, "quote_button_click")}>
+                  Get a Quote
+                </span>
               </Link>
             </li>
           </ul>

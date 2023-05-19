@@ -149,7 +149,7 @@ const Careers = () => {
                       );
                     }}
                   >
-                    See details
+                    {showDetails === job.id ? "Hide details" : "See details"}
                   </button>
                   <AnimatePresence>
                     {showDetails === job.id && (

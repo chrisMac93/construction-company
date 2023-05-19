@@ -5,6 +5,9 @@ import { FaFacebook, FaInstagram, FaSnapchatGhost } from "react-icons/fa";
 import styles from "../../styles/Home.module.css";
 import useImages from "../../hooks/useImages";
 
+import { logEvent } from "firebase/analytics";
+import { analytics } from "../../lib/firebase";
+
 const Footer = () => {
   const images = useImages();
   const logoImage = images["logo"];
@@ -50,9 +53,9 @@ const Footer = () => {
               <Link href="/terms" className="opacity-60 hover:opacity-80">
                 Terms & Conditions
               </Link>
-              <Link href="/privacy" className="opacity-60 hover:opacity-80">
+              {/* <Link href="/privacy" className="opacity-60 hover:opacity-80">
                 Privacy Policy
-              </Link>
+              </Link> */}
               <Link href="/careers" className="opacity-60 hover:opacity-80">
                 Careers
               </Link>
@@ -60,7 +63,9 @@ const Footer = () => {
                 About Us
               </Link>
               <Link href="/quote" className={`${styles.mcColor} ${styles.hov}`}>
-                Get a Quote
+                <span onClick={() => logEvent(analytics, "quote_button_click")}>
+                  Get a Quote
+                </span>
               </Link>
             </div>
           </div>
@@ -109,9 +114,15 @@ const Footer = () => {
             </div>
             <div className="text-sm opacity-60">
               <p className="font-bold">Email</p>
-              <p>martinconstruction0911@gmail.com</p>
+              <p>
+                <a href="mailto:mccoatingshr@gmail.com">
+                  mccoatingshr@gmail.com
+                </a>
+              </p>
               <p className="font-bold">Phone</p>
-              <p>(812) 204-2757</p>
+              <p>
+                <a href="tel:812-204-2757">812-204-2757</a>
+              </p>
               <p className="font-bold">Hours of Operation</p>
               <p>Monday-Friday 6AM - 6PM, Saturday and Sunday 6AM - 12PM</p>
             </div>

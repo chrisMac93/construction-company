@@ -1,6 +1,11 @@
 import { motion } from "framer-motion";
 import { useEffect } from "react";
+
+import { logEvent } from "firebase/analytics";
+import { analytics } from "../../lib/firebase";
+
 import Link from "next/link";
+
 import styles from "../../styles/Home.module.css";
 
 const MobileMenu = ({
@@ -61,15 +66,6 @@ const MobileMenu = ({
           </Link>
         </li>
         <li className="p-2">
-        <Link
-            href="/aboutUs"
-            onClick={() => toggleMobileMenu()}
-            className="p-0 text-white font-bold opacity-60 hover:opacity-80 focus:opacity-80 disabled:text-black/30 lg:px-2 [&.active]:text-black/90 dark:[&.active]:text-neutral-400"
-          >
-            About Us
-          </Link>
-        </li>
-        <li className="p-2">
           <button
             onClick={() => {
               handleNavigateAndScroll(whoWeAreRef);
@@ -126,12 +122,23 @@ const MobileMenu = ({
         </li>
         <li className="p-2">
           <Link
+            href="/aboutUs"
+            onClick={() => toggleMobileMenu()}
+            className="p-0 text-white font-bold opacity-60 hover:opacity-80 focus:opacity-80 disabled:text-black/30 lg:px-2 [&.active]:text-black/90 dark:[&.active]:text-neutral-400"
+          >
+            About Us
+          </Link>
+        </li>
+        <li className="p-2">
+          <Link
             href="/quote"
             className="font-bold disabled:text-black/30 lg:px-2 [&.active]:text-black/90 dark:[&.active]:text-neutral-400"
             style={{ color: "#B6B024" }}
             onClick={() => toggleMobileMenu()}
           >
-            Get a Quote
+            <span onClick={() => logEvent(analytics, "quote_button_click")}>
+              Get a Quote
+            </span>
           </Link>
         </li>
       </ul>

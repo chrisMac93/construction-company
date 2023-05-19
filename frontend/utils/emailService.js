@@ -38,12 +38,56 @@ export const sendQuoteEmail = (objectData, estimate) => {
   // Modify the objectData to include the estimate
   objectData.estimate = estimate;
 
+  // Map each cost object to its corresponding selected option
+  const costMap = {
+    flooringMaterialCosts: "flooringMaterial",
+    countertopMaterialCosts: "countertopMaterial",
+    kitchenCabinetMaterialCosts: "kitchenCabinetMaterial",
+    roofingMaterialCosts: "roofingMaterial",
+    sidingMaterialCosts: "sidingMaterial",
+    epoxyMaterialCosts: "epoxyMaterial",
+    coatingsMaterialCosts: "coatingsMaterial",
+    concreteMaterialCosts: "concreteMaterial",
+    deckPatioMaterialCosts: "deckPatioMaterial",
+    sinkCost: "sinkType",
+    toiletCost: "toiletType",
+    showerTubCost: "showerTubType",
+  };
+
+  const excludeFalseFlags = [
+    "includeLighting",
+    "includePlumbing",
+    "interiorDrywallIncluded",
+    "interiorFlooringIncluded",
+    "roofingIncluded",
+    "sidingIncluded",
+    "landscapingIncluded",
+    "includeDrywall",
+    "kitchenFlooringIncluded",
+    "kitchenDrywallIncluded",
+    "kitchenCountertopIncluded",
+    "kitchenCabinetIncluded",
+    "island",
+    "kitchenPlumbing",
+    "kitchenLighting",
+    "bathFlooringNeeded",
+    "bathDrywallNeeded",
+    "bathSinkNeeded",
+    "toiletNeeded",
+    "showerTubNeeded",
+    "bathPlumbing",
+    "bathLighting",
+  ];
+
   // Convert nested objects to dot notation
   const flattenedData = {};
   for (const key in objectData) {
+    if (excludeFalseFlags.includes(key) && objectData[key] === false) continue;
     if (typeof objectData[key] === "object") {
       for (const subKey in objectData[key]) {
         if (objectData[key][subKey]) {
+          // If key is in costMap, only add the cost for the selected option
+          if (costMap[key] && subKey !== objectData[costMap[key]]) continue;
           flattenedData[`${key}.${subKey}`] = objectData[key][subKey];
         }
       }
@@ -51,6 +95,16 @@ export const sendQuoteEmail = (objectData, estimate) => {
       flattenedData[key] = objectData[key];
     }
   }
+
+  // Build dynamic_content string
+  let dynamic_content = "";
+  for (let [key, value] of Object.entries(flattenedData)) {
+    dynamic_content += `<p>${key}: ${value}</p>`;
+  }
+  flattenedData.dynamic_content = dynamic_content;
+
+  // Log the data to the console
+  console.log("Sending the following data to email service: ", flattenedData);
 
   return emailjs
     .send(

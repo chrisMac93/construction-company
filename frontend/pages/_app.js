@@ -1,4 +1,5 @@
-import React, { useRef } from "react";
+import React, { useRef, useEffect } from "react";
+import { initializeAnalytics } from "../lib/firebase";
 import "react-responsive-carousel/lib/styles/carousel.min.css";
 import "../styles/globals.css";
 import Navbar from "../components/OtherComponents/Navbar";
@@ -11,7 +12,6 @@ function MyApp({ Component, pageProps }) {
   const servicesRef = useRef(null);
   const galleryRef = useRef(null);
   const testimonialsRef = useRef(null);
-  const quoteRef = useRef(null);
   const whyChooseUsRef = useRef(null);
 
   const scrollToRef = (ref) => {
@@ -19,6 +19,10 @@ function MyApp({ Component, pageProps }) {
       ref.current.scrollIntoView({ behavior: "smooth" });
     }
   };
+
+  useEffect(() => {
+    initializeAnalytics();
+  }, []);
 
   return (
     <>

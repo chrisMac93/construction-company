@@ -9,11 +9,14 @@ import {
 import Link from "next/link";
 import useImages from "../../hooks/useImages"; // Import the custom hook
 
+import { logEvent } from "firebase/analytics";
+import { analytics } from "../../lib/firebase";
+
 import styles from "../../styles/Home.module.css";
 
 const WhyChooseUs = () => {
   const images = useImages(); // Call the custom hook
-  const bgImageUrl = images["whyChoose"]
+  const bgImageUrl = images["whyChoose"];
 
   const reasons = [
     {
@@ -47,7 +50,9 @@ const WhyChooseUs = () => {
       <div
         className="absolute inset-0 h-full w-full py-20"
         style={{
-          backgroundImage: `url(${bgImageUrl || "../gallery/Gallery/Services/flooring.jpg"})`,
+          backgroundImage: `url(${
+            bgImageUrl || "/Images/Services/flooring.jpg"
+          })`,
           backgroundPosition: "center",
           backgroundSize: "cover",
           backgroundAttachment: "fixed",
@@ -82,7 +87,9 @@ const WhyChooseUs = () => {
                 className="px-8 py-3 text-lg sm:text-xl font-bold text-neutral-900 rounded hover:bg-neutral-200 transition duration-300"
                 style={{ backgroundColor: "#B6B024" }}
               >
-                Get a Quote
+                <span onClick={() => logEvent(analytics, "quote_button_click")}>
+                  Get a Quote
+                </span>
               </Link>
             </div>
           </div>
