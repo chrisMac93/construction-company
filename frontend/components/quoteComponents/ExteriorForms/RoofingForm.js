@@ -53,7 +53,7 @@ const RoofingForm = ({ handleChange, formData }) => {
     };
 
     fetchRoofing();
-  }, []);
+  }, [handleChange]);
 
   return (
     <>

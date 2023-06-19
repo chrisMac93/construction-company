@@ -34,7 +34,7 @@ const EpoxyForm = ({ handleChange, formData }) => {
     };
 
     fetchEpoxyMaterials();
-  }, []);
+  }, [handleChange]);
 
   return (
     <>

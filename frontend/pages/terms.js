@@ -8,9 +8,9 @@ const Terms = () => {
       </h1>
       <div className="text-neutral-100 space-y-6">
         <p>
-          Please read these Terms and Conditions ("Terms", "Terms and
-          Conditions") carefully before using the  Constructio Company website operated by Construction Company ("us",
-          "we", or "our").
+          Please read these Terms and Conditions (\"Terms\", \"Terms and
+          Conditions\") carefully before using the Constructio Company website
+          operated by Construction Company (\"us\", \"we\", or \"our\").
         </p>
         <p>
           Your access to and use of the Service is conditioned on your

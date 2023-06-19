@@ -8,7 +8,7 @@ export const calculateCoatingsCost = (coatingsMaterial, coatingsSqFootage, coati
   return totalCost;
 };
 
-const coatingsForm = ({ handleChange, formData }) => {
+const CoatingsForm = ({ handleChange, formData }) => {
   const [coatingsMaterials, setCoatingsMaterials] = useState([]);
 
   useEffect(() => {
@@ -34,7 +34,7 @@ const coatingsForm = ({ handleChange, formData }) => {
     };
 
     fetchCoatingsMaterials();
-  }, []);
+  }, [handleChange]);
 
   return (
     <>
@@ -74,4 +74,4 @@ const coatingsForm = ({ handleChange, formData }) => {
   );
 };
 
-export default coatingsForm;
+export default CoatingsForm;

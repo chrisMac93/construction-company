@@ -47,7 +47,7 @@ const ToiletForm = ({ handleChange, formData }) => {
     };
 
     fetchtoiletTypes();
-  }, []);
+  }, [handleChange]);
 
   return (
     <>

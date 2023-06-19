@@ -27,14 +27,14 @@ const AdminPage = () => {
         handleLogout();
       }
     }
-  }, [isLoggedIn, handleLogout]);
+  }, [isLoggedIn, handleLogout, autoLogoutTimeout]);
 
   useEffect(() => {
     if (isLoggedIn) {
       const timer = setTimeout(handleLogout, autoLogoutTimeout);
       return () => clearTimeout(timer);
     }
-  }, [isLoggedIn, handleLogout]);
+  }, [isLoggedIn, handleLogout, autoLogoutTimeout]);
 
   return (
     <div className="bg-neutral-800 text-neutral-100 py-20 px-4 sm:px-8 md:px-16 lg:px-24 overflow-x-hidden">

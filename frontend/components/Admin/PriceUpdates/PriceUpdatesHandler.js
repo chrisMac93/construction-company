@@ -60,7 +60,7 @@ const PriceUpdates = () => {
         cleanup();
       }
     };
-  }, [selectedTab]);
+  }, [selectedTab, fetchMaterials]);
 
   const handleDeleteMaterial = async (id, nestedMaterialType) => {
     try {

@@ -59,7 +59,7 @@ const CountertopsForm = ({ handleChange, formData }) => {
     };
 
     fetchCountertopMaterials();
-  }, []);
+  }, [handleChange]);
 
   return (
     <>

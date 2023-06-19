@@ -47,7 +47,7 @@ const SinkForm = ({ handleChange, formData }) => {
     };
 
     fetchSinkTypes();
-  }, []);
+  }, [handleChange]);
 
   return (
     <>

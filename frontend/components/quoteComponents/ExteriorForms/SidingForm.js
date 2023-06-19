@@ -60,7 +60,7 @@ const SidingForm = ({ handleChange, formData }) => {
     };
 
     fetchSiding();
-  }, []);
+  }, [handleChange]);
 
   return (
     <>

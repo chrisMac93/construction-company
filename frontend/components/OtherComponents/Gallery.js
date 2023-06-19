@@ -40,9 +40,9 @@ const Gallery = () => {
         Our Work
       </h2>
       <p className="mb-6 text-md leading-relaxed text-center text-neutral-800 font-semibold text-xl">
-        Check out some of our recent projects below. We've worked on a wide
+        Check out some of our recent projects below. We have worked on a wide
         variety of projects, from Whole Home Renovations to Epoxy Flooring.
-        We're proud of the work we do, and we're confident you'll be happy with
+        We are proud of the work we do, and we are confident you will be happy with
         the results.
       </p>
       <Swiper

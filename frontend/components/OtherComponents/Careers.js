@@ -101,7 +101,7 @@ const Careers = () => {
           who take pride in their work and strive for excellence in everything
           they do. We offer a supportive and collaborative work environment
           where every team member has the opportunity to grow and develop their
-          skills. If you're looking for a challenging and rewarding career in
+          skills. If you are looking for a challenging and rewarding career in
           the construction industry, we invite you to apply and join our team.
         </p>
       </div>
@@ -113,7 +113,7 @@ const Careers = () => {
                 No Positions Currently Available
               </h1>
               <p className="font-semibold text-xl text-neutral-300">
-                We're sorry, but there are no open positions at this time.
+                We are sorry, but there are no open positions at this time.
                 Please check back later as we update our job postings regularly.
               </p>
             </div>

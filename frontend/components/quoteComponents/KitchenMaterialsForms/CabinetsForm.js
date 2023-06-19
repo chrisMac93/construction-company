@@ -21,7 +21,7 @@ export const calculateKitchenCabinetCost = (
   return totalCost;
 };
 
-const kitchenCabinetsForm = ({ handleChange, formData }) => {
+const KitchenCabinetsForm = ({ handleChange, formData }) => {
   const [kitchenCabinetMaterials, setKitchenCabinetMaterials] = useState([]);
 
   useEffect(() => {
@@ -64,7 +64,7 @@ const kitchenCabinetsForm = ({ handleChange, formData }) => {
     };
 
     fetchKitchenCabinetMaterials();
-  }, []);
+  }, [handleChange]);
 
   return (
     <>
@@ -105,4 +105,4 @@ const kitchenCabinetsForm = ({ handleChange, formData }) => {
   );
 };
 
-export default kitchenCabinetsForm;
+export default KitchenCabinetsForm;

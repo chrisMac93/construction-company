@@ -17,7 +17,7 @@ const AdminDashboard = ({ userEmail }) => {
     if (!isLoggedIn) {
       router.push("/admin");
     }
-  }, []);
+  }, [isLoggedIn, router]);
 
   const renderTabs = () => {
     return (

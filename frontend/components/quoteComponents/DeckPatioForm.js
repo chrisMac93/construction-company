@@ -110,7 +110,7 @@ const DeckPatioForm = ({ handleChange, formData }) => {
     };
 
     fetchDeckPatioMaterials();
-  }, []);
+  }, [handleChange]);
 
   const handleSwitchChange = (e) => {
     const { name, cost } = e.target;

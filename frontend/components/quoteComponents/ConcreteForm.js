@@ -35,7 +35,7 @@ const ConcreteForm = ({ handleChange, formData }) => {
     };
 
     fetchConcreteMaterials();
-  }, []);
+  }, [handleChange]);
 
   return (
     <>

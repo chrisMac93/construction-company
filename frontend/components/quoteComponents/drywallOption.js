@@ -28,7 +28,7 @@ const DrywallOption = ({ handleChange, formData }) => {
     };
 
     fetchDrywallPrice();
-  }, []);
+  }, [handleChange]);
 
   return (
     <>

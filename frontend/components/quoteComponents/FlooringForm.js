@@ -45,7 +45,7 @@ const FlooringForm = ({ handleChange, formData }) => {
     };
 
     fetchFlooringMaterials();
-  }, []);
+  }, [handleChange]);
 
   return (
     <>

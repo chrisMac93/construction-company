@@ -11,7 +11,7 @@ export const calculateShowerTubCost = (showerTubType, showerTubCost) => {
   return totalCost;
 };
 
-const showerTubForm = ({ handleChange, formData }) => {
+const ShowerTubForm = ({ handleChange, formData }) => {
   const [showerTubTypes, setShowerTubTypes] = useState([]);
 
   useEffect(() => {
@@ -48,7 +48,7 @@ const showerTubForm = ({ handleChange, formData }) => {
     };
 
     fetchShowerTubTypes();
-  }, []);
+  }, [handleChange]);
 
   return (
     <>
@@ -75,4 +75,4 @@ const showerTubForm = ({ handleChange, formData }) => {
   );
 };
 
-export default showerTubForm;
+export default ShowerTubForm;

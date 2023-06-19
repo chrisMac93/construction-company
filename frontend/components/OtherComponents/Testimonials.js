@@ -80,7 +80,7 @@ const Testimonials = () => {
                   {testimonial.name}
                 </h3>
                 <p className="px-4 text-lg font-semibold text-neutral-800">
-                  "{testimonial.review}"
+                  &quot;{testimonial.review}&quot;
                 </p>
               </div>
             </div>
