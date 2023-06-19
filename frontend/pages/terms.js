@@ -9,8 +9,7 @@ const Terms = () => {
       <div className="text-neutral-100 space-y-6">
         <p>
           Please read these Terms and Conditions ("Terms", "Terms and
-          Conditions") carefully before using the Martin Construction &amp;
-          Coatings website operated by Martin Construction &amp; Coatings ("us",
+          Conditions") carefully before using the  Constructio Company website operated by Construction Company ("us",
           "we", or "our").
         </p>
         <p>

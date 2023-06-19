@@ -9,14 +9,13 @@ const useImages = () => {
     const fetchImages = async () => {
       const db = getFirestore(app);
       const imagesCollection = await getDocs(collection(db, "images"));
-      const imagesData = {};
 
-      imagesCollection.forEach((doc) => {
+      const imagesData = imagesCollection.docs.map((doc) => {
         const data = doc.data();
-        imagesData[data.title] = data.url;
+        return { [data.title]: data.url };
       });
 
-      setImages(imagesData);
+      setImages(Object.assign({}, ...imagesData));
     };
 
     fetchImages();

@@ -21,7 +21,6 @@ const Careers = () => {
           id: doc.id,
           ...doc.data(),
         }));
-        console.log("Job listings fetched successfully:", data);
         setJobListings(data);
       } catch (error) {
         console.error("Error fetching job listings:", error);
@@ -97,14 +96,13 @@ const Careers = () => {
           Careers
         </h2>
         <p className="pb-6">
-          At Martin Construction &amp; Coatings, we are passionate about
-          delivering quality results to our clients. Our team is made up of
-          dedicated professionals who take pride in their work and strive for
-          excellence in everything they do. We offer a supportive and
-          collaborative work environment where every team member has the
-          opportunity to grow and develop their skills. If you're looking for a
-          challenging and rewarding career in the construction industry, we
-          invite you to apply and join our team.
+          At Construction Company, we are passionate about delivering quality
+          results to our clients. Our team is made up of dedicated professionals
+          who take pride in their work and strive for excellence in everything
+          they do. We offer a supportive and collaborative work environment
+          where every team member has the opportunity to grow and develop their
+          skills. If you're looking for a challenging and rewarding career in
+          the construction industry, we invite you to apply and join our team.
         </p>
       </div>
       <div className="max-w-7xl mx-auto">

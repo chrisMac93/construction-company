@@ -62,7 +62,7 @@ const WhyChooseUs = () => {
         <div className="grid grid-cols-1 items-center justify-items-center">
           <div className="bg-gradient-to-br from-slate-300 via-neutral-800 to-neutral-900 text-neutral-100 p-8 rounded-md z-10 opacity-90">
             <h2 className="text-3xl md:text-4xl font-semibold mb-8 text-center">
-              Why Choose Martin Construction &amp; Coatings
+              Why Choose Construction Company
             </h2>
             <ul className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
               {reasons.map((reason, index) => (

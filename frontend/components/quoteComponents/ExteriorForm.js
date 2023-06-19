@@ -11,7 +11,6 @@ import { renderSwitch } from "./RenderSwitch";
 import styles from "../../styles/Home.module.css";
 
 export const calculateExteriorCost = (formData, landscapingCost) => {
-
   let totalCost = 0;
 
   if (formData.roofingIncluded) {
@@ -71,7 +70,6 @@ const ExteriorForm = ({ handleChange, formData }) => {
       });
 
       setLandscapingCost(landscapingCost);
-      console.log("Landscaping Cost:", landscapingCost);
     };
 
     fetchExterior();
@@ -89,7 +87,6 @@ const ExteriorForm = ({ handleChange, formData }) => {
         },
       });
     }
-    console.log("Updated Cost", updatedCost);
     handleChange(e);
   };
 
@@ -141,8 +138,8 @@ const ExteriorForm = ({ handleChange, formData }) => {
         </span>
 
         <span className="font-bold italic text-neutral-400">
-            (this service will be subcontracted)
-          </span>
+          (this service will be subcontracted)
+        </span>
       </div>
     </>
   );

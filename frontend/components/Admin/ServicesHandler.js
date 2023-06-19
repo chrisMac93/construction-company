@@ -30,20 +30,6 @@ const ServicesHandler = () => {
     return () => unsubscribe();
   }, []);
 
-  // const handleAddService = async () => {
-  //   try {
-  //     const servicesRef = collection(firestore, "services");
-  //     const newDoc = await addDoc(servicesRef, newService);
-  //     setServices([...services, { id: newDoc.id, ...newService }]);
-  //     setNewService({
-  //       title: "",
-  //       description: "",
-  //     });
-  //   } catch (error) {
-  //     console.error("Error adding new service:", error);
-  //   }
-  // };
-
   const handleAddService = async () => {
     try {
       const servicesRef = collection(firestore, "services");

@@ -59,10 +59,10 @@ const Navbar = ({
             className="disabled:text-black/30 lg:px-2 [&.active]:text-black/90 dark:[&.active]:text-neutral-400"
           >
             <Image
-              src={logoImage || "/Images/site/MC&C_Logo.PNG"}
+              src={logoImage || "/Images/site/new_logo.PNG"}
               width={100}
               height={100}
-              alt="Martin Construction &amp; Coatings Logo"
+              alt="Construction Company Logo"
             />
           </Link>
         </div>

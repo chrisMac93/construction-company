@@ -80,6 +80,5 @@ export function calculateEstimate(formData, callback) {
       break;
   }
 
-  console.log("Total Cost: ", cost);
   callback(cost);
 }

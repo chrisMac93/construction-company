@@ -12,7 +12,6 @@ export const calculateRoofingCost = (
 
   const totalCost = roofingSqFootage * roofingMaterialCosts[roofingMaterial];
 
-  console.log("Roofing Cost: ", totalCost);
   return totalCost;
 };
 

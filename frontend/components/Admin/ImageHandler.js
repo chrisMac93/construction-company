@@ -44,22 +44,13 @@ const ImageHandler = () => {
         cacheControl: "public, max-age=86400",
       };
       await uploadBytes(storageRef, file, metadata);
-      console.log(
-        "Upload to storage successful with cache control:",
-        metadata.cacheControl
-      );
 
       const imageURL = await getDownloadURL(storageRef);
-      console.log("Download URL retrieved:", imageURL);
 
       for (const imageType of imageTypes) {
         await saveImageURLToFirestore(imageURL, title, imageType, file.name);
       }
-
-      console.log("URL saved to Firestore.");
-    } catch (error) {
-      console.error("Error uploading image:", error);
-    }
+    } catch (error) {}
   };
 
   const openTitleModal = () => {
@@ -104,10 +95,8 @@ const ImageHandler = () => {
 
   const handleFileChange = (e) => {
     if (e.target.files.length === 0) {
-      console.log("No files selected");
       return;
     }
-    console.log("Files selected:", e.target.files);
     const files = Array.from(e.target.files); // Convert FileList to an array
     const filesWithTitle = files.map((file) => ({ file, title: "" }));
     setFilesWithTitle(filesWithTitle);
@@ -137,14 +126,11 @@ const ImageHandler = () => {
         // Delete the image from Firestore
         const docRef = doc(firestore, "images", querySnapshot.docs[0].id);
         await deleteDoc(docRef);
-        console.log("Deleted image from Firestore:", url);
 
         // Delete the image from Storage
         const storageRef = ref(storage, `images/${fileName}`);
         await deleteObject(storageRef);
-        console.log("Deleted image from Storage:", fileName);
       } else {
-        console.log("Image not found in Firestore:", url);
       }
     } catch (error) {
       console.error("Error deleting image:", error);

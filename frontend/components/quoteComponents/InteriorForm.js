@@ -10,7 +10,6 @@ import { renderSwitch } from "./RenderSwitch";
 import styles from "../../styles/Home.module.css";
 
 export const calculateInteriorCost = (formData, lightingCost, plumbingCost) => {
-
   let totalCost = 0;
 
   if (formData.interiorFlooringIncluded) {
@@ -32,13 +31,9 @@ export const calculateInteriorCost = (formData, lightingCost, plumbingCost) => {
     totalCost += lightingCost;
   }
 
-  console.log("lightingCost: ", lightingCost);
-
   if (formData.includePlumbing) {
     totalCost += plumbingCost;
   }
-
-  console.log("plumbingCost: ", plumbingCost);
 
   return totalCost;
 };
@@ -70,9 +65,6 @@ const InteriorForm = ({ handleChange, formData }) => {
 
       setLightingCost(costs.lighting);
       setPlumbingCost(costs.plumbing);
-
-      console.log("lightingCost: ", lightingCost);
-      console.log("plumbingCost: ", plumbingCost);
     };
 
     fetchInteriorServices();

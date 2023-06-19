@@ -12,21 +12,21 @@ const Footer = () => {
   const images = useImages();
   const logoImage = images["logo"];
 
-  const isMobile = () => {
-    return (
-      typeof window !== "undefined" &&
-      /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
-        window.navigator.userAgent
-      )
-    );
-  };
+  // const isMobile = () => {
+  //   return (
+  //     typeof window !== "undefined" &&
+  //     /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
+  //       window.navigator.userAgent
+  //     )
+  //   );
+  // };
 
-  const handleSocialLinkClick = (e, link) => {
-    if (isMobile()) {
-      e.preventDefault();
-      window.open(link, "_blank");
-    }
-  };
+  // const handleSocialLinkClick = (e, link) => {
+  //   if (isMobile()) {
+  //     e.preventDefault();
+  //     window.open(link, "_blank");
+  //   }
+  // };
 
   return (
     <footer className="bg-gradient-to-r from-slate-300 via-neutral-800 to-neutral-900 text-center text-white ">
@@ -39,7 +39,7 @@ const Footer = () => {
               className="disabled:text-black/30 lg:px-2 [&.active]:text-black/90 dark:[&.active]:text-neutral-400"
             >
               <Image
-                src={logoImage || "/Images/site/MC&C_Logo.PNG"}
+                src={logoImage || "/Images/site/new_logo.PNG"}
                 alt="Logo"
                 width={250}
                 height={167}
@@ -75,11 +75,11 @@ const Footer = () => {
             <div className="flex justify-center mb-4">
               <Link
                 className="m-1 h-9 w-9 rounded-full border-2 opacity-60 hover:opacity-80"
-                href="https://www.facebook.com/MCandC0911"
+                href="#"
                 target="_blank"
                 rel="noreferrer"
                 // onClick={(e) =>
-                //   handleSocialLinkClick(e, "fb://page?id=130056639799064")
+                //   handleSocialLinkClick(e, "fb://page?id=000")
                 // }
               >
                 <FaFacebook className="mx-auto h-full w-4" />
@@ -87,27 +87,27 @@ const Footer = () => {
 
               <Link
                 className="m-1 h-9 w-9 rounded-full border-2 opacity-60 hover:opacity-80"
-                href="https://www.instagram.com/martinconstruction_coatings?igshid=YmMyMTA2M2Y="
+                href="#"
                 target="_blank"
                 rel="noreferrer"
-                onClick={(e) =>
-                  handleSocialLinkClick(
-                    e,
-                    "instagram://user?username=martinconstruction_coatings"
-                  )
-                }
+                // onClick={(e) =>
+                //   handleSocialLinkClick(
+                //     e,
+                //     "instagram://user?username=#"
+                //   )
+                // }
               >
                 <FaInstagram className="mx-auto h-full w-4" />
               </Link>
 
               <Link
                 className="m-1 h-9 w-9 rounded-full border-2 opacity-60 hover:opacity-80"
-                href="https://www.snapchat.com/add/mcandc2020"
+                href="#"
                 target="_blank"
                 rel="noreferrer"
-                onClick={(e) =>
-                  handleSocialLinkClick(e, "snapchat://add/mcandc2020")
-                }
+                // onClick={(e) =>
+                //   handleSocialLinkClick(e, "snapchat://add/#")
+                // }
               >
                 <FaSnapchatGhost className="mx-auto h-full w-4" />
               </Link>
@@ -115,13 +115,13 @@ const Footer = () => {
             <div className="text-sm opacity-60">
               <p className="font-bold">Email</p>
               <p>
-                <a href="mailto:mccoatingshr@gmail.com">
-                  mccoatingshr@gmail.com
+                <a href="#">
+                  constructionCompany@gmail.com
                 </a>
               </p>
               <p className="font-bold">Phone</p>
               <p>
-                <a href="tel:812-204-2757">812-204-2757</a>
+                <a href="tel:812-204-2757">123-456-7890</a>
               </p>
               <p className="font-bold">Hours of Operation</p>
               <p>Monday-Friday 6AM - 6PM, Saturday and Sunday 6AM - 12PM</p>
@@ -131,7 +131,7 @@ const Footer = () => {
       </div>
       <div className=" my-2 text-lg text-neutral-200">
         © 2023 Copyright:
-        <Link href="/"> Martin Construction &amp; Coatings</Link>
+        <Link href="/"> Construction Company</Link>
       </div>
     </footer>
   );

@@ -3,38 +3,46 @@ import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import { app } from "../lib/firebase";
 
 export const Apply = async (formData) => {
-  const data = {};
-  formData.forEach((value, key) => {
-    data[key] = value;
-  });
+  try {
+    const data = {};
+    formData.forEach((value, key) => {
+      data[key] = value;
+    });
 
-  const file = formData.get("resume");
-  const storageInstance = getStorage(app);
-  const fileRef = ref(storageInstance, `resumes/${file.name}`);
+    const file = formData.get("resume");
+    const storageInstance = getStorage(app);
+    const fileRef = ref(storageInstance, `resumes/${file.name}`);
 
-  await uploadBytes(fileRef, file);
-  const downloadURL = await getDownloadURL(fileRef);
+    // Upload the resume to Firebase storage
+    await uploadBytes(fileRef, file);
+    // Retrieve download URL for the uploaded file
+    const downloadURL = await getDownloadURL(fileRef);
 
-  data.download_link = downloadURL;
+    data.download_link = downloadURL;
 
-  return emailjs
-    .send(
-      process.env.NEXT_PUBLIC_EMAILJS_SERVICE_ID,
-      process.env.NEXT_PUBLIC_EMAILJS_APPLY_TEMPLATE_ID,
-      data,
-      process.env.NEXT_PUBLIC_EMAILJS_PUBLIC_KEY
-    )
-    .then(
-      (result) => {
-        console.log("Email sent successfully!", result);
-      },
-      (error) => {
-        console.error("Failed to send email.", error);
-      }
-    );
+    // Send the data to emailjs
+    return emailjs
+      .send(
+        process.env.NEXT_PUBLIC_EMAILJS_SERVICE_ID,
+        process.env.NEXT_PUBLIC_EMAILJS_APPLY_TEMPLATE_ID,
+        data,
+        process.env.NEXT_PUBLIC_EMAILJS_PUBLIC_KEY
+      )
+      .then(
+        (result) => {
+          console.log("Email sent successfully!", result);
+        },
+        (error) => {
+          console.error("Failed to send email.", error);
+        }
+      );
+  } catch (error) {
+    console.error("An error occurred while applying.", error);
+  }
 };
 
 export const sendQuoteEmail = (objectData, estimate) => {
+  try {
   // Modify the objectData to include the estimate
   objectData.estimate = estimate;
 
@@ -121,4 +129,7 @@ export const sendQuoteEmail = (objectData, estimate) => {
         console.error("Failed to send email.", error);
       }
     );
+  } catch (error) {
+    console.error("An error occurred while sending quote email.", error);
+  }
 };

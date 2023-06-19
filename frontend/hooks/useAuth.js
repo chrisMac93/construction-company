@@ -14,29 +14,31 @@ const useAuth = () => {
   const [userEmail, setUserEmail] = useState(null);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
 
-  const allowedEmails = [
-    "christopher.j.mcelwain@gmail.com",
-    "martinconstruction0911@gmail.com",
-    "mccoatingshr@gmail.com",
-    "martinmatt1192@gmail.com",
-    "steenthirty3@gmail.com"
-  ];
+  // Define the list of allowed emails that can login
+  const allowedEmails = process.env.ALLOWED_EMAILS.split(",");
 
+  // Function to login the user using GoogleAuthProvider
   const login = () => {
     const provider = new GoogleAuthProvider();
     signInWithRedirect(auth, provider);
   };
 
-   useEffect(() => {
+  // Effect to handle the user's auth state changes
+  useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (user) => {
+      // Check if the user is logged in and is an allowed user
       if (user && allowedEmails.includes(user.email)) {
         setUserEmail(user.email);
         const token = await user.getIdToken();
+        // Store the user's token and the login timestamp in local storage
         localStorage.setItem("token", token);
         localStorage.setItem("loginTimestamp", Date.now());
-        setIsLoggedIn(true); // add this line
+        setIsLoggedIn(true);
+        // Redirect the user to the admin page
         Router.push("/admin");
-      } else if (user && !allowedEmails.includes(user.email)) {
+      }
+      // Check if the user is logged in and is not an allowed user
+      else if (user && !allowedEmails.includes(user.email)) {
         setError("You are not authorized to access this page.");
         await logout();
       }
@@ -47,15 +49,16 @@ const useAuth = () => {
     return () => unsubscribe();
   }, []);
 
+  // Function to logout the user
   const logout = async () => {
     try {
       await signOut(auth);
+      // Clear the user's token and the login timestamp from local storage
       localStorage.removeItem("token");
       localStorage.setItem("loginTimestamp", "");
       setUserEmail(null);
       setIsLoggedIn(false);
     } catch (error) {
-      // Handle any errors
       console.error(error);
     }
   };

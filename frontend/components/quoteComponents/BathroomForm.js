@@ -61,7 +61,6 @@ export const calculateBathroomCost = (
     totalCost += bathLightingCost;
   }
 
-  console.log("Bathroom cost:", totalCost);
   return totalCost;
 };
 
@@ -109,14 +108,10 @@ const BathroomForm = ({ handleChange, formData }) => {
 
       setBathLightingCost(bathLightingCosts);
       setBathbathPlumbingCost(bathPlumbingCosts);
-
-      console.log("Bath Lighting Costs:", bathLightingCosts);
-      console.log("Bath Plumbing Costs:", bathPlumbingCosts);
     };
 
     fetchBathroomTiers();
   }, []);
-
 
   const handleSwitchChange = (e) => {
     const { name, value, cost } = e.target;
@@ -139,8 +134,6 @@ const BathroomForm = ({ handleChange, formData }) => {
         },
       });
     }
-
-    console.log("Updated cost:", updatedCost);
 
     handleChange(e);
   };

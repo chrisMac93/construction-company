@@ -19,6 +19,7 @@ export default async function handler(
 
     res.status(200).json({ image: optimizedImageBuffer.toString("base64") });
   } catch (error) {
-    res.status(500).json({ message: "Error optimizing image", error });
+    res.status(500).json({ message: "Error optimizing image", error: error.message });
+
   }
 }

@@ -35,7 +35,6 @@ export const calculateDeckPatioCost = (
     }
   }
 
-  console.log("Deck/Patio Cost: ", totalCost);
   return totalCost;
 };
 
@@ -147,7 +146,10 @@ const DeckPatioForm = ({ handleChange, formData }) => {
         </select>
       </div>
       <div className="form-control">
-        <label htmlFor="deckPatioSqFootage" className="block mb-2 font-semibold">
+        <label
+          htmlFor="deckPatioSqFootage"
+          className="block mb-2 font-semibold"
+        >
           Square Footage
         </label>
         <input

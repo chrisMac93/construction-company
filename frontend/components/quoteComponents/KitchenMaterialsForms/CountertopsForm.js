@@ -13,7 +13,6 @@ export const calculateCounterTopCost = (
   const totalCost =
     counterTopSqFootage * counterTopMaterialCosts[counterTopMaterial];
 
-  console.log("CounterTop Data: ", counterTopMaterialCosts[counterTopMaterial]);
   return totalCost;
 };
 

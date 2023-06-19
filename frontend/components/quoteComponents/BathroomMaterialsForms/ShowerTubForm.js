@@ -8,7 +8,6 @@ export const calculateShowerTubCost = (showerTubType, showerTubCost) => {
 
   const totalCost = showerTubCost[showerTubType];
 
-  console.log("showerTub Cost: ", totalCost);
   return totalCost;
 };
 

@@ -7,7 +7,6 @@ export const calculateToiletCost = (toiletType, toiletCost) => {
   }
   const totalCost = toiletCost[toiletType];
 
-  console.log("Toilet Cost: ", totalCost);
   return totalCost;
 };
 

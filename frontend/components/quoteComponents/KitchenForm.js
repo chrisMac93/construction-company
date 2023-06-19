@@ -141,7 +141,6 @@ const KitchenForm = ({ handleChange, formData }) => {
         },
       });
     }
-    console.log("Updated Cost:", updatedCost);
     handleChange(e);
   };
 
@@ -159,7 +158,10 @@ const KitchenForm = ({ handleChange, formData }) => {
           formData.kitchenCountertopIncluded,
           handleChange
         )}
-        <label htmlFor="kitchenCountertopIncluded" className="ml-1 font-semibold">
+        <label
+          htmlFor="kitchenCountertopIncluded"
+          className="ml-1 font-semibold"
+        >
           Updated Countertops?
         </label>
       </div>

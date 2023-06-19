@@ -22,7 +22,7 @@ const AboutUs = () => {
         className="relative bg-cover bg-center py-60 px-4 sm:px-8 md:px-16 lg:px-24 parallax"
         style={{
           backgroundImage: `url(${
-            bgImageUrl2 || "/Images/site/aboutBottom.jpg"
+            bgImageUrl || "/Images/site/aboutBottom.jpg"
           })`,
         }}
       >
@@ -46,7 +46,7 @@ const AboutUs = () => {
             <div>
               <h3 className="text-3xl font-semibold lg:mt-6">Who We Are</h3>
               <p className="mt-4 text-lg leading-relaxed">
-                Martin Construction &amp; Coatings is a family-owned business
+                Construction Company is a family-owned business
                 that has been providing high-quality construction and coating
                 services for over 20 years. Our team of skilled professionals is
                 dedicated to ensuring customer satisfaction and delivering
@@ -80,7 +80,7 @@ const AboutUs = () => {
         <div className="max-w-7xl mx-auto">
           <h3 className="text-3xl font-semibold mb-8">Our Approach</h3>
           <p className="text-lg leading-relaxed">
-            At Martin Construction &amp; Coatings, our approach is rooted in our
+            At Construction Company, our approach is rooted in our
             commitment to quality and customer satisfaction. We understand the
             importance of listening to our clients needs and working closely
             with them throughout the entire process. Our experienced team is
@@ -138,13 +138,13 @@ const AboutUs = () => {
         className="relative bg-cover bg-center py-20 px-4 sm:px-8 md:px-16 lg:px-24 parallax"
         style={{
           backgroundImage: `url(${
-            bgImageUrl || "/Images/site/epoxy2.jpg"
+            bgImageUrl2 || "/Images/site/epoxy2.jpg"
           })`,
         }}
       >
         <div className="bg-neutral-800 bg-opacity-70 text-neutral-100 py-20 px-4 sm:px-8 md:px-16 lg:px-24 text-center">
           <h2 className="text-3xl md:text-4xl font-semibold">
-            Interested in Working with Martin Construction &amp; Coatings?
+            Interested in Working with Construction Company?
           </h2>
           <p className="mt-4">
             Join our team of professionals and contribute to the success of our

@@ -18,10 +18,6 @@ export const calculateKitchenCabinetCost = (
     kitchenCabinetSqFootage *
     kitchenCabinetMaterialCosts[kitchenCabinetMaterial];
 
-  console.log(
-    "kitchenCabinet Data: ",
-    kitchenCabinetMaterialCosts[kitchenCabinetMaterial]
-  );
   return totalCost;
 };
 

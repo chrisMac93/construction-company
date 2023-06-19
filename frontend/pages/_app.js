@@ -21,14 +21,18 @@ function MyApp({ Component, pageProps }) {
   };
 
   useEffect(() => {
-    initializeAnalytics();
+    try {
+      initializeAnalytics();
+    } catch (error) {
+      console.error("An error occurred while initializing analytics.", error);
+    }
   }, []);
 
   return (
     <>
       <Head>
         <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <title>Martin Construction &amp; Coatings</title>
+        <title>Construction Company</title>
         {/* Add any other common meta tags, styles, or scripts here */}
       </Head>
       <div className="flex flex-col min-h-screen">

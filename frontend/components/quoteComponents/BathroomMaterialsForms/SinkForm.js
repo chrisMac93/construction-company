@@ -7,7 +7,6 @@ export const calculateSinkCost = (sinkType, sinkCost) => {
   }
   const totalCost = sinkCost[sinkType];
 
-  console.log("Sink Cost: ", totalCost);
   return totalCost;
 };
 
