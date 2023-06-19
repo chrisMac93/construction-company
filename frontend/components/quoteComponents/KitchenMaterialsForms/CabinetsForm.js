@@ -105,4 +105,5 @@ const KitchenCabinetsForm = ({ handleChange, formData }) => {
   );
 };
 
+
 export default KitchenCabinetsForm;

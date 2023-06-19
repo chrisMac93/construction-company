@@ -44,6 +44,7 @@ const Gallery = () => {
         variety of projects, from Whole Home Renovations to Epoxy Flooring.
         We are proud of the work we do, and we are confident you will be happy with
         the results.
+        
       </p>
       <Swiper
         spaceBetween={10}

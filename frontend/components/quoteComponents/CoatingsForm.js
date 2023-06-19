@@ -74,4 +74,5 @@ const CoatingsForm = ({ handleChange, formData }) => {
   );
 };
 
+
 export default CoatingsForm;

@@ -8,9 +8,8 @@ const Terms = () => {
       </h1>
       <div className="text-neutral-100 space-y-6">
         <p>
-          Please read these Terms and Conditions (\"Terms\", \"Terms and
-          Conditions\") carefully before using the Constructio Company website
-          operated by Construction Company (\"us\", \"we\", or \"our\").
+          Please read these Terms and Conditions  carefully before using the Constructio Company website
+          operated by Construction Company.
         </p>
         <p>
           Your access to and use of the Service is conditioned on your
@@ -40,7 +39,7 @@ const Terms = () => {
         <p>
           We reserve the right, at our sole discretion, to modify or replace
           these Terms at any time. If a revision is material we will try to
-          provide at least 30 days' notice prior to any new terms taking effect.
+          provide at least 30 days notice prior to any new terms taking effect.
           What constitutes a material change will be determined at our sole
           discretion.
         </p>
