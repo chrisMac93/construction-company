@@ -39,7 +39,7 @@ const Footer = () => {
               className="disabled:text-black/30 lg:px-2 [&.active]:text-black/90 dark:[&.active]:text-neutral-400"
             >
               <Image
-                src={logoImage || "/Images/site/new_logo.PNG"}
+                src={logoImage || "/Images/site/MC&C_Logo.PNG"}
                 alt="Logo"
                 width={250}
                 height={167}
@@ -115,23 +115,23 @@ const Footer = () => {
             <div className="text-sm opacity-60">
               <p className="font-bold">Email</p>
               <p>
-                <a href="#">
-                  constructionCompany@gmail.com
+                <a href="email:martinconstruction0911@gmail.com">
+                  martinconstruction0911@gmail.com
                 </a>
               </p>
               <p className="font-bold">Phone</p>
               <p>
-                <a href="tel:812-204-2757">123-456-7890</a>
+                <a href="tel:812-204-2757">812-204-2757</a>
               </p>
               <p className="font-bold">Hours of Operation</p>
-              <p>Monday-Friday 6AM - 6PM, Saturday and Sunday 6AM - 12PM</p>
+              <p>Monday-Friday 6AM - 6PM<br/> Saturday 6AM - 12PM</p>
             </div>
           </div>
         </div>
       </div>
       <div className=" my-2 text-lg text-neutral-200">
         © 2023 Copyright:
-        <Link href="/"> Construction Company</Link>
+        <Link href="/"> Martin Construction & Coatings</Link>
       </div>
     </footer>
   );

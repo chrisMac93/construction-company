@@ -32,7 +32,7 @@ function MyApp({ Component, pageProps }) {
     <>
       <Head>
         <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <title>Construction Company</title>
+        <title>Martin Construction & Coatings</title>
         {/* Add any other common meta tags, styles, or scripts here */}
       </Head>
       <div className="flex flex-col min-h-screen">

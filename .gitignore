@@ -28,9 +28,13 @@ yarn-debug.log*
 yarn-error.log*
 .pnpm-debug.log*
 
+# CORS
+cors.json
+
 # local env files
 .env*.local
 .env
+.env.local
 
 # vercel
 .vercel

@@ -46,7 +46,7 @@ const AboutUs = () => {
             <div>
               <h3 className="text-3xl font-semibold lg:mt-6">Who We Are</h3>
               <p className="mt-4 text-lg leading-relaxed">
-                Construction Company is a family-owned business
+                Martin Construction & Coatings is a family-owned business
                 that has been providing high-quality construction and coating
                 services for over 20 years. Our team of skilled professionals is
                 dedicated to ensuring customer satisfaction and delivering
@@ -80,7 +80,7 @@ const AboutUs = () => {
         <div className="max-w-7xl mx-auto">
           <h3 className="text-3xl font-semibold mb-8">Our Approach</h3>
           <p className="text-lg leading-relaxed">
-            At Construction Company, our approach is rooted in our
+            At Martin Construction & Coatings, our approach is rooted in our
             commitment to quality and customer satisfaction. We understand the
             importance of listening to our clients needs and working closely
             with them throughout the entire process. Our experienced team is
@@ -144,7 +144,7 @@ const AboutUs = () => {
       >
         <div className="bg-neutral-800 bg-opacity-70 text-neutral-100 py-20 px-4 sm:px-8 md:px-16 lg:px-24 text-center">
           <h2 className="text-3xl md:text-4xl font-semibold">
-            Interested in Working with Construction Company?
+            Interested in Working with Martin Construction & Coatings?
           </h2>
           <p className="mt-4">
             Join our team of professionals and contribute to the success of our

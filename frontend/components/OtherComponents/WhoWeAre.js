@@ -15,10 +15,10 @@ const WhoWeAre = () => {
           GENERAL CONTRACTORS
         </h5>
         <h1 className="text-3xl md:text-4xl font-semibold mb-8">
-          Construction Company
+          Martin Construction & Coatings
         </h1>
         <p className="mb-6 text-xl leading-relaxed">
-          Construction Company is a leading general contractor with a reputation for providing outstanding
+          Martin Construction & Coatings is a leading general contractor with a reputation for providing outstanding
           services to our clients. We are dedicated to delivering high-quality
           craftsmanship and exceptional customer service to ensure that every
           project meets and exceeds our clients provision.
@@ -32,7 +32,7 @@ const WhoWeAre = () => {
           complete projects on time and within budget.
         </p>
         <p className="mb-6 text-xl leading-relaxed">
-          At Construction Company, we understand the importance of
+          At Martin Construction & Coatings, we understand the importance of
           trust and communication in building lasting relationships with our
           clients. We work closely with you throughout the entire process,
           keeping you informed and involved every step of the way. Our ultimate

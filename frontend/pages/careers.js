@@ -7,13 +7,13 @@ const CareersPage = () => {
   return (
     <>
       <NextSeo
-        title="Careers at Construction Company"
+        title="Careers at Martin Construction & Coatings"
         description="Looking for a challenging and rewarding career in the construction industry? Check out our job listings and apply today."
         openGraph={{
           // url: 'https://www.yourwebsite.com/careers',
-          title: 'Careers at  Construction Company',
+          title: 'Careers at  Martin Construction & Coatings',
           description: 'Looking for a challenging and rewarding career in the construction industry? Check out our job listings and apply today.',
-          site_name: 'Construction Company',
+          site_name: 'Martin Construction & Coatings',
         }}
       />
       <main>
