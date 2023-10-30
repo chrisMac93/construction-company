@@ -96,7 +96,7 @@ const Careers = () => {
           Careers
         </h2>
         <p className="pb-6">
-          At Martin Construction & Coatings, we are passionate about delivering quality
+          At Martin Construction &amp; Coatings, we are passionate about delivering quality
           results to our clients. Our team is made up of dedicated professionals
           who take pride in their work and strive for excellence in everything
           they do. We offer a supportive and collaborative work environment

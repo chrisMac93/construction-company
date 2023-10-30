@@ -62,7 +62,7 @@ const Navbar = ({
               src={logoImage || "/Images/site/MC&C_Logo.PNG"}
               width={100}
               height={100}
-              alt="Martin Construction & Coatings Logo"
+              alt="Martin Construction &amp; Coatings Logo"
             />
           </Link>
         </div>

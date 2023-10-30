@@ -13,7 +13,7 @@ class MyDocument extends Document {
           <meta charSet="utf-8" />
           <meta
             name="description"
-            content="Martin Construction & Coatings offers a wide range of residential renovation services including interior/exterior remodel, kitchen and bathroom remodel/additions, deck/patio build or renovations, flooring, epoxy, coatings, concrete and more."
+            content="Martin Construction &amp; Coatings offers a wide range of residential renovation services including interior/exterior remodel, kitchen and bathroom remodel/additions, deck/patio build or renovations, flooring, epoxy, coatings, concrete and more."
           />
           <meta
             name="keywords"

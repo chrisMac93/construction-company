@@ -28,6 +28,42 @@ const Footer = () => {
   //   }
   // };
 
+  const handleSocialLinkClick = (e, platform) => {
+    e.preventDefault();
+    const isAndroid = /Android/i.test(window.navigator.userAgent);
+    const isiOS = /iPhone|iPad|iPod/i.test(window.navigator.userAgent);
+
+    // Define the URLs and page IDs for each platform
+    const fbLink = "https://www.facebook.com/MCandC0911";
+    const fbPageId = "MCandC0911"; // Replace with the numeric page ID if needed
+    const igLink = "https://www.instagram.com/martinconstruction_coatings/";
+    const igUsername = "martinconstruction_coatings";
+    const scUsername = "#"; // Replace with the actual Snapchat username
+
+    if (platform === "facebook") {
+      if (isAndroid) {
+        window.open(`fb://facewebmodal/f?href=${fbLink}`, "_blank");
+      } else if (isiOS) {
+        window.open(`fb://page/${fbPageId}`, "_blank");
+      } else {
+        window.open(fbLink, "_blank");
+      }
+    } else if (platform === "instagram") {
+      if (isAndroid || isiOS) {
+        window.open(`instagram://user?username=${igUsername}`, "_blank");
+      } else {
+        window.open(igLink, "_blank");
+      }
+    } else if (platform === "snapchat") {
+      if (isAndroid || isiOS) {
+        window.open(`snapchat://add/${scUsername}`, "_blank");
+      } else {
+        // There isn't a direct web link for adding a user on Snapchat, you might need to link to the profile or a Snapchat landing page
+        window.open(`https://www.snapchat.com/add/${scUsername}`, "_blank");
+      }
+    }
+  };
+
   return (
     <footer className="bg-gradient-to-r from-slate-300 via-neutral-800 to-neutral-900 text-center text-white ">
       <div className="px-6 pt-6 max-w-5xl mx-auto">
@@ -53,9 +89,6 @@ const Footer = () => {
               <Link href="/terms" className="opacity-60 hover:opacity-80">
                 Terms & Conditions
               </Link>
-              {/* <Link href="/privacy" className="opacity-60 hover:opacity-80">
-                Privacy Policy
-              </Link> */}
               <Link href="/careers" className="opacity-60 hover:opacity-80">
                 Careers
               </Link>
@@ -75,27 +108,29 @@ const Footer = () => {
             <div className="flex justify-center mb-4">
               <Link
                 className="m-1 h-9 w-9 rounded-full border-2 opacity-60 hover:opacity-80"
-                href="#"
+                href="https://www.facebook.com/MCandC0911"
                 target="_blank"
                 rel="noreferrer"
-                // onClick={(e) =>
-                //   handleSocialLinkClick(e, "fb://page?id=000")
-                // }
+                aria-label="Facebook - opens in new tab"
+                onClick={(e) =>
+                  handleSocialLinkClick(e, "facebook")
+                }
               >
                 <FaFacebook className="mx-auto h-full w-4" />
               </Link>
 
               <Link
                 className="m-1 h-9 w-9 rounded-full border-2 opacity-60 hover:opacity-80"
-                href="#"
+                href="https://www.instagram.com/martinconstruction_coatings/"
                 target="_blank"
                 rel="noreferrer"
-                // onClick={(e) =>
-                //   handleSocialLinkClick(
-                //     e,
-                //     "instagram://user?username=#"
-                //   )
-                // }
+                aria-label="Instagram - opens in new tab"
+                onClick={(e) =>
+                  handleSocialLinkClick(
+                    e,
+                    "instagram"
+                  )
+                }
               >
                 <FaInstagram className="mx-auto h-full w-4" />
               </Link>
@@ -105,9 +140,8 @@ const Footer = () => {
                 href="#"
                 target="_blank"
                 rel="noreferrer"
-                // onClick={(e) =>
-                //   handleSocialLinkClick(e, "snapchat://add/#")
-                // }
+                aria-label="Snapchat - opens in new tab"
+                onClick={(e) => handleSocialLinkClick(e, "snapchat")}
               >
                 <FaSnapchatGhost className="mx-auto h-full w-4" />
               </Link>
@@ -115,7 +149,7 @@ const Footer = () => {
             <div className="text-sm opacity-60">
               <p className="font-bold">Email</p>
               <p>
-                <a href="email:martinconstruction0911@gmail.com">
+                <a href="mailto:martinconstruction0911@gmail.com">
                   martinconstruction0911@gmail.com
                 </a>
               </p>
@@ -124,14 +158,17 @@ const Footer = () => {
                 <a href="tel:812-204-2757">812-204-2757</a>
               </p>
               <p className="font-bold">Hours of Operation</p>
-              <p>Monday-Friday 6AM - 6PM<br/> Saturday 6AM - 12PM</p>
+              <p>
+                Monday-Friday 6AM - 6PM
+                <br /> Saturday 6AM - 12PM
+              </p>
             </div>
           </div>
         </div>
       </div>
       <div className=" my-2 text-lg text-neutral-200">
         © 2023 Copyright:
-        <Link href="/"> Martin Construction & Coatings</Link>
+        <Link href="/"> Martin Construction &amp; Coatings</Link>
       </div>
     </footer>
   );

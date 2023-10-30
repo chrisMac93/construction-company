@@ -2,6 +2,9 @@ import { motion } from "framer-motion";
 import Image from "next/image";
 import Link from "next/link";
 import useImages from "../../hooks/useImages";
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faUsers, faHammer, faCogs, faEye, faBullseye } from '@fortawesome/free-solid-svg-icons';
+
 
 import styles from "../../styles/Home.module.css";
 
@@ -44,9 +47,9 @@ const AboutUs = () => {
         <div className="max-w-7xl mx-auto">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8 items-center">
             <div>
-              <h3 className="text-3xl font-semibold lg:mt-6">Who We Are</h3>
+              <h3 className="text-3xl font-semibold lg:mt-6"><FontAwesomeIcon icon={faUsers} className="mr-3" />Who We Are</h3>
               <p className="mt-4 text-lg leading-relaxed">
-                Martin Construction & Coatings is a family-owned business
+                Martin Construction &amp; Coatings is a family-owned business
                 that has been providing high-quality construction and coating
                 services for over 20 years. Our team of skilled professionals is
                 dedicated to ensuring customer satisfaction and delivering
@@ -54,7 +57,7 @@ const AboutUs = () => {
               </p>
             </div>
             <div>
-              <h3 className="text-3xl font-semibold">What We Do</h3>
+              <h3 className="text-3xl font-semibold"><FontAwesomeIcon icon={faHammer} className="mr-3" />What We Do</h3>
               <p className="mt-4 text-lg leading-relaxed">
                 We specialize in a wide range of construction and coating
                 services, including residential and commercial projects. Our
@@ -76,11 +79,11 @@ const AboutUs = () => {
       </section>
 
       {/* Our Approach */}
-      <section className="bg-neutral-900 text-neutral-100 py-16 px-4 sm:px-8 md:px-16 lg:px-24">
-        <div className="max-w-7xl mx-auto">
-          <h3 className="text-3xl font-semibold mb-8">Our Approach</h3>
+      <section className="bg-neutral-700 text-neutral-100 py-16 px-4 sm:px-8 md:px-16 lg:px-24">
+        <div className="max-w-7xl mx-auto text-center">
+          <h3 className="text-3xl font-semibold mb-8"><FontAwesomeIcon icon={faCogs} className="mr-3" />Our Approach</h3>
           <p className="text-lg leading-relaxed">
-            At Martin Construction & Coatings, our approach is rooted in our
+            At Martin Construction &amp; Coatings, our approach is rooted in our
             commitment to quality and customer satisfaction. We understand the
             importance of listening to our clients needs and working closely
             with them throughout the entire process. Our experienced team is
@@ -110,7 +113,7 @@ const AboutUs = () => {
       <section className="bg-neutral-900 text-neutral-100 py-16 px-4 sm:px-8 md:px-16 lg:px-24">
         <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-8">
           <div className="text-center">
-            <h3 className="text-3xl font-semibold">Our Vision</h3>
+            <h3 className="text-3xl font-semibold"><FontAwesomeIcon icon={faEye} className="mr-3" />Our Vision</h3>
             <p className="mt-4 text-lg leading-relaxed">
               Our vision is to be a leading construction and coatings company,
               known for our commitment to quality, innovation, and customer
@@ -120,7 +123,7 @@ const AboutUs = () => {
             </p>
           </div>
           <div className="text-center">
-            <h3 className="text-3xl font-semibold">Our Mission</h3>
+            <h3 className="text-3xl font-semibold"><FontAwesomeIcon icon={faBullseye} className="mr-3" />Our Mission</h3>
             <p className="mt-4 text-lg leading-relaxed">
               Our mission is to provide exceptional construction and coating
               services that exceed our clients expectations. We are committed to
@@ -144,7 +147,7 @@ const AboutUs = () => {
       >
         <div className="bg-neutral-800 bg-opacity-70 text-neutral-100 py-20 px-4 sm:px-8 md:px-16 lg:px-24 text-center">
           <h2 className="text-3xl md:text-4xl font-semibold">
-            Interested in Working with Martin Construction & Coatings?
+            Interested in Working with Martin Construction &amp; Coatings?
           </h2>
           <p className="mt-4">
             Join our team of professionals and contribute to the success of our

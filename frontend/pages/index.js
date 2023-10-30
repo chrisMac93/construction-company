@@ -18,12 +18,12 @@ export default function Home({
   return (
     <div className="overflow-x-hidden">
       <NextSeo
-        title="Martin Construction & Coatings"
-        description="Martin Construction & Coatings offers a wide range of residential renovation services including interior/exterior remodel, kitchen and bathroom remodel/additions, deck/patio build or renovations, flooring, epoxy, coatings, concrete and more."
+        title="Martin Construction &amp; Coatings"
+        description="Martin Construction &amp; Coatings offers a wide range of residential renovation services including interior/exterior remodel, kitchen and bathroom remodel/additions, deck/patio build or renovations, flooring, epoxy, coatings, concrete and more."
         openGraph={{
-          title: "Martin Construction & Coatings",
+          title: "Martin Construction &amp; Coatings",
           description:
-            "Martin Construction & Coatings offers a wide range of residential renovation services including interior/exterior remodel, kitchen and bathroom remodel/additions, deck/patio build or renovations, flooring, epoxy, coatings, concrete and more.",
+            "Martin Construction &amp; Coatings offers a wide range of residential renovation services including interior/exterior remodel, kitchen and bathroom remodel/additions, deck/patio build or renovations, flooring, epoxy, coatings, concrete and more.",
           images: [
             {
               url: "https://firebasestorage.googleapis.com/v0/b/martinconstructioncoatings.appspot.com/o/images%2Fhome.jpg?alt=media&token=233fc243-1c41-471e-8d65-75199e6cd037", // Replace with your OpenGraph image

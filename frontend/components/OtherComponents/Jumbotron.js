@@ -31,7 +31,7 @@ const Jumbotron = () => {
           variants={headerVariants}
           transition={{ duration: 1 }}
         >
-          Martin Construction & Coatings
+          Martin Construction &amp; Coatings
         </motion.h1>
         <motion.p
           className="text-lg sm:text-xl text-slate-300"
