@@ -6,11 +6,13 @@ import styles from "../../styles/Home.module.css";
 import useImages from "../../hooks/useImages";
 
 import { logEvent } from "firebase/analytics";
-import { analytics } from "../../lib/firebase";
+import { initializeAnalytics } from "../../lib/firebase";
 
 const Footer = () => {
   const images = useImages();
   const logoImage = images["logo"];
+
+  const analytics = initializeAnalytics();
 
   // const isMobile = () => {
   //   return (

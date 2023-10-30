@@ -7,7 +7,7 @@ import { useAnimation } from "framer-motion";
 import useImages from "../../hooks/useImages";
 
 import { logEvent } from "firebase/analytics";
-import { analytics } from "../../lib/firebase";
+import { initializeAnalytics } from "../../lib/firebase";
 
 
 import styles from "../../styles/Home.module.css";
@@ -27,6 +27,8 @@ const Navbar = ({
 
   const images = useImages();
   const logoImage = images["logo"];
+
+  const analytics = initializeAnalytics();
 
   const handleNavigateAndScroll = async (ref) => {
     if (router.pathname !== "/") {

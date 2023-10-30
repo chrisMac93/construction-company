@@ -10,13 +10,15 @@ import Link from "next/link";
 import useImages from "../../hooks/useImages"; // Import the custom hook
 
 import { logEvent } from "firebase/analytics";
-import { analytics } from "../../lib/firebase";
+import { initializeAnalytics } from "../../lib/firebase";
 
 import styles from "../../styles/Home.module.css";
 
 const WhyChooseUs = () => {
   const images = useImages(); // Call the custom hook
   const bgImageUrl = images["whyChoose"];
+
+  const analytics = initializeAnalytics();
 
   const reasons = [
     {

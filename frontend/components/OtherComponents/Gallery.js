@@ -9,7 +9,7 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import { firestore } from "../../lib/firebase";
 import { collection, getDocs } from "firebase/firestore";
 import { logEvent } from "firebase/analytics";
-import { analytics } from "../../lib/firebase";
+import { initializeAnalytics } from "../../lib/firebase";
 
 
 import "swiper/css";
@@ -20,6 +20,8 @@ SwiperCore.use([Pagination, Autoplay]);
 
 const Gallery = () => {
   const [images, setImages] = useState([]);
+
+  const analytics = initializeAnalytics();
 
   useEffect(() => {
     const fetchImages = async () => {

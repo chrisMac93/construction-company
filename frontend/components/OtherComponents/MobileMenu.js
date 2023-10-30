@@ -2,7 +2,7 @@ import { motion } from "framer-motion";
 import { useEffect } from "react";
 
 import { logEvent } from "firebase/analytics";
-import { analytics } from "../../lib/firebase";
+import { initializeAnalytics } from "../../lib/firebase";
 
 import Link from "next/link";
 
@@ -19,6 +19,9 @@ const MobileMenu = ({
   testimonialsRef,
   mobileMenuControls,
 }) => {
+
+  const analytics = initializeAnalytics();
+
   useEffect(() => {
     if (isMobileMenuOpen) {
       mobileMenuControls.start({
